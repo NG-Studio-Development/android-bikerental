@@ -1,0 +1,49 @@
+<resources>
+
+    <string name="please_wait"> Идет обработка запроса </string>
+
+    <string name="app_name">Bike Rent</string>
+
+    <string name="inventory"> Инвентарь </string>
+
+    <string name="rents"> Ренты </string>
+
+    <string name="chat"> Чат </string>
+
+    <string name="breakdowns"> Поломки </string>
+
+    <string name="clients"> Клиенты </string>
+
+    <string name="title_client"> Клиент: </string>
+
+    <string name="title_inventory"> Инвентарь: </string>
+
+    <string name="title_time"> До: </string>
+
+    <string name="title_breakdown"> Поломка: </string>
+
+    <string name="title_activity_main">MainActivity</string>
+
+    <string name="drawer_open">Open navigation drawer</string>
+
+    <string name="drawer_close">Close navigation drawer</string>
+
+    <string name="title_activity_rent">RentActivity</string>
+
+    <string name="action_settings">Settings</string>
+
+    <string name="title_activity_inventory">InventoryActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+
+    <string name="title_inventory_number">Инвентарный номер</string>
+
+    <string name="title_rents_count">Аренды</string>
+    <string name="title_cost">Цены</string>
+
+
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+</resources>

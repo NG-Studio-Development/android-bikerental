@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="ru.prokatvros.veloprokat" >
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:name=".BikerentalApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name=".ui.activities.MainActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.activities.RentActivity"
+            android:label="@string/title_activity_rent" >
+        </activity>
+        <activity
+            android:name=".ui.activities.InventoryActivity"
+            android:label="@string/title_activity_inventory" >
+        </activity>
+
+        <meta-data android:name="AA_DB_NAME" android:value="BikeRents.db" />
+        <meta-data android:name="AA_DB_VERSION" android:value="101" />
+
+    </application>
+
+</manifest>

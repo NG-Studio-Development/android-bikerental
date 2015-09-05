@@ -1,0 +1,44 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+
+
+    <dimen name="padding_action_bar_logo_sides">6dp</dimen>
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="margin_activity_default_horizontal">16dp</dimen>
+    <dimen name="margin_activity_default_vertical">16dp</dimen>
+    <dimen name="margin_widget_default_tiny">5dp</dimen>
+    <dimen name="margin_widget_default_min">2dp</dimen>
+    <dimen name="margin_widget_default_small">10dp</dimen>
+    <dimen name="margin_widget_default_medium">15dp</dimen>
+    <dimen name="margin_widget_default_normal">20dp</dimen>
+    <dimen name="margin_widget_default_large">30dp</dimen>
+    <dimen name="margin_widget_default_extra_large">60dp</dimen>
+    <dimen name="padding_adapter_item_default">10dp</dimen>
+    <dimen name="padding_item_chat">4dp</dimen>
+    <dimen name="padding_top_panel_fragment_chat">15dp</dimen>
+    <dimen name="padding_dialog_textview">6dp</dimen>
+    <dimen name="tab_highlight_size_default">10dp</dimen>
+
+    <!-- TEXT DIMENS -->
+    <dimen name="padding_edit_text_default">@dimen/margin_widget_default_tiny</dimen>
+    <dimen name="padding_edit_text_default_sides">@dimen/margin_widget_default_small</dimen>
+    <dimen name="min_height_edit_text">20dp</dimen>
+
+    <dimen name="text_size_action_bar_title">22sp</dimen>
+    <dimen name="text_size_action_bar_subtitle">13sp</dimen>
+    <dimen name="text_size_tab_label">12sp</dimen>
+    <dimen name="text_size_default_tiny">12sp</dimen>
+    <dimen name="text_size_default_small">14sp</dimen>
+    <dimen name="text_size_default">15sp</dimen>
+    <dimen name="text_size_default_normal">16sp</dimen>
+    <dimen name="text_size_default_medium">18sp</dimen>
+    <dimen name="text_size_default_large">30sp</dimen>
+    <dimen name="text_size_button_default">18sp</dimen>
+
+    <dimen name="photo_profile_height">240dp</dimen>
+    <dimen name="size_avatar_imageview">80dp</dimen>
+
+</resources>
