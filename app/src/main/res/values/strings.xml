@@ -39,11 +39,27 @@
     <string name="title_inventory_number">Инвентарный номер</string>
 
     <string name="title_rents_count">Аренды</string>
+
     <string name="title_cost">Цены</string>
+
+    <string name="warning_can_not_have_empty_field"> Недопустимы пустые поля </string>
+
+    <string name="title_activity_client"> Activity client </string>
+
+    <string name="name"> Имя </string>
+
+    <string name="surname"> Фамилия </string>
+
+    <string name="temp_phone"> +7 XXX XXX XX XX </string>
+
+    <string name="add"> Добавить </string>
 
 
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+
 
 </resources>

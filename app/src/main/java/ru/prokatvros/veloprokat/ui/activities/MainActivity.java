@@ -10,12 +10,12 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-import ru.prokatvros.veloprokat.BikerentalApplication;
 import ru.prokatvros.veloprokat.R;
 import ru.prokatvros.veloprokat.ui.adapters.ItemsAdapter;
-import ru.prokatvros.veloprokat.ui.fragments.BlankFragment;
+import ru.prokatvros.veloprokat.ui.fragments.ClientListFragment;
 import ru.prokatvros.veloprokat.ui.fragments.InventoryListFragment;
 import ru.prokatvros.veloprokat.ui.fragments.ProfileFragment;
+import ru.prokatvros.veloprokat.ui.fragments.RentListFragment;
 
 
 public class MainActivity extends BaseActivity {
@@ -74,7 +74,7 @@ public class MainActivity extends BaseActivity {
             replaceFragment(new ProfileFragment(), false);
         }
 
-        BikerentalApplication.getInstance().loadDataFromWeb();
+        // BikerentalApplication.getInstance().loadDataFromWeb();
     }
 
     @Override
@@ -103,7 +103,7 @@ public class MainActivity extends BaseActivity {
                 break;
 
             case 1:
-                fragment = new BlankFragment();
+                fragment = new RentListFragment();
                 break;
 
             case 2:
@@ -114,6 +114,9 @@ public class MainActivity extends BaseActivity {
                 fragment = new ProfileFragment();
                 break;
 
+            case 4:
+                fragment = new ClientListFragment();
+                break;
             default:
                 fragment = new ProfileFragment();
                 return;

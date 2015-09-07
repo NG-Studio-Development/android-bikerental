@@ -10,7 +10,7 @@ import ru.prokatvros.veloprokat.ui.fragments.InventoryFragment;
 
 public class InventoryActivity extends BaseActivity {
 
-    private static String INVENTORY_KEY = "inventory_key";
+    private final static String INVENTORY_KEY = "inventory_key";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

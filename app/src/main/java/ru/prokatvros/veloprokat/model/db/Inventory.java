@@ -35,4 +35,11 @@ public class Inventory extends Model implements Serializable {
                 .where("Model = ?", model)
                 .execute();
     }
+
+    public static List<Inventory> getBySubName(String subName) {
+        return new Select()
+                .from(Inventory.class)
+                .where("Model LIKE ?", "%" + subName +"%")
+                .execute();
+    }
 }

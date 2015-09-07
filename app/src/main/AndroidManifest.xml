@@ -28,9 +28,17 @@
             android:label="@string/title_activity_inventory" >
         </activity>
 
-        <meta-data android:name="AA_DB_NAME" android:value="BikeRents.db" />
-        <meta-data android:name="AA_DB_VERSION" android:value="101" />
+        <meta-data
+            android:name="AA_DB_NAME"
+            android:value="BikeRents.db" />
+        <meta-data
+            android:name="AA_DB_VERSION"
+            android:value="125" />
 
+        <activity
+            android:name=".ui.activities.ClientActivity"
+            android:label="@string/title_activity_client" >
+        </activity>
     </application>
 
 </manifest>

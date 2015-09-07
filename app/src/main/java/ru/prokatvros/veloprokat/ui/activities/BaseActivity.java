@@ -1,6 +1,7 @@
 package ru.prokatvros.veloprokat.ui.activities;
 
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -59,4 +60,20 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     protected abstract int getContainer();
+
+
+
+    /*public void onBackPressed() {
+        super.onBackPressed();
+    } */
+
+    @Override
+    public void onBackPressed() {
+        FragmentManager fragmentManager = getFragmentManager();
+        if (fragmentManager.getBackStackEntryCount() > 0) {
+            fragmentManager.popBackStack();
+        } else {
+            super.onBackPressed();
+        }
+    }
 }

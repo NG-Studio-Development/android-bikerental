@@ -5,13 +5,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import ru.prokatvros.veloprokat.R;
 
 public abstract class BaseListFragment extends BaseFragment {
+
+    private ListView lvList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,10 +40,10 @@ public abstract class BaseListFragment extends BaseFragment {
             }
         });
 
-        ListView lvList = (ListView) view.findViewById(R.id.lvList);
-        ArrayAdapter adapter = getAdapter();
-        adapter.getCount();
-        lvList.setAdapter(adapter);
+        lvList = (ListView) view.findViewById(R.id.lvList);
+        //ArrayAdapter adapter = getAdapter();
+        //adapter.getCount();
+        //lvList.setAdapter(adapter);
 
         lvList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -56,7 +58,12 @@ public abstract class BaseListFragment extends BaseFragment {
 
     public abstract void onAddClick ();
     public abstract void onItemClick (AdapterView<?> parent, View view, int position, long id);
-    public abstract ArrayAdapter getAdapter ();
 
+    public void setAdapter(ListAdapter adapter) {
+        lvList.setAdapter(adapter);
+    }
 
+    public ListAdapter getAdapter() {
+        return lvList.getAdapter();
+    }
 }

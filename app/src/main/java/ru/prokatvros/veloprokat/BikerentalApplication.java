@@ -18,7 +18,9 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
+import ru.prokatvros.veloprokat.model.db.Breakdown;
 import ru.prokatvros.veloprokat.model.db.Inventory;
+import ru.prokatvros.veloprokat.model.db.Rent;
 import ru.prokatvros.veloprokat.model.requests.InventoryRequest;
 
 public class BikerentalApplication extends android.app.Application {
@@ -40,6 +42,8 @@ public class BikerentalApplication extends android.app.Application {
 
             BikerentalApplication.class.notifyAll();
         }
+
+        Rent.removeEmpty();
     }
 
 
@@ -69,6 +73,8 @@ public class BikerentalApplication extends android.app.Application {
 
 
     public void loadDataFromWeb() {
+
+        Breakdown.initListForDEBUG();
 
         InventoryRequest request = InventoryRequest.requestAllInventory("point", new Response.Listener<String>() {
             @Override
