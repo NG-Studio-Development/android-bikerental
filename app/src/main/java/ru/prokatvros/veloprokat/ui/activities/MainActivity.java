@@ -1,6 +1,8 @@
 package ru.prokatvros.veloprokat.ui.activities;
 
 import android.app.Fragment;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -25,6 +27,7 @@ public class MainActivity extends BaseActivity {
     RecyclerView.LayoutManager mLayoutManager;
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle mDrawerToggle;
+    ProgressDialog pb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +78,10 @@ public class MainActivity extends BaseActivity {
         }
 
         // BikerentalApplication.getInstance().loadDataFromWeb();
+
+
+
+
     }
 
     @Override
@@ -125,6 +132,24 @@ public class MainActivity extends BaseActivity {
         replaceFragment(fragment, false);
         drawerLayout.closeDrawers();
     }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+
+
+
+
+
+
+    public static void startMainActivity(Context context) {
+        Intent intent = new Intent(context, MainActivity.class);
+        context.startActivity(intent);
+    }
+
 }
 
 

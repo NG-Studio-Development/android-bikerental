@@ -23,6 +23,16 @@ public class Inventory extends Model implements Serializable {
     @Column(name = "Cost")
     public int cost;
 
+    @Column(name = "Tarif")
+    public Tarif tarif;
+
+    @Column(name = "Point")
+    public Point points;
+    //public List<Point> pointList;
+
+
+
+
     public static List<Inventory> getAll() {
         return new Select()
                 .from(Inventory.class)

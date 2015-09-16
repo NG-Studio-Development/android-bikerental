@@ -166,13 +166,13 @@ public class ProfileFragment extends BaseFragment<ProfileActivity> /* implements
                 getHostActivity().showProgressDialog();
                 HttpServer.submitToServer(BaseAvatarRequest.getImagePostRequest(WhereAreYouApplication.getInstance().getUuid(), System.currentTimeMillis(), " "), new BaseResponseCallback<String>() {
                     @Override
-                    public void onSuccess(String result) {
+                    public void onResponse(String result) {
                         getHostActivity().hideProgressDialog();
                         WhereAreYouApplication.removeAvatarFromCache(WhereAreYouApplication.getInstance().getUserName());
                     }
 
                     @Override
-                    public void onError(Exception error) {
+                    public void onErrorResponse(Exception error) {
 
                     }
                 });
@@ -244,7 +244,7 @@ public class ProfileFragment extends BaseFragment<ProfileActivity> /* implements
                                 AvatarRequestStepServer request = AvatarRequestStepServer.getImagePostRequest(WhereAreYouApplication.getInstance().getUserName(),base64Image);
                                 HttpServer.submitToServer(request, new BaseResponseCallback<String>() {
                                     @Override
-                                    public void onSuccess(String result) {
+                                    public void onResponse(String result) {
                                         getHostActivity().hideProgressDialog();
                                         String avatarUri = uri.toString();
                                         WhereAreYouApplication.removeAvatarFromCache(WhereAreYouApplication.getInstance().getUserName());
@@ -266,7 +266,7 @@ public class ProfileFragment extends BaseFragment<ProfileActivity> /* implements
                                     }
 
                                     @Override
-                                    public void onError(Exception error) {
+                                    public void onErrorResponse(Exception error) {
                                         getHostActivity().hideProgressDialog();
                                     }
                                 });

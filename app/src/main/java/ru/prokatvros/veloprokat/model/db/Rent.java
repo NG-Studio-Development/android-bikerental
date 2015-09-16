@@ -17,7 +17,8 @@ public class Rent extends Model implements Parcelable {
 
     private final static Map<String, Rent> poolOfRents = new HashMap<>();
 
-    int completed;
+    @Column(name = "Completed")
+    private int completed;
 
     @Column(name = "Client")
     public Client client;
@@ -27,6 +28,17 @@ public class Rent extends Model implements Parcelable {
 
     @Column(name = "Breakdown")
     public Breakdown breakdown;
+
+    @Column(name = "EndTime")
+    public long endTime;
+
+    public void setCompleted(boolean completed) {
+        this.completed = completed ? 1:0;
+    }
+
+    public boolean getCompleted() {
+        return completed == 1;
+    }
 
     public static Rent createRentInPool(String key) {
         Rent rent = new Rent();
@@ -45,6 +57,15 @@ public class Rent extends Model implements Parcelable {
     public static List<Rent> getAll() {
         return new Select()
                 .from(Rent.class)
+                .execute();
+    }
+
+    public static List<Rent> getAllByCompleted(boolean completed) {
+        int completedInInteger = completed ? 1 : 0;
+
+        return new Select()
+                .from(Rent.class)
+                .where("Completed = ?", completedInInteger)
                 .execute();
     }
 

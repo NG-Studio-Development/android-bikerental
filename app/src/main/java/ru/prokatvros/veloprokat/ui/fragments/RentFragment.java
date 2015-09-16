@@ -1,12 +1,12 @@
 package ru.prokatvros.veloprokat.ui.fragments;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 
 import java.util.List;
@@ -38,11 +38,9 @@ public class RentFragment extends BaseFragment {
 
         //rent = Rent.getRentFromPool(RentActivity.DEBUG_RENT);
 
-
-
         if (getArguments() != null) {
             rent = getArguments().getParcelable(ARG_RENT);
-            Log.d("DEBUG_SEND_RENT", "Rent id in RentFragment: " + rent.getId());
+            // Log.d("DEBUG_SEND_RENT", "Rent id in RentFragment: " + rent.getId());
         }
 
     }
@@ -59,6 +57,7 @@ public class RentFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_rent, container, false);
 
         Spinner spinner = (Spinner) view.findViewById(R.id.spinnerBreakdown);
+        Button buttonClose = (Button) view.findViewById(R.id.buttonClose);
 
         final List<Breakdown> breakdownList = Breakdown.getAll();
 
@@ -82,6 +81,15 @@ public class RentFragment extends BaseFragment {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {}
+        });
+
+
+        buttonClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                rent.setCompleted(true);
+                rent.save();
+            }
         });
 
         return view;

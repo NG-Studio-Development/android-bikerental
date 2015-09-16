@@ -31,12 +31,14 @@ public class AddClientFragment extends BaseFragment {
         final EditText etSurname = (EditText) view.findViewById(R.id.etSurname);
         final EditText etPhone = (EditText) view.findViewById(R.id.etSearch);
 
-        button.setOnClickListener( new View.OnClickListener() {
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick( View v ) {
-                addClient( etName.getText().toString(),
-                            etSurname.getText().toString(),
-                            etPhone.getText().toString() );
+            public void onClick(View v) {
+                addClient(etName.getText().toString(),
+                        etSurname.getText().toString(),
+                        etPhone.getText().toString());
+
+                getHostActivity().onBackPressed();
             }
         } );
 

@@ -7,12 +7,15 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.util.Calendar;
 import java.util.List;
 
 import ru.prokatvros.veloprokat.R;
 import ru.prokatvros.veloprokat.model.db.Rent;
 
 public class RentAdapter extends ArrayAdapter<Rent> {
+
+    private static int TIME_OF_EXPIRES = 60*60*1000;
 
     private int resource;
     private List<Rent> list;
@@ -61,7 +64,17 @@ public class RentAdapter extends ArrayAdapter<Rent> {
         if (rent.inventory != null && rent.inventory.model != null)
             inventoryModel = rent.inventory.model;
 
-        holder.tvName.setText(clientName+" "+inventoryModel);
+        holder.tvName.setText(clientName + " " + inventoryModel);
+
+        long timeToEndOfRent = rent.endTime - Calendar.getInstance().getTimeInMillis();
+
+
+        if (timeToEndOfRent <= 0 )
+            convertView.setBackgroundColor(getContext().getResources().getColor(R.color.red));
+        else if (timeToEndOfRent <= TIME_OF_EXPIRES) {
+            convertView.setBackgroundColor(getContext().getResources().getColor(R.color.yellow));
+        }
+
 
         return convertView;
     }

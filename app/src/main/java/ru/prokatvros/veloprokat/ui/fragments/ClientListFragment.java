@@ -1,9 +1,6 @@
 package ru.prokatvros.veloprokat.ui.fragments;
 
-import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import ru.prokatvros.veloprokat.R;
@@ -14,15 +11,12 @@ import ru.prokatvros.veloprokat.ui.adapters.ClientAdapter;
 
 public class ClientListFragment extends BaseListFragment {
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = super.onCreateView(inflater, container, savedInstanceState);
-        // setAdapter(new ClientAdapter(getHostActivity(), R.layout.item_base, ClientAdapter.initListForDEBUG()));
-        setAdapter(new ClientAdapter(getHostActivity(), R.layout.item_base, Client.getAll()));
-        return view;
-    }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        setAdapter(new ClientAdapter(getHostActivity(), R.layout.item_base, Client.getAll()));
+    }
 
     @Override
     public void onAddClick() {

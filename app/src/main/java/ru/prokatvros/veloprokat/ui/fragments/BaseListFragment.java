@@ -29,7 +29,7 @@ public abstract class BaseListFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_base_list, container, false);
+        View view = inflater.inflate(getLayoutResID(), container, false);
 
         ImageButton ibAdd = (ImageButton) view.findViewById(R.id.ibAdd);
 

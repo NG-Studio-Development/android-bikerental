@@ -42,24 +42,31 @@
 
     <string name="title_cost">Цены</string>
 
-    <string name="warning_can_not_have_empty_field"> Недопустимы пустые поля </string>
-
     <string name="title_activity_client"> Activity client </string>
 
     <string name="name"> Имя </string>
 
     <string name="surname"> Фамилия </string>
 
-    <string name="temp_phone"> +7 XXX XXX XX XX </string>
+    <string name="templ_phone"> +7 XXX XXX XX XX </string>
 
     <string name="add"> Добавить </string>
 
+    <string name="close"> Закрыть </string>
 
+    <string name="closed"> Закрытые </string>
+
+    <string name="current"> Текущие </string>
+
+    <string name="warning_must_enter_time_and_date"> Поля дата и время обязательны для ввода </string>
+
+    <string name="warning_can_not_have_empty_field"> Недопустимы пустые поля </string>
+
+    <string name="hint_login"> Логин </string>
+
+    <string name="hint_password"> Пароль </string>
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-
-
-
 
 </resources>
