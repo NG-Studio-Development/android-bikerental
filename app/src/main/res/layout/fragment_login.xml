@@ -1,6 +1,7 @@
 <RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white_a"
     tools:context="ru.prokatvros.veloprokat.ui.fragments.LoginFragment">
 
 
@@ -9,12 +10,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true">
+        android:layout_centerHorizontal="true" >
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/tvLogin"
+            style="@style/EditTextAuthorization"
+            android:hint="@string/hint_login"
+            android:layout_margin="@dimen/margin_widget_default_small"
             android:layout_gravity="center_horizontal" />
 
         <EditText
@@ -22,14 +26,19 @@
             android:layout_height="wrap_content"
             android:inputType="textPassword"
             android:ems="10"
+            android:layout_margin="@dimen/margin_widget_default_small"
             android:id="@+id/tvPassword"
+            style="@style/EditTextAuthorization"
+            android:hint="@string/hint_password"
             android:layout_gravity="center_horizontal" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="New Button"
             android:id="@+id/buttonLogin"
+            android:text="@string/enter"
+            android:background="@color/main_color"
+            android:textColor="@color/white_a"
             android:layout_gravity="center_horizontal" />
     </LinearLayout>
 </RelativeLayout>

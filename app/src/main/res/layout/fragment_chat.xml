@@ -1,0 +1,42 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white_a"
+    tools:context="ru.prokatvros.veloprokat.ui.fragments.ChatFragment">
+
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/lvList"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/relativeLayout" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/relativeLayout"
+        android:background="@drawable/drawable_top_border_gray"
+        android:padding="@dimen/margin_widget_default_small">
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/etMessage"
+            android:layout_toLeftOf="@+id/ibSendMessage"
+            android:hint="@string/hint_message"
+            android:layout_alignParentLeft="true" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ibSendMessage"
+            android:src="@drawable/drawable_ic_send"
+            android:background="@null"
+            android:padding="@dimen/margin_widget_default_small"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+    </RelativeLayout>
+</RelativeLayout>

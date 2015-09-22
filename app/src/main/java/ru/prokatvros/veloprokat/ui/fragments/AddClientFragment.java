@@ -1,6 +1,7 @@
 package ru.prokatvros.veloprokat.ui.fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,10 +9,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.Volley;
+
 import ru.prokatvros.veloprokat.R;
 import ru.prokatvros.veloprokat.model.db.Client;
+import ru.prokatvros.veloprokat.model.requests.ClientRequest;
+import ru.prokatvros.veloprokat.model.requests.PostResponseListener;
 
 public class AddClientFragment extends BaseFragment {
+
+    private final static String TAG = "ADD_CLIENT_FRAGMENT";
 
     public AddClientFragment() {}
 
@@ -57,5 +65,26 @@ public class AddClientFragment extends BaseFragment {
         client.surname = surname;
         client.phone = phone;
         client.save();
+
+        sendToServer(client);
+
+    }
+
+
+    protected void sendToServer(Client client) {
+        ClientRequest clientRequest = ClientRequest.requestPostClient(client, new PostResponseListener() {
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "Response: "+response);
+            }
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                Log.d(TAG, "ERROR");
+            }
+        });
+
+        Volley.newRequestQueue(getHostActivity()).add(clientRequest);
     }
 }

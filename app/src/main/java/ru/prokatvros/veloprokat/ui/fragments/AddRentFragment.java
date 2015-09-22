@@ -17,11 +17,21 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.util.Calendar;
 
+import ru.prokatvros.veloprokat.BikerentalApplication;
 import ru.prokatvros.veloprokat.R;
 import ru.prokatvros.veloprokat.model.db.Rent;
+import ru.prokatvros.veloprokat.model.requests.PostResponseListener;
+import ru.prokatvros.veloprokat.model.requests.RentRequest;
+import ru.prokatvros.veloprokat.services.receivers.SampleAlarmReceiver;
 import ru.prokatvros.veloprokat.ui.activities.RentActivity;
+import ru.prokatvros.veloprokat.utils.DataParser;
 
 public class AddRentFragment extends BaseFragment {
 
@@ -29,6 +39,8 @@ public class AddRentFragment extends BaseFragment {
 
     static TextView tvTime;
     static TextView tvDate;
+    Button buttonAddClient;
+    Button buttonAddInventory;
 
     @Override
     public int getLayoutResID() {
@@ -42,11 +54,13 @@ public class AddRentFragment extends BaseFragment {
 
         View view = inflater.inflate(R.layout.fragment_add_rent, container, false);
 
+        setHasOptionsMenu(true);
+
         tvTime = (TextView) view.findViewById(R.id.tvTime);
         tvDate = (TextView) view.findViewById(R.id.tvDate);
 
-        Button buttonAddClient = (Button) view.findViewById(R.id.buttonAddClient);
-        Button buttonAddInventory = (Button) view.findViewById(R.id.buttonAddInventory);
+        buttonAddClient= (Button) view.findViewById(R.id.buttonAddClient);
+        buttonAddInventory = (Button) view.findViewById(R.id.buttonAddInventory);
         Button buttonAdd = (Button) view.findViewById(R.id.buttonAdd);
         ImageButton buttonAddDate = (ImageButton) view.findViewById(R.id.ibAddDate);
         ImageButton ibAddTime = (ImageButton) view.findViewById(R.id.ibAddTime);
@@ -107,18 +121,85 @@ public class AddRentFragment extends BaseFragment {
                     Log.d(TAG, "Time in millis: "+calendar.getTimeInMillis());
                     rent.endTime = calendar.getTimeInMillis();
                     rent.save();
+                    sendToServer(rent);
                 } else {
                     throw new Error("Rent is null, please, check set new rent to pool in RentActivity");
                 }
 
-                getHostActivity().onBackPressed();
+                //getHostActivity().onBackPressed();
             }
         });
 
         return view;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
 
+        getHostActivity().getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getHostActivity().getSupportActionBar().setDisplayShowTitleEnabled(true);
+        getHostActivity().getSupportActionBar().setTitle(getString(R.string.title_new_rent));
+
+        Rent rent = Rent.getRentFromPool(RentActivity.CREATE_RENT);
+
+        if(rent.client != null)
+            buttonAddClient.setText(rent.client.name);
+
+        if(rent.inventory != null)
+            buttonAddInventory.setText(rent.inventory.model);
+    }
+
+    protected void sendToServer(final Rent rent) {
+
+        Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+        final String strJsonRent = gson.toJson(rent);
+
+        Log.d(TAG, "Json rent:"+strJsonRent);
+        long idAdmin = BikerentalApplication.getInstance().getAdmin().getId();
+        final RentRequest rentRequest = RentRequest.requestPostRent(idAdmin, strJsonRent, new PostResponseListener() {
+            @Override
+            public void onResponse(String response) {
+                Toast.makeText(getHostActivity(), "Success", Toast.LENGTH_LONG).show();
+                Log.d(TAG, "Response: " + response);
+                rent.inventory.countRents +=1;
+                rent.inventory.save();
+                //getHostActivity().onBackPressed();
+            }
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getHostActivity(), "Error: "+error.toString(), Toast.LENGTH_LONG).show();
+
+                DataParser.getInstance(getHostActivity()).saveToPoolRentData(strJsonRent);
+
+                SampleAlarmReceiver alarmReceiver = new SampleAlarmReceiver();
+                alarmReceiver.setAlarm(getHostActivity());
+
+                error.printStackTrace();
+            }
+        });
+
+        BikerentalApplication.getInstance().isNetworkAvailable(new BikerentalApplication.NetworkAvailableListener() {
+            @Override
+            public void onResponse(boolean isAvailable) {
+                if (isAvailable) {
+                    Volley.newRequestQueue(getHostActivity()).add(rentRequest);
+                } else {
+
+                    DataParser.getInstance(getHostActivity()).saveToPoolRentData(strJsonRent);
+
+
+                    SampleAlarmReceiver alarmReceiver = new SampleAlarmReceiver();
+                    alarmReceiver.setAlarm(getHostActivity());
+                    Toast.makeText(getHostActivity(), "Server not avialable", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+    }
+
+    /* */
 
     public static class TimePickerFragment extends DialogFragment
             implements TimePickerDialog.OnTimeSetListener {
@@ -190,6 +271,9 @@ public class AddRentFragment extends BaseFragment {
             this.month = month;
             this.day = day;
             isSet = true;
+
+            if (tvDate != null)
+                tvDate.setText(day+"/"+month+"/"+year);
         }
 
         public int getYear() {
@@ -208,6 +292,7 @@ public class AddRentFragment extends BaseFragment {
             return isSet;
         }
     }
+
 
 
 }

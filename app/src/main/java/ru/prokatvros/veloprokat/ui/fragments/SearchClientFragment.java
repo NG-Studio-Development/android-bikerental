@@ -5,6 +5,9 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -32,8 +35,14 @@ public class SearchClientFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search_base, container, false);
 
+        getHostActivity().getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        getHostActivity().getSupportActionBar().setDisplayShowTitleEnabled(false);
+        setHasOptionsMenu(true);
+
         final ListView lvClient = (ListView) view.findViewById(R.id.lvList);
         EditText etPhone = (EditText) view.findViewById(R.id.etSearch);
+
+        etPhone.setHint(getString(R.string.hint_enter_client_number));
 
         final List<Client> clientList = new ArrayList<>();
         final ClientAdapter adapter = new ClientAdapter(getHostActivity(), R.layout.item_base, clientList);
@@ -72,6 +81,22 @@ public class SearchClientFragment extends BaseFragment {
         return view;
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_rent, menu);
+        menu.findItem(R.id.actionClose).setVisible(true);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.actionClose:
+                getHostActivity().onBackPressed();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
 
 }

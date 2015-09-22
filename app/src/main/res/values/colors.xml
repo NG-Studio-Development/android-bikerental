@@ -5,7 +5,7 @@
 
     <color name="background_action_bar_default">@android:color/transparent</color>
 
-    <color name="background_action_bar">@color/violet_bright</color>
+    <color name="background_action_bar">@color/main_color</color>
 
     <color name="background_widget_default">@android:color/background_dark</color>
 
@@ -17,7 +17,7 @@
 
     <color name="dialog_button_generic_pressed">#40000000</color>
 
-    <color name="text_color_section_title">@color/violet_bright</color>
+    <color name="text_color_section_title">@color/main_color</color>
 
     <color name="gray_light_low"> #e8e8e8 </color>
 
@@ -37,7 +37,7 @@
 
     <color name="black">#000</color>
 
-    <color name="violet_bright">#5f3b78</color>
+    <color name="main_color">#00BCE8</color>
 
     <color name="violet_additional_dark">#4C385A</color>
 

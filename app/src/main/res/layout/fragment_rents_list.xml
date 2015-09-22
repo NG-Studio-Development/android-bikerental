@@ -14,11 +14,12 @@
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@mipmap/ic_launcher"
+        android:src="@drawable/drawable_ic_add"
+        android:background="@drawable/bg_round_button"
         android:id="@+id/ibAdd"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_margin="@dimen/margin_widget_default_medium"  />
 
     <RadioGroup
         android:layout_width="match_parent"

@@ -59,9 +59,4 @@ public class AuthorizationRequest extends StringRequest {
         return params;
     }
 
-    public interface PostResponseListener {
-        public void onResponse(String response);
-        public void onErrorResponse(VolleyError error);
-    }
-
 }

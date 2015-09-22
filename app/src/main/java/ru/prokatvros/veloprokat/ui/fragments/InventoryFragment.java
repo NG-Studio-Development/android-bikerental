@@ -2,14 +2,16 @@ package ru.prokatvros.veloprokat.ui.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import ru.prokatvros.veloprokat.R;
 import ru.prokatvros.veloprokat.model.db.Inventory;
+import ru.prokatvros.veloprokat.ui.activities.InventoryActivity;
 
-public class InventoryFragment extends BaseFragment {
+public class InventoryFragment extends BaseFragment<InventoryActivity> {
 
     private static final String ARG_INVENTORY = "inventory";
 
@@ -24,12 +26,19 @@ public class InventoryFragment extends BaseFragment {
         return fragment;
     }
 
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             inventory = (Inventory) getArguments().getSerializable(ARG_INVENTORY);
         }
+
+        //inventory.tarif.
+
+        getHostActivity().getSupportActionBar().setTitle(inventory.model);
+        getHostActivity().getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -43,13 +52,32 @@ public class InventoryFragment extends BaseFragment {
 
         View view = inflater.inflate(R.layout.fragment_inventory, container, false);
         TextView tvName = (TextView) view.findViewById(R.id.tvName);
+        TextView tvNumber = (TextView) view.findViewById(R.id.tvNumber);
+        TextView tvCount = (TextView) view.findViewById(R.id.tvRentsCount);
+        TextView tvCost = (TextView) view.findViewById(R.id.tvCost);
 
-        if (inventory != null ) {
+        setHasOptionsMenu(true);
+
+        if ( inventory != null ) {
             tvName.setText(inventory.model);
+            tvNumber.setText(inventory.number);
+            //tvCost.setText(String.valueOf("Day: "+inventory.tarif.sumDay));
+            tvCount.setText(String.valueOf(inventory.countRents));
         }
 
-
         return view;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        /* switch (item.getItemId()) {
+            case android.R.id.home:
+                getHostActivity().onBackPressed();
+                break;
+        } */
+
+        return super.onOptionsItemSelected(item);
     }
 
 }

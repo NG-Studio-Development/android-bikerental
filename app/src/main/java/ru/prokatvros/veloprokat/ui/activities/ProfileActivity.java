@@ -9,10 +9,6 @@ import android.support.v7.widget.Toolbar;
 import ru.prokatvros.veloprokat.R;
 import ru.prokatvros.veloprokat.ui.fragments.ProfileFragment;
 
-//import android.widget.Toolbar;
-
-//import org.jetbrains.annotations.NotNull;
-//import org.jetbrains.annotations.Nullable;
 
 public class ProfileActivity extends BaseActivity {
 
@@ -33,8 +29,6 @@ public class ProfileActivity extends BaseActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        //setSupportActionBar(toolbar);
 
         if (savedInstanceState == null) {
             //addFragment(ProfileFragment.class,getIntent().getExtras(),false);

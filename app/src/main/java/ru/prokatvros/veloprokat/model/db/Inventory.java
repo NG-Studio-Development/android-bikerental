@@ -4,6 +4,7 @@ import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
+import com.google.gson.annotations.Expose;
 
 import java.io.Serializable;
 import java.util.List;
@@ -11,29 +12,38 @@ import java.util.List;
 @Table(name = "Inventory")
 public class Inventory extends Model implements Serializable {
 
-    @Column(name = "Model")
+    @Expose
+    @Column(name = "ServerId", onDelete = Column.ForeignKeyAction.CASCADE)
+    public String serverId;
+
+    @Expose
+    @Column(name = "Model", onDelete = Column.ForeignKeyAction.CASCADE)
     public String model;
 
-    @Column(name = "Number")
+    @Expose
+    @Column(name = "Number", onDelete = Column.ForeignKeyAction.CASCADE)
     public String number;
 
-    @Column(name = "CountRents")
-    public int countRents;
+    @Expose
+    @Column(name = "CountRents", onDelete = Column.ForeignKeyAction.CASCADE)
+    public int countRents = -1;
 
+    /*@Expose
     @Column(name = "Cost")
-    public int cost;
+    public int cost = -1; */
 
-    @Column(name = "Tarif")
+    @Expose
+    @Column(name = "Tarif", onDelete = Column.ForeignKeyAction.CASCADE)
     public Tarif tarif;
 
-    @Column(name = "Point")
+    @Expose
+    @Column(name = "Point", onDelete = Column.ForeignKeyAction.CASCADE)
     public Point points;
     //public List<Point> pointList;
 
 
-
-
     public static List<Inventory> getAll() {
+
         return new Select()
                 .from(Inventory.class)
                 .execute();

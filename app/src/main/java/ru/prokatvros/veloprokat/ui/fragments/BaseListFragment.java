@@ -8,12 +8,17 @@ import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import ru.prokatvros.veloprokat.R;
 
 public abstract class BaseListFragment extends BaseFragment {
 
+    protected final static int SET_ADAPTER = 1;
+
     private ListView lvList;
+
+    private ProgressBar pbLoader;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -32,25 +37,23 @@ public abstract class BaseListFragment extends BaseFragment {
         View view = inflater.inflate(getLayoutResID(), container, false);
 
         ImageButton ibAdd = (ImageButton) view.findViewById(R.id.ibAdd);
-
-        ibAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onAddClick();
-            }
-        });
+        if (ibAdd != null)
+            ibAdd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onAddClick();
+                }
+            });
 
         lvList = (ListView) view.findViewById(R.id.lvList);
-        //ArrayAdapter adapter = getAdapter();
-        //adapter.getCount();
-        //lvList.setAdapter(adapter);
-
         lvList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 BaseListFragment.this.onItemClick(parent, view, position, id);
             }
         });
+
+        pbLoader = (ProgressBar) view.findViewById(R.id.pbLoader);
 
         return view;
     }
@@ -63,6 +66,14 @@ public abstract class BaseListFragment extends BaseFragment {
         lvList.setAdapter(adapter);
     }
 
+    public ListView getLvList() {
+        return lvList;
+    }
+
+    public void setVisibilityProgressBar(boolean visibilityState) {
+        int visibility = visibilityState ? View.VISIBLE : View.GONE;
+        pbLoader.setVisibility(visibility);
+    }
     public ListAdapter getAdapter() {
         return lvList.getAdapter();
     }

@@ -28,7 +28,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
 
     private Context context;
     private String name;
-    private String email;
+    //private String email;
 
     private View previousView;
 
@@ -38,10 +38,8 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
         int holderId;
 
         TextView textView;
-        //ImageView imageView;
         ImageView ivAvatar;
         TextView tvName;
-        TextView tvEmail;
 
         public ViewHolder(View itemView,int ViewType) {
             super(itemView);
@@ -52,22 +50,22 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
                 holderId = 1;
             } else {
                 tvName = (TextView) itemView.findViewById(R.id.name);
-                tvEmail = (TextView) itemView.findViewById(R.id.email);
+                //tvEmail = (TextView) itemView.findViewById(R.id.email);
                 ivAvatar = (ImageView) itemView.findViewById(R.id.ivAvatar);
                 holderId = 0;
             }
         }
     }
 
-    public ItemsAdapter(Context context, String name, String email, OnItemClickListener onItemClickListener) {
-        this(context, name, email);
+    public ItemsAdapter(Context context, String name, OnItemClickListener onItemClickListener) {
+        this(context, name);
         this.onItemClickListener = onItemClickListener;
     }
 
-    public ItemsAdapter(Context context, String name, String email) {
+    public ItemsAdapter(Context context, String name) {
         this.context = context;
         this.name = name;
-        this.email = email;
+
     }
 
     @Override
@@ -121,8 +119,9 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
                     //ProfileActivity.startProfileActivity(context, null);
                 }
             });
+            holder.ivAvatar.setImageResource(R.mipmap.ic_launcher);
             holder.tvName.setText(name);
-            holder.tvEmail.setText(email);
+            //holder.tvEmail.setText(email);
         }
     }
 

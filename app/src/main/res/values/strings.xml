@@ -3,6 +3,7 @@
     <string name="please_wait"> Идет обработка запроса </string>
 
     <string name="app_name">Bike Rent</string>
+    <string name="default_name">Name</string>
 
     <string name="inventory"> Инвентарь </string>
 
@@ -34,15 +35,21 @@
 
     <string name="title_activity_inventory">InventoryActivity</string>
 
+    <string name="title_activity_profile">Profile</string>
+
     <string name="hello_world">Hello world!</string>
 
     <string name="title_inventory_number">Инвентарный номер</string>
+
+    <string name="title_inventory_model">Модель</string>
 
     <string name="title_rents_count">Аренды</string>
 
     <string name="title_cost">Цены</string>
 
     <string name="title_activity_client"> Activity client </string>
+
+    <string name="title_new_rent"> Новая аренда </string>
 
     <string name="name"> Имя </string>
 
@@ -62,11 +69,36 @@
 
     <string name="warning_can_not_have_empty_field"> Недопустимы пустые поля </string>
 
+    <string name="warning_can_not_have_empty_message"> Вы не ввели сообщение </string>
+
+    <string name="warning_check_internet_connection"> Проверте интернет соединение </string>
+
+    <string name="notice_sanding_is_all_send"> Все данные отправленны </string>
+
+    <string name="notice_sanding_not_send_all_data"> Не все данные отправленны </string>
+
     <string name="hint_login"> Логин </string>
 
     <string name="hint_password"> Пароль </string>
 
-<!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hint_message"> Ваше сообщение </string>
+
+    <string name="hint_enter_client_number"> Введите номер клиента </string>
+
+    <string name="hint_enter_model_name"> Введите имя модели </string>
+
+    <string name="was_closed"> Закрыто </string>
+
+    <string name="not_selected_client"> Не выбран клиент </string>
+
+    <string name="not_selected_inventory"> Не выбран нвентарь </string>
+
+    <string name="not_set_time"> Не заданно время </string>
+
+    <string name="not_set_date"> Не заданна дата </string>
+
+    <string name="unidentified_user"> Не опознан </string>
+
+    <string name="enter"> Войти </string>
 
 </resources>

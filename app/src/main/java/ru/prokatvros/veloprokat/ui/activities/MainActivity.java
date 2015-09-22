@@ -10,17 +10,29 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.Volley;
+
+import ru.prokatvros.veloprokat.BikerentalApplication;
 import ru.prokatvros.veloprokat.R;
+import ru.prokatvros.veloprokat.model.db.Admin;
+import ru.prokatvros.veloprokat.model.requests.LoadAllDataRequest;
+import ru.prokatvros.veloprokat.model.requests.PostResponseListener;
 import ru.prokatvros.veloprokat.ui.adapters.ItemsAdapter;
+import ru.prokatvros.veloprokat.ui.fragments.ChatFragment;
 import ru.prokatvros.veloprokat.ui.fragments.ClientListFragment;
 import ru.prokatvros.veloprokat.ui.fragments.InventoryListFragment;
 import ru.prokatvros.veloprokat.ui.fragments.ProfileFragment;
 import ru.prokatvros.veloprokat.ui.fragments.RentListFragment;
+import ru.prokatvros.veloprokat.utils.DataParser;
 
 
 public class MainActivity extends BaseActivity {
+
+    private final String TAG = "MAIN_ACTIVITY";
 
     RecyclerView rvDrawerContainer;
     ItemsAdapter menuAdapter;
@@ -34,14 +46,14 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Admin admin = BikerentalApplication.getInstance().getAdmin();
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         rvDrawerContainer = (RecyclerView) findViewById(R.id.rwDrawerContainer);
         rvDrawerContainer.setHasFixedSize(true);
         menuAdapter = new ItemsAdapter(this,
-                "D_Name"/*WhereAreYouApplication.getInstance().getUserName()*/,
-                "D_Email"/*WhereAreYouApplication.getInstance().getUserEmail()*/ , new ItemsAdapter.OnItemClickListener() {
+                admin.name, new ItemsAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
                 selectItem(position);
@@ -74,28 +86,13 @@ public class MainActivity extends BaseActivity {
         mDrawerToggle.syncState();
 
         if (savedInstanceState == null) {
-            replaceFragment(new ProfileFragment(), false);
+            selectItem(0);
         }
-
-        // BikerentalApplication.getInstance().loadDataFromWeb();
-
-
-
-
     }
 
     @Override
     protected int getContainer() {
         return R.id.container;
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        /* WhereAreYouAppLog.i("onActivityResult " + requestCode);
-        if(requestCode == REQUEST_CODE_ENABLE_GPS) {
-            startService(new Intent(MainActivity.this, GeoService.class));
-        } */
     }
 
     private void selectItem(int position) {
@@ -114,7 +111,7 @@ public class MainActivity extends BaseActivity {
                 break;
 
             case 2:
-                fragment = new ProfileFragment();
+                fragment = new ChatFragment();
                 break;
 
             case 3:
@@ -137,10 +134,47 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
+        /*
+        Client client = new Client();
+
+        client.name="vasa";
+        client.phone="9449";
+        client.surname="sidorov";
+        client.serverId=9999;
+        //client.save();
+
+        Rent rent = new Rent();
+        rent.client = client;
+
+        Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+        final String strJsonRent = gson.toJson(rent);
+
+        Log.d("CLIENT_TO_JSON", strJsonRent); */
+
+        //List<Inventory> list = Inventory.getAll();
+        //list.size();
+
     }
 
+    private void getPoolDataDEBUG() {
+        String dataFromPool = DataParser.getInstance(this).loadDataFromPool();
+        Log.d(TAG, "Data from pool: " + dataFromPool);
 
+        LoadAllDataRequest request = LoadAllDataRequest.saveRequestAllData(dataFromPool, new PostResponseListener() {
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "Save request all data SUCCESS");
+            }
 
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d(TAG, "Save request all data ERROR");
+            }
+        });
+
+        Volley.newRequestQueue(this).add(request);
+    }
 
 
 

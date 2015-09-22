@@ -1,6 +1,9 @@
 package ru.prokatvros.veloprokat.ui.fragments;
 
+import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,12 +20,32 @@ import ru.prokatvros.veloprokat.ui.adapters.RentAdapter;
 
 public class RentListFragment extends BaseListFragment implements CompoundButton.OnCheckedChangeListener {
 
+    private static final String TAG = "RENT_LIST_F";
+
     RadioButton rbCompleted;
     RadioButton rbUncompleted;
+    List<Rent> rentList;
+
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == SET_ADAPTER) {
+                if (rentList != null)
+                    setAdapter(new RentAdapter(getHostActivity(), R.layout.item_base, rentList));
+                //setVisibilityProgressBar(false);
+            }
+        }
+    };
 
     @Override
     public int getLayoutResID() {
         return R.layout.fragment_rents_list;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        getHostActivity().getSupportActionBar().setTitle(getString(R.string.rents));
     }
 
     @Override
@@ -42,8 +65,15 @@ public class RentListFragment extends BaseListFragment implements CompoundButton
     public void onStart() {
         super.onStart();
         rbUncompleted.setChecked(true);
-        //setAdapter(new RentAdapter(getHostActivity(), R.layout.item_base, Rent.getAll()));
-        //setAdapter(new RentAdapter(getHostActivity(), R.layout.item_base, Rent.getAllByCompleted(false)));
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                rentList = Rent.getAllByCompleted(false);
+                handler.sendMessage(handler.obtainMessage(SET_ADAPTER));
+
+            }
+        }).start();
     }
 
     @Override

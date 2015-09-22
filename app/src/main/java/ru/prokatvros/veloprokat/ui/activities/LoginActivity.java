@@ -6,6 +6,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -23,8 +24,10 @@ import ru.prokatvros.veloprokat.BikerentalApplication;
 import ru.prokatvros.veloprokat.R;
 import ru.prokatvros.veloprokat.model.db.Admin;
 import ru.prokatvros.veloprokat.model.requests.AuthorizationRequest;
+import ru.prokatvros.veloprokat.model.requests.PostResponseListener;
 import ru.prokatvros.veloprokat.ui.fragments.LoginFragment;
 import ru.prokatvros.veloprokat.ui.fragments.SelectPointFragment;
+import ru.prokatvros.veloprokat.utils.DataParser;
 
 public class LoginActivity extends  BaseActivity implements LoginFragment.OnLoginListener {
 
@@ -49,9 +52,12 @@ public class LoginActivity extends  BaseActivity implements LoginFragment.OnLogi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().hide();
+
         context = getApplicationContext();
 
-        // Check device for Play Services APK. If check succeeds, proceed with GCM registration.
         if (checkPlayServices()) {
             gcm = GoogleCloudMessaging.getInstance(this);
             regid = getRegistrationId(context);
@@ -61,6 +67,7 @@ public class LoginActivity extends  BaseActivity implements LoginFragment.OnLogi
                 // registerInBackground();
             } else {
                 //replaceFragment(new SelectPointFragment(), false);
+                DataParser.getInstance(this).clearDB();
                 BikerentalApplication.getInstance().getDataParser().parsing(parseListener);
             }
         } else {
@@ -70,10 +77,11 @@ public class LoginActivity extends  BaseActivity implements LoginFragment.OnLogi
 
 
 
-    BikerentalApplication.OnParseListener parseListener = new BikerentalApplication.OnParseListener() {
+    DataParser.OnParseListener parseListener = new DataParser.OnParseListener() {
         @Override
         public void onStart() {
-            getProgressDialog().show();
+            //if(!getProgressDialog().isShowing())
+                //getProgressDialog().show();
         }
 
         @Override
@@ -151,8 +159,6 @@ public class LoginActivity extends  BaseActivity implements LoginFragment.OnLogi
                     regid = gcm.register(SENDER_ID);
                     msg = "Device registered, registration ID=" + regid;
 
-                    //sendRegistrationIdToBackend();
-
                     storeRegistrationId(context, regid);
                 } catch (IOException ex) {
                     msg = "Error :" + ex.getMessage();
@@ -190,7 +196,7 @@ public class LoginActivity extends  BaseActivity implements LoginFragment.OnLogi
 
     private void sendRegistrationIdToBackend(String login, String password) {
 
-        AuthorizationRequest request = AuthorizationRequest.requestLogin(login, password, regid, new AuthorizationRequest.PostResponseListener() {
+        AuthorizationRequest request = AuthorizationRequest.requestLogin(login, password, regid, new PostResponseListener() {
             @Override
             public void onResponse(String response) {
                 Gson gson = new Gson();

@@ -69,9 +69,9 @@ public class RentAdapter extends ArrayAdapter<Rent> {
         long timeToEndOfRent = rent.endTime - Calendar.getInstance().getTimeInMillis();
 
 
-        if (timeToEndOfRent <= 0 )
+        if (timeToEndOfRent <= 0 ) {
             convertView.setBackgroundColor(getContext().getResources().getColor(R.color.red));
-        else if (timeToEndOfRent <= TIME_OF_EXPIRES) {
+        } else if (timeToEndOfRent <= TIME_OF_EXPIRES) {
             convertView.setBackgroundColor(getContext().getResources().getColor(R.color.yellow));
         }
 

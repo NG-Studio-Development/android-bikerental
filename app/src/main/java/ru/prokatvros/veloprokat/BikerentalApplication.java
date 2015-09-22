@@ -1,25 +1,18 @@
 package ru.prokatvros.veloprokat;
 
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
-import android.widget.Toast;
+import android.os.Message;
+import android.telephony.TelephonyManager;
 
 import com.activeandroid.ActiveAndroid;
-import com.activeandroid.Model;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+import com.activeandroid.Configuration;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.UnsupportedEncodingException;
-import java.util.List;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 import ru.prokatvros.veloprokat.model.db.Admin;
 import ru.prokatvros.veloprokat.model.db.Breakdown;
@@ -28,14 +21,11 @@ import ru.prokatvros.veloprokat.model.db.Inventory;
 import ru.prokatvros.veloprokat.model.db.Point;
 import ru.prokatvros.veloprokat.model.db.Rent;
 import ru.prokatvros.veloprokat.model.db.Tarif;
-import ru.prokatvros.veloprokat.model.requests.InventoryRequest;
-import ru.prokatvros.veloprokat.model.requests.LoadAllDataRequest;
+import ru.prokatvros.veloprokat.utils.DataParser;
 
 public class BikerentalApplication extends android.app.Application {
 
     private volatile static BikerentalApplication instance;
-
-    private volatile static DataParser dataParser;
 
     private SharedPreferences applicationPreferences;
 
@@ -52,6 +42,15 @@ public class BikerentalApplication extends android.app.Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+
+        Configuration.Builder configurationBuilder = new Configuration.Builder(this);
+        configurationBuilder.addModelClasses(Admin.class,
+                Breakdown.class, Client.class,
+                Inventory.class, ru.prokatvros.veloprokat.model.db.Message.class,
+                Point.class, Rent.class,
+                Tarif.class);
+
 
         ActiveAndroid.initialize(this);
 
@@ -99,7 +98,7 @@ public class BikerentalApplication extends android.app.Application {
         return application;
     }
 
-    @Deprecated
+    /* @Deprecated
     public void loadDataFromWeb() {
 
         Breakdown.initListForDEBUG();
@@ -149,7 +148,7 @@ public class BikerentalApplication extends android.app.Application {
         });
 
         Volley.newRequestQueue(this).add(request);
-    }
+    } */
 
     public Admin getAdmin() {
         long adminId = getApplicationPreferences().getLong(ConstantsBikeRentalApp.PREFERENCE_ID_ADMIN, -1);
@@ -167,119 +166,64 @@ public class BikerentalApplication extends android.app.Application {
     }
 
 
+    public String getUUID() {
+        TelephonyManager tManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+        return tManager.getDeviceId();
+    }
+
     public DataParser getDataParser() {
-        //if ( dataParser == null )
-            //dataParser = new DataParser();
-        return dataParser = new DataParser();
+        return DataParser.getInstance(this);
     }
 
-
-    public interface OnParseListener {
-        void onStart();
-        void onSuccess();
-        void onError();
+    public interface NetworkAvailableListener {
+        void onResponse(boolean isAvailable);
     }
 
-    public class DataParser {
+    NetworkAvailableListener availableListener = null;
+    private final int ON_ERROR = 0;
+    private final int ON_SUCCESS = 1;
 
-        OnParseListener onParseListener;
+    Handler serverAvialableHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if (availableListener == null)
+                return;
 
+                availableListener.onResponse( msg.what == ON_SUCCESS );
 
-        private LoadAllDataRequest requestCollectData
-                = LoadAllDataRequest.requestCollectData(new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Toast.makeText(BikerentalApplication.this, "IN RESPONSE", Toast.LENGTH_LONG).show();
-
-                Volley.newRequestQueue(BikerentalApplication.this).add(jsonRequestAllData);
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                //getProgressDialog().hide();
-                onParseListener.onError();
-                Toast.makeText(BikerentalApplication.this, "Error: " + error.getMessage(), Toast.LENGTH_LONG).show();
-                error.printStackTrace();
-            }
-        });
-
-
-        JsonObjectRequest jsonRequestAllData = LoadAllDataRequest.jsonRequestAllData(new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                result(response);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                onParseListener.onError();
-                Toast.makeText(BikerentalApplication.this, "Error: " + error.getMessage(), Toast.LENGTH_LONG).show();
-                error.printStackTrace();
-            }
-        });
-
-
-
-        public void parsing(OnParseListener onParseListener) {
-            this.onParseListener = onParseListener;
-            this.onParseListener.onStart();
-            Volley.newRequestQueue(BikerentalApplication.this).add(requestCollectData);
         }
+    };
 
-        protected void saveToDataBase(List<? extends Model>... lists) {
-            ActiveAndroid.beginTransaction();
-            try {
+    public void isNetworkAvailable( final NetworkAvailableListener listener ) {
+        availableListener = listener;
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                //boolean isAvailable = false;
+                try {
+                    URL url = new URL(ConstantsBikeRentalApp.URL_SERVER+"/");
+                    HttpURLConnection conn= (HttpURLConnection) url.openConnection();
 
-                for (List<? extends Model> list : lists) {
-                    for (Model model : list) {
-                        model.save();
-                    }
+                    if (conn.getResponseCode() == 200)
+                        serverAvialableHandler.sendMessage( serverAvialableHandler.obtainMessage(ON_SUCCESS) );
+                    else
+                        serverAvialableHandler.sendMessage( serverAvialableHandler.obtainMessage(ON_ERROR) );
+                    //isAvailable = true;
+
+
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                    serverAvialableHandler.sendMessage( serverAvialableHandler.obtainMessage(ON_ERROR) );
+                        //listener.onError();
                 }
-                ActiveAndroid.setTransactionSuccessful();
-                onParseListener.onSuccess();
+
+
+                //listener.onResponse(isAvailable);
+
             }
-            finally {
-                ActiveAndroid.endTransaction();
-            }
-
-        }
-
-        protected void result(final JSONObject response) {
-
-
-
-            //new Thread(new Runnable() {
-                //@Override
-                //public void run() {
-                    Gson gson = new Gson();
-                    try {
-                        JSONArray jsonClientsArray = response.getJSONObject("data").getJSONArray("clients");
-                        JSONArray jsonTarifsArray = response.getJSONObject("data").getJSONArray("tarifs");
-                        JSONArray jsonInventoriesArray = response.getJSONObject("data").getJSONArray("inventories");
-                        JSONArray jsonPointsArray = response.getJSONObject("data").getJSONArray("points");
-
-                        List<Client> clientList = gson.fromJson(jsonClientsArray.toString(), new TypeToken<List<Client>>() {
-                        }.getType());
-
-                        List<Tarif> tarifsList = gson.fromJson(jsonTarifsArray.toString(), new TypeToken<List<Tarif>>() {
-                        }.getType());
-
-                        List<Inventory> inventoriesList = gson.fromJson(jsonInventoriesArray.toString(), new TypeToken<List<Inventory>>() {
-                        }.getType());
-
-                        List<Point> pointsList = gson.fromJson(jsonPointsArray.toString(), new TypeToken<List<Point>>() {
-                        }.getType());
-
-                        saveToDataBase(clientList, tarifsList, inventoriesList, pointsList);
-
-                    } catch (JSONException ex) {
-                        ex.printStackTrace();
-                        onParseListener.onError();
-                    }
-                //}
-            //}).start();
-
-        }
+        }).start();
     }
+
+
+
 }

@@ -3,6 +3,7 @@ package ru.prokatvros.veloprokat.ui.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 
 import ru.prokatvros.veloprokat.R;
 import ru.prokatvros.veloprokat.model.db.Inventory;
@@ -16,6 +17,9 @@ public class InventoryActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         Inventory inventory = null;
         Intent intent = getIntent();

@@ -6,13 +6,16 @@ import android.os.Parcelable;
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
+import com.google.gson.annotations.Expose;
 
 @Table(name = "Point")
 public class Point extends Model implements Parcelable {
 
+    @Expose
     @Column(name = "Title")
     public String title;
 
+    @Expose
     @Column(name = "Address")
     public String address;
 

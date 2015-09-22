@@ -7,38 +7,77 @@ import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
+import com.google.gson.annotations.Expose;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import ru.prokatvros.veloprokat.BikerentalApplication;
 
 @Table(name = "Rent")
 public class Rent extends Model implements Parcelable {
 
     private final static Map<String, Rent> poolOfRents = new HashMap<>();
 
-    @Column(name = "Completed")
-    private int completed;
+    @Expose
+    @Column(name = "ServerId", onDelete = Column.ForeignKeyAction.CASCADE)
+    private int serverId;
 
-    @Column(name = "Client")
+    @Expose
+    @Column(name = "Token", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE )
+    private String token;
+
+    @Expose
+    @Column(name = "IsCompleted", onDelete = Column.ForeignKeyAction.CASCADE)
+    public int isCompleted;
+
+    @Expose
+    @Column(name = "Client", onDelete = Column.ForeignKeyAction.CASCADE, index = true)
     public Client client;
 
-    @Column(name = "Inventory")
+    @Expose
+    @Column(name = "Inventory", onDelete = Column.ForeignKeyAction.CASCADE)
     public Inventory inventory;
 
-    @Column(name = "Breakdown")
+    @Expose
+    @Column(name = "Breakdown", onDelete = Column.ForeignKeyAction.CASCADE)
     public Breakdown breakdown;
 
+    @Expose
     @Column(name = "EndTime")
     public long endTime;
 
-    public void setCompleted(boolean completed) {
-        this.completed = completed ? 1:0;
+    public void setCompleteds(boolean completeds) {
+        this.isCompleted = completeds ? 1:0;
     }
 
-    public boolean getCompleted() {
-        return completed == 1;
+    public boolean isCompleted() {
+        return isCompleted == 1;
     }
+
+
+    public void puckFields() {
+        Client clientField = null;
+
+        if (client != null ) {
+            clientField = Client.getByNumber(client.phone);
+            if (clientField != null)
+                client = clientField;
+            else
+                client.save();
+        }
+        inventory.save();
+
+    }
+
+    public Rent() {
+        super();
+        token = BikerentalApplication.getInstance().getUUID() +
+                Calendar.getInstance().getTimeInMillis();
+    }
+
 
     public static Rent createRentInPool(String key) {
         Rent rent = new Rent();
@@ -65,7 +104,7 @@ public class Rent extends Model implements Parcelable {
 
         return new Select()
                 .from(Rent.class)
-                .where("Completed = ?", completedInInteger)
+                .where("IsCompleted = ?", completedInInteger)
                 .execute();
     }
 
@@ -75,9 +114,11 @@ public class Rent extends Model implements Parcelable {
         for (Rent rent : rentList) {
             if (rent.client == null && rent.inventory == null)
                 rent.delete();
-
         }
     }
+
+
+
 
 
     public static final Parcelable.Creator<Rent> CREATOR = new Parcelable.Creator<Rent>() {

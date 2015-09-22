@@ -13,18 +13,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/title_inventory_number"
-            android:id="@+id/tvNameTitle" />
+            android:id="@+id/tvInventoryNumberTitle" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="New Text"
-            android:id="@+id/tvName"
+            android:id="@+id/tvNumber"
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
     </RelativeLayout>
-
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -33,14 +32,14 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/title_inventory_number"
-            android:id="@+id/tvInventoryNumberTitle" />
+            android:text="@string/title_inventory_model"
+            android:id="@+id/tvNameTitle" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="New Text"
-            android:id="@+id/tvInventoryNumber"
+            android:id="@+id/tvName"
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />

@@ -4,6 +4,7 @@ import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
+import com.google.gson.annotations.Expose;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -12,12 +13,15 @@ import java.util.List;
 @Table(name = "Breakdown")
 public class Breakdown extends Model implements Serializable {
 
+    @Expose
     @Column(name = "Code")
     public String code;
 
+    @Expose
     @Column(name = "Description")
     public String description;
 
+    @Expose
     @Column(name = "Cost")
     public int cost;
 

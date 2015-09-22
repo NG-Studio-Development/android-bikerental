@@ -14,7 +14,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/title_client"
-                android:id="@+id/tvClientTitle" />
+                android:layout_marginTop="@dimen/margin_widget_default_small"
+                android:id="@+id/tvClientTitle"
+                style="@style/TextViewTitle" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -26,7 +28,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/title_inventory"
-                android:id="@+id/tvInventoryTitle" />
+                android:layout_marginTop="@dimen/margin_widget_default_small"
+                android:id="@+id/tvInventoryTitle"
+                style="@style/TextViewTitle" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -37,6 +41,7 @@
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_widget_default_small"
                 android:layout_gravity="center_horizontal">
 
                 <TextView
@@ -46,7 +51,8 @@
                     android:id="@+id/tvTimeTitle"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true" />
+                    android:layout_alignParentStart="true"
+                    style="@style/TextViewTitle" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -58,11 +64,39 @@
                     android:layout_alignParentEnd="true" />
             </RelativeLayout>
 
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/rlBreakdown"
+                android:visibility="gone"
+                android:layout_marginTop="@dimen/margin_widget_default_small"
+                android:layout_gravity="center_horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/title_breakdown"
+                    android:id="@+id/tvBreakdownTitle"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    style="@style/TextViewTitle" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="New Text"
+                    android:id="@+id/tvBreakdown"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true" />
+            </RelativeLayout>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/title_breakdown"
-                android:id="@+id/tvBreakdownTitle"
+                android:id="@+id/tvBreakdownSpinnerTitle"
                 android:layout_gravity="center_horizontal" />
 
             <Spinner

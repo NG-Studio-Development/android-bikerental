@@ -6,15 +6,23 @@ import android.os.Parcelable;
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
+import com.google.gson.annotations.Expose;
 
 @Table(name = "Admin")
 public class Admin extends Model implements Parcelable {
 
+    @Expose
+    @Column(name = "ServerId")
+    public long serverId;
+
+    @Expose
     @Column(name = "Name")
     public String name;
 
     @Column(name = "Point")
     public Point point;
+
+
 
     public static final Parcelable.Creator<Admin> CREATOR = new Parcelable.Creator<Admin>() {
 

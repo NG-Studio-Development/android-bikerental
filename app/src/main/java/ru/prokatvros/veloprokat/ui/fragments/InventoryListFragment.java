@@ -1,10 +1,12 @@
 package ru.prokatvros.veloprokat.ui.fragments;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageButton;
 
 import ru.prokatvros.veloprokat.R;
 import ru.prokatvros.veloprokat.model.db.Inventory;
@@ -20,10 +22,18 @@ public class InventoryListFragment extends BaseListFragment {
     }
 
     @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        getHostActivity().getSupportActionBar().setTitle(getString(R.string.inventory));
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View view = super.onCreateView(inflater, container, savedInstanceState);
+        ImageButton ibAdd = (ImageButton) view.findViewById(R.id.ibAdd);
+        ibAdd.setVisibility(View.INVISIBLE);
 
         setAdapter(new InventoryAdapter(getHostActivity(), R.layout.item_base, Inventory.getAll()));
 
