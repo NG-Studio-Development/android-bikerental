@@ -9,7 +9,11 @@ public class ConstantsBikeRentalApp {
 
     public static final String PREFERENCE_ID_ADMIN = "preference_id_admin";
 
+    public static final String PREFERENCE_ID_POINT = "preference_id_point";
+
     public static final String PREFERENCE_CACHE_JSON = "preference_cache_json";
+
+    public static final int RESULT_OK = 1;
 
 
 }

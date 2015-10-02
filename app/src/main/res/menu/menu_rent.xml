@@ -9,7 +9,7 @@
     <item android:id="@+id/actionClose"
         android:title="@string/close"
         android:orderInCategory="100"
-        android:icon="@drawable/drawable_ic_add"
+        android:icon="@mipmap/ic_action_cancel"
         android:visible="false"
         app:showAsAction="ifRoom" />
 

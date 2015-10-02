@@ -5,25 +5,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
 
 import ru.prokatvros.veloprokat.R;
-import ru.prokatvros.veloprokat.model.db.Message;
+import ru.prokatvros.veloprokat.model.db.BreakdownInRent;
 
-public class ChatAdapter extends ArrayAdapter<Message> {
+public class BreakdownInRentAdapter extends ArrayAdapter<BreakdownInRent> {
 
     private int resource;
 
-    public ChatAdapter(Context context, int resource, List<Message> list) {
+    public BreakdownInRentAdapter (Context context, int resource, List<BreakdownInRent> list) {
         super(context, resource, list);
         this.resource = resource;
     }
-
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -38,30 +34,22 @@ public class ChatAdapter extends ArrayAdapter<Message> {
             holder = (Holder)convertView.getTag();
         }
 
-        Message message = getItem(position);
+        BreakdownInRent breakdown = getItem(position);
 
-        holder.tvText.setText(message.message);
-
-        if (message.admin != null && message.admin.name != null) {
-            holder.tvName.setText(message.admin.name);
-            ImageLoader.getInstance().displayImage(message.admin.getAvatarUrl(), holder.ivAvatar);
-        }
-
+        holder.tvDescription.setText(breakdown.name);
 
         return convertView;
     }
 
     private Holder initHolder(View convertView) {
         Holder holder = new Holder();
-        holder.tvText = (TextView) convertView.findViewById(R.id.tvText);
-        holder.tvName = (TextView) convertView.findViewById(R.id.tvName);
-        holder.ivAvatar = (ImageView) convertView.findViewById(R.id.ivAvatar);
+        holder.tvDescription = (TextView) convertView.findViewById(R.id.tvName);
         return holder;
     }
 
     class Holder {
-        ImageView ivAvatar;
-        TextView tvText;
-        TextView tvName;
+        TextView tvDescription;
     }
+
+
 }

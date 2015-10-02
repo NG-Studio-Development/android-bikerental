@@ -17,6 +17,7 @@ import ru.prokatvros.veloprokat.ConstantsBikeRentalApp;
 import ru.prokatvros.veloprokat.model.db.Message;
 
 public class MessageRequest extends StringRequest {
+
     private static final String TAG = "MESSAGE_REQUEST";
 
     private static String PARAM_JSON_DATA = "data";

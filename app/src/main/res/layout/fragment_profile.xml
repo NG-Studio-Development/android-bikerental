@@ -11,7 +11,7 @@
         android:layout_height="@dimen/photo_profile_height"
         android:background="@color/main_color">
 
-        <ImageView
+        <ru.prokatvros.veloprokat.views.RoundedImageView
             android:id="@+id/ivAvatar"
             android:layout_width="@dimen/size_avatar_imageview"
             android:layout_height="@dimen/size_avatar_imageview"

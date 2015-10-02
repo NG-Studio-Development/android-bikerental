@@ -10,24 +10,18 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
-
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.Volley;
 
 import ru.prokatvros.veloprokat.BikerentalApplication;
 import ru.prokatvros.veloprokat.R;
 import ru.prokatvros.veloprokat.model.db.Admin;
-import ru.prokatvros.veloprokat.model.requests.LoadAllDataRequest;
-import ru.prokatvros.veloprokat.model.requests.PostResponseListener;
 import ru.prokatvros.veloprokat.ui.adapters.ItemsAdapter;
+import ru.prokatvros.veloprokat.ui.fragments.BreakdownInRentListFragment;
 import ru.prokatvros.veloprokat.ui.fragments.ChatFragment;
 import ru.prokatvros.veloprokat.ui.fragments.ClientListFragment;
 import ru.prokatvros.veloprokat.ui.fragments.InventoryListFragment;
 import ru.prokatvros.veloprokat.ui.fragments.ProfileFragment;
 import ru.prokatvros.veloprokat.ui.fragments.RentListFragment;
-import ru.prokatvros.veloprokat.utils.DataParser;
 
 
 public class MainActivity extends BaseActivity {
@@ -115,7 +109,7 @@ public class MainActivity extends BaseActivity {
                 break;
 
             case 3:
-                fragment = new ProfileFragment();
+                fragment = new BreakdownInRentListFragment();
                 break;
 
             case 4:
@@ -157,7 +151,7 @@ public class MainActivity extends BaseActivity {
 
     }
 
-    private void getPoolDataDEBUG() {
+    /*private void getPoolDataDEBUG() {
         String dataFromPool = DataParser.getInstance(this).loadDataFromPool();
         Log.d(TAG, "Data from pool: " + dataFromPool);
 
@@ -174,7 +168,7 @@ public class MainActivity extends BaseActivity {
         });
 
         Volley.newRequestQueue(this).add(request);
-    }
+    } */
 
 
 

@@ -1,18 +1,6 @@
 package ru.prokatvros.veloprokat.ui.adapters;
 
-import android.content.Context;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
-
-import java.util.List;
-
-import ru.prokatvros.veloprokat.R;
-import ru.prokatvros.veloprokat.model.db.Breakdown;
-
-public class BreakdownAdapter extends ArrayAdapter<Breakdown> {
+/* public class BreakdownAdapter extends ArrayAdapter<Breakdown> {
 
     private int resource;
     private List<Breakdown> list;
@@ -54,4 +42,4 @@ public class BreakdownAdapter extends ArrayAdapter<Breakdown> {
         TextView tvName;
     }
 
-}
+} */

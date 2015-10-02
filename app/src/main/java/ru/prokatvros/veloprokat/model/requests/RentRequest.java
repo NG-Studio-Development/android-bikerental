@@ -45,6 +45,29 @@ public class RentRequest extends StringRequest {
     }
 
 
+    public static RentRequest requestPutRent( long adminId, String strJsonRent, final PostResponseListener listener ) {
+
+        String url = ConstantsBikeRentalApp.URL_SERVER+"/"+"rent";
+
+        Map<String, String> params = new HashMap<>();
+        params.put(PARAM_ID_ADMIN, String.valueOf(adminId));
+        params.put(PARAM_JSON_RENT, strJsonRent);
+
+        return new RentRequest(Request.Method.PUT, url, params, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                listener.onResponse(response);
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                listener.onErrorResponse(error);
+            }
+        });
+    }
+
+
     @Override
     protected Map<String, String> getParams() throws com.android.volley.AuthFailureError {
         return params;

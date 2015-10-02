@@ -16,11 +16,16 @@
             android:id="@+id/buttonAddClient" />
 
         <Button
-            style="?android:attr/buttonStyleSmall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/not_selected_inventory"
             android:id="@+id/buttonAddInventory" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/not_selected_additional_inventory"
+            android:id="@+id/buttonAdditionInventory" />
 
         <RelativeLayout
             android:layout_width="match_parent"

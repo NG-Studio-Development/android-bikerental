@@ -11,8 +11,9 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import ru.prokatvros.veloprokat.R;
+import ru.prokatvros.veloprokat.ui.activities.MainActivity;
 
-public abstract class BaseListFragment extends BaseFragment {
+public abstract class BaseListFragment extends BaseFragment<MainActivity> {
 
     protected final static int SET_ADAPTER = 1;
 

@@ -19,8 +19,9 @@ public class Admin extends Model implements Parcelable {
     @Column(name = "Name")
     public String name;
 
-    @Column(name = "Point")
-    public Point point;
+    //@Expose
+    //@Column(name = "Point" /*, onDelete = Column.ForeignKeyAction.CASCADE*/ )
+    //public Point point;
 
 
 
@@ -36,6 +37,9 @@ public class Admin extends Model implements Parcelable {
         }
     };
 
+    public String getAvatarUrl() {
+        return "http://prokatvros.temp.swtest.ru/api/files/images/cat.jpg";
+    }
 
     @Override
     public int describeContents() {

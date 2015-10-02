@@ -6,7 +6,10 @@ import android.os.Parcelable;
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
+import com.activeandroid.query.Select;
 import com.google.gson.annotations.Expose;
+
+import java.util.List;
 
 @Table(name = "Point")
 public class Point extends Model implements Parcelable {
@@ -16,12 +19,22 @@ public class Point extends Model implements Parcelable {
     public String title;
 
     @Expose
-    @Column(name = "Address")
+    @Column(name = "Address", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
     public String address;
 
+    public static List<Point> getAll() {
 
+        return new Select()
+                .from(Point.class)
+                .execute();
+    }
 
-
+    public static Point getByAddress(String address) {
+        return new Select()
+                .from(Point.class)
+                .where("Address = ?", address)
+                .executeSingle();
+    }
 
     public static final Parcelable.Creator<Point> CREATOR = new Parcelable.Creator<Point>() {
 

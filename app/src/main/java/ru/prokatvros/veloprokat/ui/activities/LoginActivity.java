@@ -16,6 +16,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -199,7 +200,7 @@ public class LoginActivity extends  BaseActivity implements LoginFragment.OnLogi
         AuthorizationRequest request = AuthorizationRequest.requestLogin(login, password, regid, new PostResponseListener() {
             @Override
             public void onResponse(String response) {
-                Gson gson = new Gson();
+                Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
                 Log.d(TAG, "Response: "+response);
                 Admin admin = gson.fromJson(response, Admin.class);
                 admin.save();
@@ -209,12 +210,14 @@ public class LoginActivity extends  BaseActivity implements LoginFragment.OnLogi
                 else
                     throw new Error("Admin is null");
 
-                replaceFragment(new SelectPointFragment(), false);
+                DataParser.getInstance(LoginActivity.this).clearDB();
+                BikerentalApplication.getInstance().getDataParser().parsing(parseListener);
+
             }
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(LoginActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(LoginActivity.this, "Id to back "+error.toString(), Toast.LENGTH_LONG).show();
                 error.printStackTrace();
             }
         });

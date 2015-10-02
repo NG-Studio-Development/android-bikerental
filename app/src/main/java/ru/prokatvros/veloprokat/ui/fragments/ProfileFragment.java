@@ -18,6 +18,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -94,6 +95,9 @@ public class ProfileFragment extends BaseFragment<ProfileActivity> {
         Admin admin = BikerentalApplication.getInstance().getAdmin();
 
         ivAvatar.setImageResource(R.mipmap.ic_launcher);
+
+        ImageLoader.getInstance().displayImage(admin.getAvatarUrl(), ivAvatar);
+
         tvProfileName.setText(admin.name);
 
         String dataFromPool = DataParser.getInstance(getHostActivity()).loadDataFromPool();
@@ -135,7 +139,7 @@ public class ProfileFragment extends BaseFragment<ProfileActivity> {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.d(TAG, "Save request all data ERROR");
-                Toast.makeText(getHostActivity(), "Save request all data ERROR", Toast.LENGTH_LONG).show();
+                //Toast.makeText(getHostActivity(), "Save request all data ERROR", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -145,6 +149,7 @@ public class ProfileFragment extends BaseFragment<ProfileActivity> {
             @Override
             public void onClick(View v) {
                 Volley.newRequestQueue(getHostActivity()).add(request);
+                disableSendButton(buttonSend);
             }
         });
 

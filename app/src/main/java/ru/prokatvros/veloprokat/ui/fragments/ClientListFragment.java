@@ -20,8 +20,6 @@ import ru.prokatvros.veloprokat.ui.adapters.ClientAdapter;
 
 public class ClientListFragment extends BaseListFragment implements LoaderManager.LoaderCallbacks<Client>{
 
-
-
     private List<Client> clientList = null;
 
     Handler handler = new Handler() {
@@ -37,7 +35,7 @@ public class ClientListFragment extends BaseListFragment implements LoaderManage
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        getHostActivity().getSupportActionBar().setTitle(getString(R.string.clients));
+//        getHostActivity().getSupportActionBar().setTitle(getString(R.string.clients));
     }
 
     @Override

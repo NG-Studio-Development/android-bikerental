@@ -1,8 +1,5 @@
 package ru.prokatvros.veloprokat.model.db;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
@@ -16,25 +13,25 @@ import java.util.Map;
 
 import ru.prokatvros.veloprokat.BikerentalApplication;
 
-@Table(name = "Rent")
-public class Rent extends Model implements Parcelable {
+@Table(name = "Rental")
+public class Rent extends Model /*implements Parcelable*/ {
 
     private final static Map<String, Rent> poolOfRents = new HashMap<>();
 
     @Expose
-    @Column(name = "ServerId", onDelete = Column.ForeignKeyAction.CASCADE)
-    private int serverId;
+    @Column(name = "serverId")
+    private Integer serverId;
 
     @Expose
     @Column(name = "Token", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE )
     private String token;
 
     @Expose
-    @Column(name = "IsCompleted", onDelete = Column.ForeignKeyAction.CASCADE)
-    public int isCompleted;
+    @Column(name = "IsCompleted")
+    public Integer isCompleted = 0;
 
     @Expose
-    @Column(name = "Client", onDelete = Column.ForeignKeyAction.CASCADE, index = true)
+    @Column(name = "Client", onDelete = Column.ForeignKeyAction.CASCADE)
     public Client client;
 
     @Expose
@@ -42,12 +39,16 @@ public class Rent extends Model implements Parcelable {
     public Inventory inventory;
 
     @Expose
+    @Column(name = "InventoryAddition")
+    public Inventory inventoryAddition;
+
+    @Expose
     @Column(name = "Breakdown", onDelete = Column.ForeignKeyAction.CASCADE)
     public Breakdown breakdown;
 
     @Expose
     @Column(name = "EndTime")
-    public long endTime;
+    public Long endTime;
 
     public void setCompleteds(boolean completeds) {
         this.isCompleted = completeds ? 1:0;
@@ -68,9 +69,39 @@ public class Rent extends Model implements Parcelable {
             else
                 client.save();
         }
-        inventory.save();
+
+        //=
+
+
+        //=
+
+
+        Inventory inventory = Inventory.getByNumber(this.inventory.number);
+
+        if (inventory == null)
+            this.inventory.save();
+        else
+            this.inventory = inventory;
+
+
+        inventory = Inventory.getByNumber(this.inventoryAddition.number);
+
+        if (inventory == null)
+            this.inventoryAddition.save();
+        else
+            inventoryAddition = inventory;
 
     }
+
+    /*public void saveCrud() {
+        List<Point> pointsAll = Point.getAll();
+        Point points = Point.getByAddress(this.points.address);
+        if ( points == null )
+            this.points.save();
+        else
+            this.points = points;
+
+    }*/
 
     public Rent() {
         super();
@@ -100,8 +131,17 @@ public class Rent extends Model implements Parcelable {
     }
 
     public static List<Rent> getAllByCompleted(boolean completed) {
-        int completedInInteger = completed ? 1 : 0;
+        /*int completedInInteger = completed ? 1 : 0;
+        List<Rent> list = new ArrayList<>();
+        List<Rent> allRentsList = getAll();
+        for (Rent rent : allRentsList) {
+            if (rent.isCompleted == completedInInteger ) {
+                list.add(rent);
+            }
+        }
 
+        return list; */
+        int completedInInteger = completed ? 1 : 0;
         return new Select()
                 .from(Rent.class)
                 .where("IsCompleted = ?", completedInInteger)
@@ -117,11 +157,7 @@ public class Rent extends Model implements Parcelable {
         }
     }
 
-
-
-
-
-    public static final Parcelable.Creator<Rent> CREATOR = new Parcelable.Creator<Rent>() {
+    /*public static final Parcelable.Creator<Rent> CREATOR = new Parcelable.Creator<Rent>() {
 
         public Rent createFromParcel(Parcel in) {
 
@@ -142,5 +178,5 @@ public class Rent extends Model implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(getId());
-    }
+    } */
 }

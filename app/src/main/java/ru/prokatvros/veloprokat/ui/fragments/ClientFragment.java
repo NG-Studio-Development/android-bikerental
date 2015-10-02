@@ -1,16 +1,23 @@
 package ru.prokatvros.veloprokat.ui.fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+
+import ru.prokatvros.veloprokat.ConstantsBikeRentalApp;
 import ru.prokatvros.veloprokat.R;
 import ru.prokatvros.veloprokat.model.db.Client;
+import ru.prokatvros.veloprokat.ui.activities.ClientActivity;
 
-public class ClientFragment extends BaseFragment {
+public class ClientFragment extends BaseFragment<ClientActivity> {
 
+    private final static String TAG = "CLIENT_FRAGMENT";
     private static final String ARG_CLIENT = "client";
 
     private Client client;
@@ -18,7 +25,7 @@ public class ClientFragment extends BaseFragment {
     public static ClientFragment newInstance(Client client) {
         ClientFragment fragment = new ClientFragment ();
         Bundle args = new Bundle();
-        args.putSerializable(ARG_CLIENT, client);
+        args.putParcelable(ARG_CLIENT, client);
         fragment.setArguments(args);
 
         return fragment;
@@ -28,8 +35,14 @@ public class ClientFragment extends BaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            client = (Client) getArguments().getSerializable(ARG_CLIENT);
+            client = getArguments().getParcelable(ARG_CLIENT);
+            if (client == null)
+                throw new Error("Not found client model !!!");
         }
+
+        getHostActivity().getSupportActionBar().setTitle(client.name);
+        getHostActivity().getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
     }
 
     @Override
@@ -42,11 +55,27 @@ public class ClientFragment extends BaseFragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_client, container, false);
-        TextView tvName = (TextView) view.findViewById(R.id.tvName);
 
-        if (client != null ) {
-            tvName.setText(client.name);
-        }
+        setHasOptionsMenu(true);
+
+        TextView tvName = (TextView) view.findViewById(R.id.tvName);
+        TextView tvSurname = (TextView) view.findViewById(R.id.tvSurname);
+        TextView tvPhone = (TextView) view.findViewById(R.id.tvPhone);
+        TextView tvRentsCount = (TextView) view.findViewById(R.id.tvRentsCount);
+        TextView tvSumm = (TextView) view.findViewById(R.id.tvSumm);
+        TextView tvBlackList = (TextView) view.findViewById(R.id.tvBlackList);
+        ImageView ivAvatar = (ImageView) view.findViewById(R.id.ivAvatar);
+
+        String urlToImage = ConstantsBikeRentalApp.URL_SERVER+"/"+client.avatar;
+        Log.d(TAG, "Avatar: "+ urlToImage);
+        ImageLoader.getInstance().displayImage(urlToImage, ivAvatar);
+
+        tvName.setText(client.name);
+        tvSurname.setText(client.surname);
+        tvPhone.setText(client.phone);
+        tvRentsCount.setText(String.valueOf(client.countRents));
+        tvSumm.setText(String.valueOf(client.summ));
+        tvBlackList.setText(String.valueOf(client.blackList));
 
 
         return view;

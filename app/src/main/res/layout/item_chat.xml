@@ -21,10 +21,11 @@
         android:gravity="center"
         android:id="@+id/linearLayout2">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/imageView"
+        <ru.prokatvros.veloprokat.views.RoundedImageView
+            android:layout_width="@dimen/size_avatar_imageview"
+            android:layout_height="@dimen/size_avatar_imageview"
+            android:id="@+id/ivAvatar"
+
             android:src="@mipmap/ic_launcher"
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"

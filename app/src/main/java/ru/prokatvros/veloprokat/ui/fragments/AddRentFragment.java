@@ -17,23 +17,13 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.Volley;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 import java.util.Calendar;
 
-import ru.prokatvros.veloprokat.BikerentalApplication;
 import ru.prokatvros.veloprokat.R;
 import ru.prokatvros.veloprokat.model.db.Rent;
-import ru.prokatvros.veloprokat.model.requests.PostResponseListener;
-import ru.prokatvros.veloprokat.model.requests.RentRequest;
-import ru.prokatvros.veloprokat.services.receivers.SampleAlarmReceiver;
 import ru.prokatvros.veloprokat.ui.activities.RentActivity;
-import ru.prokatvros.veloprokat.utils.DataParser;
 
-public class AddRentFragment extends BaseFragment {
+public class AddRentFragment extends BaseFragment<RentActivity> {
 
     private static String TAG = "ADD_RENT_FRAGMENT";
 
@@ -41,6 +31,7 @@ public class AddRentFragment extends BaseFragment {
     static TextView tvDate;
     Button buttonAddClient;
     Button buttonAddInventory;
+    Button buttonAdditionInventory;
 
     @Override
     public int getLayoutResID() {
@@ -59,7 +50,9 @@ public class AddRentFragment extends BaseFragment {
         tvTime = (TextView) view.findViewById(R.id.tvTime);
         tvDate = (TextView) view.findViewById(R.id.tvDate);
 
-        buttonAddClient= (Button) view.findViewById(R.id.buttonAddClient);
+        buttonAdditionInventory = (Button) view.findViewById(R.id.buttonAdditionInventory);
+
+        buttonAddClient = (Button) view.findViewById(R.id.buttonAddClient);
         buttonAddInventory = (Button) view.findViewById(R.id.buttonAddInventory);
         Button buttonAdd = (Button) view.findViewById(R.id.buttonAdd);
         ImageButton buttonAddDate = (ImageButton) view.findViewById(R.id.ibAddDate);
@@ -94,9 +87,18 @@ public class AddRentFragment extends BaseFragment {
         buttonAddInventory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getHostActivity().replaceFragment(new SearchInventoryFragment(), true);
+                getHostActivity().replaceFragment(SearchInventoryFragment.newSearchMain(), true);
             }
         });
+
+
+        buttonAdditionInventory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getHostActivity().replaceFragment(SearchInventoryFragment.newSearchAdditional(), true);
+            }
+        });
+
 
         buttonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -121,12 +123,12 @@ public class AddRentFragment extends BaseFragment {
                     Log.d(TAG, "Time in millis: "+calendar.getTimeInMillis());
                     rent.endTime = calendar.getTimeInMillis();
                     rent.save();
-                    sendToServer(rent);
+                    getHostActivity().sendToServer(rent);
                 } else {
                     throw new Error("Rent is null, please, check set new rent to pool in RentActivity");
                 }
 
-                //getHostActivity().onBackPressed();
+                getHostActivity().onBackPressed();
             }
         });
 
@@ -148,9 +150,12 @@ public class AddRentFragment extends BaseFragment {
 
         if(rent.inventory != null)
             buttonAddInventory.setText(rent.inventory.model);
+
+        if(rent.inventoryAddition != null)
+            buttonAdditionInventory.setText(rent.inventoryAddition.model);
     }
 
-    protected void sendToServer(final Rent rent) {
+    /* protected void sendToServer(final Rent rent) {
 
         Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
         final String strJsonRent = gson.toJson(rent);
@@ -197,7 +202,7 @@ public class AddRentFragment extends BaseFragment {
             }
         });
 
-    }
+    } */
 
     /* */
 

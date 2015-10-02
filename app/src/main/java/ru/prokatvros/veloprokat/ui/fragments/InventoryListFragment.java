@@ -8,8 +8,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 
+import ru.prokatvros.veloprokat.BikerentalApplication;
 import ru.prokatvros.veloprokat.R;
 import ru.prokatvros.veloprokat.model.db.Inventory;
+import ru.prokatvros.veloprokat.model.db.Point;
 import ru.prokatvros.veloprokat.ui.activities.InventoryActivity;
 import ru.prokatvros.veloprokat.ui.adapters.InventoryAdapter;
 
@@ -34,8 +36,9 @@ public class InventoryListFragment extends BaseListFragment {
         View view = super.onCreateView(inflater, container, savedInstanceState);
         ImageButton ibAdd = (ImageButton) view.findViewById(R.id.ibAdd);
         ibAdd.setVisibility(View.INVISIBLE);
+        Point point = BikerentalApplication.getInstance().getPoint();
 
-        setAdapter(new InventoryAdapter(getHostActivity(), R.layout.item_base, Inventory.getAll()));
+        setAdapter(new InventoryAdapter(getHostActivity(), R.layout.item_base, Inventory.getByPoint(point)));
 
         return view;
     }

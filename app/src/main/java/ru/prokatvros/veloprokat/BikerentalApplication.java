@@ -9,6 +9,8 @@ import android.telephony.TelephonyManager;
 
 import com.activeandroid.ActiveAndroid;
 import com.activeandroid.Configuration;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -22,6 +24,7 @@ import ru.prokatvros.veloprokat.model.db.Point;
 import ru.prokatvros.veloprokat.model.db.Rent;
 import ru.prokatvros.veloprokat.model.db.Tarif;
 import ru.prokatvros.veloprokat.utils.DataParser;
+import ru.prokatvros.veloprokat.utils.FileUtils;
 
 public class BikerentalApplication extends android.app.Application {
 
@@ -43,6 +46,11 @@ public class BikerentalApplication extends android.app.Application {
     public void onCreate() {
         super.onCreate();
 
+        // Create global configuration and initialize ImageLoader with this config
+        ImageLoaderConfiguration config = ImageLoaderConfiguration.createDefault(this);
+        ImageLoader.getInstance().init(config);
+
+        ImageLoader.getInstance().handleSlowNetwork(true);
 
         Configuration.Builder configurationBuilder = new Configuration.Builder(this);
         configurationBuilder.addModelClasses(Admin.class,
@@ -53,6 +61,8 @@ public class BikerentalApplication extends android.app.Application {
 
 
         ActiveAndroid.initialize(this);
+
+        FileUtils.init(this);
 
         synchronized (BikerentalApplication.class) {
             if (BuildConfig.DEBUG) {
@@ -70,7 +80,7 @@ public class BikerentalApplication extends android.app.Application {
         applicationPreferences = getSharedPreferences(ConstantsBikeRentalApp.SHARED_PREFERENCE_NAME,MODE_PRIVATE);
         applicationPreferencesEditor = applicationPreferences.edit();
 
-        Rent.removeEmpty();
+        //Rent.removeEmpty();
     }
 
 
@@ -154,7 +164,7 @@ public class BikerentalApplication extends android.app.Application {
         long adminId = getApplicationPreferences().getLong(ConstantsBikeRentalApp.PREFERENCE_ID_ADMIN, -1);
 
         if (adminId == -1)
-            throw new Error("Not found admin, please check registration of admin");
+            throw new Error("Not found admin, please check registration of admin !!!");
 
         return Admin.load(Admin.class, adminId);
     }
@@ -163,6 +173,21 @@ public class BikerentalApplication extends android.app.Application {
         SharedPreferences.Editor  editor = getApplicationPreferencesEditor();
         editor.putLong(ConstantsBikeRentalApp.PREFERENCE_ID_ADMIN, admin.getId());
         editor.commit();
+    }
+
+    public void setPoint(Point point) {
+        SharedPreferences.Editor  editor = getApplicationPreferencesEditor();
+        editor.putLong(ConstantsBikeRentalApp.PREFERENCE_ID_POINT, point.getId());
+        editor.commit();
+    }
+
+    public Point getPoint() {
+        long pointId = getApplicationPreferences().getLong(ConstantsBikeRentalApp.PREFERENCE_ID_POINT, -1);
+
+        if (pointId == -1)
+            throw new Error("Not found admin, please check registration of admin !!!");
+
+        return Admin.load(Point.class, pointId);
     }
 
 

@@ -13,13 +13,20 @@ import com.google.gson.GsonBuilder;
 import java.util.HashMap;
 import java.util.Map;
 
+import ru.prokatvros.veloprokat.BikerentalApplication;
 import ru.prokatvros.veloprokat.ConstantsBikeRentalApp;
+import ru.prokatvros.veloprokat.R;
 import ru.prokatvros.veloprokat.model.db.Client;
 
 public class ClientRequest extends StringRequest {
 
-    private static final String TAG ="CLIENT_REQUEST ";
+    private static final String TAG ="CLIENT_REQUEST";
+
     private static String PARAM_JSON_CLIENT = "json_client";
+
+    public static int CODE_ERROR_DUPLICATE_POST_CLIENT = 1;
+    public static int CODE_NOT_ERROR_POST_CLIENT = 0;
+
 
     private Map<String, String> params;
 
@@ -29,9 +36,22 @@ public class ClientRequest extends StringRequest {
         this.params = params;
     }
 
+
+    private static int[] text_error_post_client = new int[2];
+
+    public static String errorMessagePostClient(int code) {
+        return BikerentalApplication.getInstance().getString(text_error_post_client[code]);
+    }
+
     public static ClientRequest requestPostClient(Client client,  final PostResponseListener listener) {
+
+
+        text_error_post_client[CODE_ERROR_DUPLICATE_POST_CLIENT] = R.string.warning_duplicate_client;
+        text_error_post_client[CODE_NOT_ERROR_POST_CLIENT] = R.string.warning_duplicate_client;
+
         Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
         final String strJsonClient = gson.toJson(client);
+
 
         Log.d(TAG, "Json: " + strJsonClient);
 

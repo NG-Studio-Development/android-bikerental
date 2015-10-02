@@ -91,7 +91,7 @@ public class DataParser {
         @Override
         public void onErrorResponse(VolleyError error) {
             handler.sendMessage( handler.obtainMessage(ON_ERROR) );
-            Toast.makeText(context, "Error: " + error.getMessage(), Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "RequestCollectData error: " + error.toString(), Toast.LENGTH_LONG).show();
             error.printStackTrace();
         }
     });
@@ -144,11 +144,6 @@ public class DataParser {
                                   List<Breakdown> breakdownList,
                                   List<Rent> rentList ) {
 
-
-
-
-
-
         ActiveAndroid.beginTransaction();
         try {
 
@@ -160,22 +155,21 @@ public class DataParser {
                 tarif.save();
             }
 
-            for (Inventory inventory : inventoriesList) {
-                inventory.save();
-            }
-
             for (Point point : pointsList) {
                 point.save();
+            }
+
+            for (Inventory inventory : inventoriesList) {
+                inventory.tarif.save();
+                inventory.saveCrud();
+                inventory.save();
             }
 
             for (Breakdown breakdown : breakdownList) {
                 breakdown.save();
             }
 
-
-
             ActiveAndroid.setTransactionSuccessful();
-
         }
         finally {
             ActiveAndroid.endTransaction();
@@ -183,12 +177,12 @@ public class DataParser {
 
         ActiveAndroid.beginTransaction();
         try {
+
             for (Rent rent : rentList) {
-                //rent.inventory.save();
-                //rent.client.save();
                 rent.puckFields();
                 rent.save();
             }
+
             ActiveAndroid.setTransactionSuccessful();
             handler.sendMessage(handler.obtainMessage(ON_SUCCESS) );
         } finally {
@@ -240,7 +234,6 @@ public class DataParser {
                 }
             }
         }).start();
-
     }
 
     public void clear() {
@@ -258,11 +251,11 @@ public class DataParser {
     }
 
     public String loadDataFromPool() {
-        return BikerentalApplication.getInstance().getApplicationPreferences().getString(PARAM_JSON_DATA,"");
+        return BikerentalApplication.getInstance().getApplicationPreferences().getString(PARAM_JSON_DATA, "");
     }
 
     public void saveToPoolRentData(String strJsonRent) {
-        String jsonDataStr = BikerentalApplication.getInstance().getApplicationPreferences().getString(PARAM_JSON_DATA,"");
+        String jsonDataStr = BikerentalApplication.getInstance().getApplicationPreferences().getString(PARAM_JSON_DATA, "");
         JSONObject data = null;
 
         try {
@@ -301,7 +294,7 @@ public class DataParser {
             editorPref.putString(PARAM_JSON_DATA, jsonObject.toString());
             editorPref.commit();
 
-            String save = BikerentalApplication.getInstance().getApplicationPreferences().getString(PARAM_JSON_DATA,"");
+            String save = BikerentalApplication.getInstance().getApplicationPreferences().getString(PARAM_JSON_DATA, "");
 
             Log.d(TAG, "Rent in data: "+save);
 

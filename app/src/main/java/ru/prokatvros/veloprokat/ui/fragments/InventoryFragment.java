@@ -20,22 +20,18 @@ public class InventoryFragment extends BaseFragment<InventoryActivity> {
     public static InventoryFragment newInstance(Inventory inventory) {
         InventoryFragment fragment = new InventoryFragment();
         Bundle args = new Bundle();
-        args.putSerializable(ARG_INVENTORY, inventory);
+        args.putParcelable(ARG_INVENTORY, inventory);
         fragment.setArguments(args);
 
         return fragment;
     }
 
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            inventory = (Inventory) getArguments().getSerializable(ARG_INVENTORY);
+            inventory = (Inventory) getArguments().getParcelable(ARG_INVENTORY);
         }
-
-        //inventory.tarif.
 
         getHostActivity().getSupportActionBar().setTitle(inventory.model);
         getHostActivity().getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -56,12 +52,15 @@ public class InventoryFragment extends BaseFragment<InventoryActivity> {
         TextView tvCount = (TextView) view.findViewById(R.id.tvRentsCount);
         TextView tvCost = (TextView) view.findViewById(R.id.tvCost);
 
+
         setHasOptionsMenu(true);
 
         if ( inventory != null ) {
             tvName.setText(inventory.model);
             tvNumber.setText(inventory.number);
-            //tvCost.setText(String.valueOf("Day: "+inventory.tarif.sumDay));
+            tvCost.setText(String.valueOf(getString(R.string.hour)+": "+inventory.tarif.sumPerHour+"\n"+
+                                            getString(R.string.day)+": "+inventory.tarif.sumDay+"\n"+
+                                            getString(R.string.th_hour)+": "+inventory.tarif.sumTsDay ) );
             tvCount.setText(String.valueOf(inventory.countRents));
         }
 

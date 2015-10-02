@@ -25,7 +25,7 @@ public class InventoryActivity extends BaseActivity {
         Intent intent = getIntent();
 
         if ( intent != null )
-            inventory = (Inventory) intent.getSerializableExtra(INVENTORY_KEY);
+            inventory = intent.getParcelableExtra(INVENTORY_KEY);
 
         if (inventory != null)
             replaceFragment(InventoryFragment.newInstance(inventory), false);

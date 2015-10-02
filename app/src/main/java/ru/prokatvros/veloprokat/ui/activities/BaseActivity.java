@@ -29,6 +29,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             progressDialog.setMessage(getString(R.string.please_wait));
         }
 
+        progressDialog.setCancelable(false);
         return progressDialog;
     }
 

@@ -38,6 +38,20 @@
                 android:text="New Text"
                 android:id="@+id/tvInventoryName" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/title_additional_inventory"
+                android:layout_marginTop="@dimen/margin_widget_default_small"
+                android:id="@+id/tvInventoryAdditionalTitle"
+                style="@style/TextViewTitle" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/not_have_additional_inventory"
+                android:id="@+id/tvInventoryAdditionalName" />
+
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

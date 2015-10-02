@@ -19,6 +19,8 @@
 
     <string name="title_inventory"> Инвентарь: </string>
 
+    <string name="title_additional_inventory"> Доп. инвентарь: </string>
+
     <string name="title_time"> До: </string>
 
     <string name="title_breakdown"> Поломка: </string>
@@ -55,6 +57,8 @@
 
     <string name="surname"> Фамилия </string>
 
+    <string name="phone"> Телефон </string>
+
     <string name="templ_phone"> +7 XXX XXX XX XX </string>
 
     <string name="add"> Добавить </string>
@@ -65,6 +69,12 @@
 
     <string name="current"> Текущие </string>
 
+    <string name="hour"> Час </string>
+
+    <string name="day"> День </string>
+
+    <string name="th_hour"> 36 часов </string>
+
     <string name="warning_must_enter_time_and_date"> Поля дата и время обязательны для ввода </string>
 
     <string name="warning_can_not_have_empty_field"> Недопустимы пустые поля </string>
@@ -72,6 +82,10 @@
     <string name="warning_can_not_have_empty_message"> Вы не ввели сообщение </string>
 
     <string name="warning_check_internet_connection"> Проверте интернет соединение </string>
+
+    <string name="warning_duplicate_client"> Клиент с таким номером уже есть в базе </string>
+
+
 
     <string name="notice_sanding_is_all_send"> Все данные отправленны </string>
 
@@ -89,9 +103,13 @@
 
     <string name="was_closed"> Закрыто </string>
 
+    <string name="not_have_additional_inventory"> Без доп. инвентаря: </string>
+
     <string name="not_selected_client"> Не выбран клиент </string>
 
-    <string name="not_selected_inventory"> Не выбран нвентарь </string>
+    <string name="not_selected_inventory"> Не выбран инвентарь </string>
+
+    <string name="not_selected_additional_inventory"> Не выбрано доп. инвентарь </string>
 
     <string name="not_set_time"> Не заданно время </string>
 
@@ -100,5 +118,22 @@
     <string name="unidentified_user"> Не опознан </string>
 
     <string name="enter"> Войти </string>
+
+    <string name="count_rent"> Количество аренд </string>
+
+    <string name="black_list"> Черный список </string>
+
+    <string name="successful_add_data"> Дпнные успешно внесены </string>
+
+    <string name="not_found_anything">  Ничего не найдено </string>
+
+    <string name="can_not_load_data_from_server">  Не удалось загрузить данные с сервера </string>
+
+
+    <string name="summ"> Сумма </string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_breakdown_in_rent">BreakdownInRentActivity</string>
 
 </resources>

@@ -8,6 +8,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+
+import ru.prokatvros.veloprokat.BikerentalApplication;
 import ru.prokatvros.veloprokat.R;
 import ru.prokatvros.veloprokat.ui.activities.ProfileActivity;
 
@@ -52,6 +55,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
                 tvName = (TextView) itemView.findViewById(R.id.name);
                 //tvEmail = (TextView) itemView.findViewById(R.id.email);
                 ivAvatar = (ImageView) itemView.findViewById(R.id.ivAvatar);
+
                 holderId = 0;
             }
         }
@@ -111,7 +115,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
         } else if(holder.holderId == 0){
             //WhereAreYouApplication.getInstance()
                     //.getAvatarCache().displayImage(AvatarBase64ImageDownloader.getImageUriFor(WhereAreYouApplication.getInstance().getUserName()),holder.ivAvatar);
-
+            ImageLoader.getInstance().displayImage(BikerentalApplication.getInstance().getAdmin().getAvatarUrl(), holder.ivAvatar);
             holder.ivAvatar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
