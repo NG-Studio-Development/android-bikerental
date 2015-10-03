@@ -1,8 +1,11 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="ru.prokatvros.veloprokat.ui.fragments.InventoryListFragment">
 
+    <se.emilsjolander.stickylistheaders.StickyListHeadersListView
+        android:id="@+id/lvInventory"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
-
-</FrameLayout>
+</RelativeLayout>

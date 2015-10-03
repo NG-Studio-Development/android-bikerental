@@ -102,7 +102,8 @@ public class RentFragment extends BaseFragment<RentActivity> {
         tvClientName.setText(rent.client.name + " " + rent.client.surname);
         tvInventoryName.setText(rent.inventory.model);
 
-        tvInventoryAdditionalName.setText(rent.inventoryAddition.model);
+        if ( rent.inventoryAddition != null )
+            tvInventoryAdditionalName.setText(rent.inventoryAddition.model);
 
         tvTime.setText(getDate(rent.endTime));
 

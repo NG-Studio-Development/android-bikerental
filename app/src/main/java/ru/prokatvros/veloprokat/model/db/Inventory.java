@@ -9,6 +9,7 @@ import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
 import com.google.gson.annotations.Expose;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Table(name = "Inventory")
@@ -48,6 +49,10 @@ public class Inventory extends Model implements Parcelable {
     @Expose
     @Column(name = "IdGroup")
     private Long idGroup;
+
+    @Expose
+    @Column(name = "IdParent")
+    public Long idParent;
 
 
     public void saveCrud() {
@@ -95,24 +100,36 @@ public class Inventory extends Model implements Parcelable {
                 .execute();
     }
 
+
+    private static List<Inventory> removeRootItem(List<Inventory> allInventory) {
+
+        List<Inventory> filteredList = new ArrayList<>();
+        for (Inventory inventory : allInventory) {
+            if (inventory.idParent != 0)
+                filteredList.add(inventory);
+        }
+
+        return filteredList;
+    }
+
     public static List<Inventory> getBySubNumber( String subNumber, Long idGroup ) {
-        return new Select()
+        List<Inventory> allInventory = new Select()
                 .from(Inventory.class)
                 .where("Number LIKE ?", "%" + subNumber + "%")
                 .where("IdGroup = ?", String.valueOf(idGroup))
                 .execute();
+
+        return removeRootItem(allInventory);
     }
 
-    public static List<Inventory> getByPoint( Point point ) {
-        List<Inventory> allInventory = getAll();
-        List<Point> allPoint = Point.getAll();
+    public static List<Inventory> getByPoint( Point point, boolean isKeepRoot ) {
 
         List<Inventory> byPoint = new Select()
                 .from(Inventory.class)
                 .where( "Point = ?", point.getId() )
                 .execute();
 
-        return byPoint;
+        return isKeepRoot ? byPoint : removeRootItem(byPoint);
     }
 
     /*public static List<Inventory> getByGroup(Long idGroup) {

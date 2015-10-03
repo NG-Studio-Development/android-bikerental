@@ -41,6 +41,7 @@ public class AddClientFragment extends BaseFragment {
     private final static String TAG = "ADD_CLIENT_FRAGMENT";
 
     //private static final int REQUEST_CODE_CHOOSE_IMAGE = 2;
+    
     private static final int REQUEST_CODE_CAPTURE_IMAGE = 3;
 
     private static final int BASE_64_IMAGE_HANDLER = 1;
@@ -48,13 +49,17 @@ public class AddClientFragment extends BaseFragment {
     File file;
     Client client;
     String base64Image;
+    Button buttonAddPhoto;
 
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             if ( msg.what == BASE_64_IMAGE_HANDLER ) {
-                if (base64Image != null)
+                if (base64Image != null) {
                     postImageToServer(base64Image);
+                    buttonAddPhoto.setText(getString(R.string.photo_was_added));
+                }
+
             }
         }
     };
@@ -73,7 +78,7 @@ public class AddClientFragment extends BaseFragment {
 
         View view = inflater.inflate(R.layout.fragment_add_client, container, false);
         Button buttonAdd = (Button) view.findViewById(R.id.buttonAdd);
-        Button buttonAddPhoto = (Button) view.findViewById(R.id.buttonAddPhoto);
+        buttonAddPhoto = (Button) view.findViewById(R.id.buttonAddPhoto);
 
         final EditText etName = (EditText) view.findViewById(R.id.etName);
         final EditText etSurname = (EditText) view.findViewById(R.id.etSurname);

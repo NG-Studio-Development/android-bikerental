@@ -3,6 +3,7 @@
     <string name="please_wait"> Идет обработка запроса </string>
 
     <string name="app_name">Bike Rent</string>
+
     <string name="default_name">Name</string>
 
     <string name="inventory"> Инвентарь </string>
@@ -51,6 +52,8 @@
 
     <string name="title_activity_client"> Activity client </string>
 
+    <string name="title_activity_breakdown_in_rent"> Activity breakdown </string>
+
     <string name="title_new_rent"> Новая аренда </string>
 
     <string name="name"> Имя </string>
@@ -84,8 +87,6 @@
     <string name="warning_check_internet_connection"> Проверте интернет соединение </string>
 
     <string name="warning_duplicate_client"> Клиент с таким номером уже есть в базе </string>
-
-
 
     <string name="notice_sanding_is_all_send"> Все данные отправленны </string>
 
@@ -129,11 +130,10 @@
 
     <string name="can_not_load_data_from_server">  Не удалось загрузить данные с сервера </string>
 
+    <string name="without_photo">  Без фото </string>
+
+    <string name="photo_was_added">  Фото добавленно </string>
 
     <string name="summ"> Сумма </string>
-
-<!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_breakdown_in_rent">BreakdownInRentActivity</string>
 
 </resources>

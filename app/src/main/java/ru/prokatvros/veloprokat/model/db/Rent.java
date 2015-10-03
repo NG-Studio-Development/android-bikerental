@@ -84,12 +84,14 @@ public class Rent extends Model /*implements Parcelable*/ {
             this.inventory = inventory;
 
 
-        inventory = Inventory.getByNumber(this.inventoryAddition.number);
+        if (inventoryAddition != null) {
+            inventory = Inventory.getByNumber(this.inventoryAddition.number);
 
-        if (inventory == null)
-            this.inventoryAddition.save();
-        else
-            inventoryAddition = inventory;
+            if (inventory == null)
+                this.inventoryAddition.save();
+            else
+                inventoryAddition = inventory;
+        }
 
     }
 
