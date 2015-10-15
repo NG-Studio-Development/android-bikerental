@@ -138,16 +138,6 @@ public class Rent extends Model /*implements Parcelable*/ {
     }
 
     public static List<Rent> getAllByCompleted(boolean completed) {
-        /*int completedInInteger = completed ? 1 : 0;
-        List<Rent> list = new ArrayList<>();
-        List<Rent> allRentsList = getAll();
-        for (Rent rent : allRentsList) {
-            if (rent.isCompleted == completedInInteger ) {
-                list.add(rent);
-            }
-        }
-
-        return list; */
         int completedInInteger = completed ? 1 : 0;
         return new Select()
                 .from(Rent.class)
@@ -164,26 +154,11 @@ public class Rent extends Model /*implements Parcelable*/ {
         }
     }
 
-    /*public static final Parcelable.Creator<Rent> CREATOR = new Parcelable.Creator<Rent>() {
-
-        public Rent createFromParcel(Parcel in) {
-
-            return Rent.load(Rent.class, in.readLong());
-        }
-
-        public Rent[] newArray(int size) {
-            return new Rent[size];
-        }
-    };
-
-
-    @Override
-    public int describeContents() {
-        return 0;
+    public int getCost() {
+        if ( inventory != null && endTime != null )
+            return 99;
+        else
+            return 0;
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(getId());
-    } */
 }

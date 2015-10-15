@@ -33,6 +33,7 @@ public class AddRentFragment extends BaseFragment<RentActivity> {
     Button buttonAddClient;
     Button buttonAddInventory;
     Button buttonAdditionInventory;
+    TextView tvCost;
 
     @Override
     public int getLayoutResID() {
@@ -58,6 +59,8 @@ public class AddRentFragment extends BaseFragment<RentActivity> {
         Button buttonAdd = (Button) view.findViewById(R.id.buttonAdd);
         ImageButton buttonAddDate = (ImageButton) view.findViewById(R.id.ibAddDate);
         ImageButton ibAddTime = (ImageButton) view.findViewById(R.id.ibAddTime);
+        tvCost = (TextView) view.findViewById(R.id.tvCost);
+
 
         final TimePickerFragment timePickerFragment = new TimePickerFragment();
         final DatePickerFragment datePickerFragment = new DatePickerFragment();
@@ -75,8 +78,6 @@ public class AddRentFragment extends BaseFragment<RentActivity> {
                 datePickerFragment.show(getFragmentManager(), "datePicker");
             }
         });
-
-        //final Rent rent = Rent.getRentFromPool(RentActivity.CREATE_RENT);
 
         buttonAddClient.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,6 +125,9 @@ public class AddRentFragment extends BaseFragment<RentActivity> {
                     Log.d(TAG, "Time in millis: "+calendar.getTimeInMillis());
                     rent.endTime = calendar.getTimeInMillis();
                     rent.save();
+
+                    tvCost.setText(String.valueOf(rent.getCost()));
+
                     getHostActivity().sendToServer(rent);
                 } else {
                     throw new Error("Rent is null, please, check set new rent to pool in RentActivity");
@@ -154,6 +158,8 @@ public class AddRentFragment extends BaseFragment<RentActivity> {
 
         if(rent.inventoryAddition != null)
             buttonAdditionInventory.setText(rent.inventoryAddition.model);
+
+        tvCost.setText( String.valueOf(rent.getCost()) );
     }
 
     public static class TimePickerFragment extends DialogFragment

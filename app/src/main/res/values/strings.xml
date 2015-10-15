@@ -145,6 +145,9 @@
     <string name="paid_upon"> Оплачено по факту </string>
 
     <string name="without_fine"> Без штрафа </string>
+
     <string name="without_phone"> Без телефона </string>
+
+    <string name="cost"> Цена </string>
 
 </resources>
