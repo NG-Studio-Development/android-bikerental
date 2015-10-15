@@ -1,16 +1,17 @@
 package ru.prokatvros.veloprokat.ui.activities;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
 import ru.prokatvros.veloprokat.R;
 import ru.prokatvros.veloprokat.ui.fragments.ProfileFragment;
 
-public abstract class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity /*Activity*/ {
 
     private final static String SWITCH_FRAGMENT_ADD = "switch_fragment_add";
     private final static String SWITCH_FRAGMENT_REPLACE = "switch_fragment_replace";
@@ -42,7 +43,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     private void updateFragment(Fragment fragment, String keySwitchFragment, boolean saveInBackStack) {
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
         switch (keySwitchFragment) {
             case SWITCH_FRAGMENT_ADD:
@@ -69,7 +71,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        FragmentManager fragmentManager = getFragmentManager();
+        FragmentManager fragmentManager = getSupportFragmentManager();
         if (fragmentManager.getBackStackEntryCount() > 0) {
             fragmentManager.popBackStack();
         } else {

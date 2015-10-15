@@ -16,6 +16,8 @@ import ru.prokatvros.veloprokat.ui.activities.MainActivity;
 public abstract class BaseListFragment extends BaseFragment<MainActivity> {
 
     protected final static int SET_ADAPTER = 1;
+    protected final static String PARAM_RESPONSE = "param_response";
+    protected final static String ACTION_LOADED_DATA = "action_loaded_data";
 
     private ListView lvList;
 

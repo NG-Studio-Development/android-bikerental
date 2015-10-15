@@ -1,10 +1,11 @@
 package ru.prokatvros.veloprokat.ui.fragments;
 
+
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -154,57 +155,6 @@ public class AddRentFragment extends BaseFragment<RentActivity> {
         if(rent.inventoryAddition != null)
             buttonAdditionInventory.setText(rent.inventoryAddition.model);
     }
-
-    /* protected void sendToServer(final Rent rent) {
-
-        Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
-        final String strJsonRent = gson.toJson(rent);
-
-        Log.d(TAG, "Json rent:"+strJsonRent);
-        long idAdmin = BikerentalApplication.getInstance().getAdmin().getId();
-        final RentRequest rentRequest = RentRequest.requestPostRent(idAdmin, strJsonRent, new PostResponseListener() {
-            @Override
-            public void onResponse(String response) {
-                Toast.makeText(getHostActivity(), "Success", Toast.LENGTH_LONG).show();
-                Log.d(TAG, "Response: " + response);
-                rent.inventory.countRents +=1;
-                rent.inventory.save();
-                //getHostActivity().onBackPressed();
-            }
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getHostActivity(), "Error: "+error.toString(), Toast.LENGTH_LONG).show();
-
-                DataParser.getInstance(getHostActivity()).saveToPoolRentData(strJsonRent);
-
-                SampleAlarmReceiver alarmReceiver = new SampleAlarmReceiver();
-                alarmReceiver.setAlarm(getHostActivity());
-
-                error.printStackTrace();
-            }
-        });
-
-        BikerentalApplication.getInstance().isNetworkAvailable(new BikerentalApplication.NetworkAvailableListener() {
-            @Override
-            public void onResponse(boolean isAvailable) {
-                if (isAvailable) {
-                    Volley.newRequestQueue(getHostActivity()).add(rentRequest);
-                } else {
-
-                    DataParser.getInstance(getHostActivity()).saveToPoolRentData(strJsonRent);
-
-
-                    SampleAlarmReceiver alarmReceiver = new SampleAlarmReceiver();
-                    alarmReceiver.setAlarm(getHostActivity());
-                    Toast.makeText(getHostActivity(), "Server not avialable", Toast.LENGTH_LONG).show();
-                }
-            }
-        });
-
-    } */
-
-    /* */
 
     public static class TimePickerFragment extends DialogFragment
             implements TimePickerDialog.OnTimeSetListener {

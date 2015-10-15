@@ -23,7 +23,7 @@ public class Rent extends Model /*implements Parcelable*/ {
     private Integer serverId;
 
     @Expose
-    @Column(name = "Token", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE )
+    @Column(name = "Token"/*, unique = true, onUniqueConflict = Column.ConflictAction.REPLACE*/ )
     private String token;
 
     @Expose
@@ -49,6 +49,11 @@ public class Rent extends Model /*implements Parcelable*/ {
     @Expose
     @Column(name = "EndTime")
     public Long endTime;
+
+    @Expose
+    @Column(name = "PaidFine")
+    public int paidFine;
+
 
     public void setCompleteds(boolean completeds) {
         this.isCompleted = completeds ? 1:0;

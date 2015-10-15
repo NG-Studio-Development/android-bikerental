@@ -12,15 +12,10 @@ import ru.prokatvros.veloprokat.ui.fragments.ProfileFragment;
 
 public class ProfileActivity extends BaseActivity {
 
-
-
     public static void  startProfileActivity(/*@NotNull*/ Context context /*@Nullable*/ /*ContactStep contact*/) {
         Intent intent = new Intent(context, ProfileActivity.class);
-        //intent.putExtra(WhereAreYouAppConstants.KEY_CONTACT,contact);
         context.startActivity(intent);
     }
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

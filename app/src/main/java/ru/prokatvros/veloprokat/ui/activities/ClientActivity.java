@@ -1,9 +1,10 @@
 package ru.prokatvros.veloprokat.ui.activities;
 
-import android.app.Fragment;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 
 import ru.prokatvros.veloprokat.R;
@@ -17,6 +18,8 @@ public class ClientActivity extends BaseActivity {
 
     public final static String KEY_ADD_CLIENT = "key_add_client";
 
+    public final static String KEY_SEARCHING_NUMBER = "param_searching_number";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,11 +30,12 @@ public class ClientActivity extends BaseActivity {
 
         Client client = null;
         Intent intent = getIntent();
-        Fragment fragment = new AddClientFragment();
+
+        Fragment fragment = AddClientFragment.newInstance( intent.getStringExtra( KEY_SEARCHING_NUMBER ) );
 
         if ( intent != null && intent.getParcelableExtra(CLIENT_KEY) != null) {
 
-            client = (Client) intent.getParcelableExtra(CLIENT_KEY);
+            client = intent.getParcelableExtra(CLIENT_KEY);
 
             if ( client != null )
                 fragment = ClientFragment.newInstance(client);

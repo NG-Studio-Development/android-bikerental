@@ -1,5 +1,6 @@
 package ru.prokatvros.veloprokat.ui.fragments;
 
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -52,7 +53,6 @@ public class RentFragment extends BaseFragment<RentActivity> {
         return fragment;
     }
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,7 +61,6 @@ public class RentFragment extends BaseFragment<RentActivity> {
             Long idRent = getArguments().getLong(ARG_RENT);
             rent = Model.load(Rent.class, idRent);
         }
-
     }
 
     @Override
@@ -75,17 +74,23 @@ public class RentFragment extends BaseFragment<RentActivity> {
 
         View view = inflater.inflate(R.layout.fragment_rent, container, false);
 
-        getHostActivity().getSupportActionBar().setTitle(rent.client.name);
-        getHostActivity().getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getHostActivity().getSupportActionBar() != null) {
+            getHostActivity().getSupportActionBar().setTitle(rent.client.name);
+            getHostActivity().getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
+
         setHasOptionsMenu(true);
 
         TextView tvClientName = (TextView) view.findViewById(R.id.tvClientName);
+        TextView tvClientPhone = (TextView) view.findViewById(R.id.tvClientPhone);
         TextView tvInventoryName = (TextView) view.findViewById(R.id.tvInventoryName);
         TextView tvTime = (TextView) view.findViewById(R.id.tvTime);
         TextView tvTimeTitle = (TextView) view.findViewById(R.id.tvTimeTitle);
         RelativeLayout rlBreakdown = (RelativeLayout) view.findViewById(R.id.rlBreakdown);
         TextView tvBreakdown = (TextView) view.findViewById(R.id.tvBreakdown);
         TextView tvBreakdownSpinnerTitle = (TextView) view.findViewById(R.id.tvBreakdownSpinnerTitle);
+        final TextView tvSummFine = (TextView) view.findViewById(R.id.tvSummFine);
 
         TextView tvInventoryAdditionalName = (TextView) view.findViewById(R.id.tvInventoryAdditionalName);
 
@@ -100,6 +105,7 @@ public class RentFragment extends BaseFragment<RentActivity> {
 
 
         tvClientName.setText(rent.client.name + " " + rent.client.surname);
+        tvClientPhone.setText(rent.client.phone);
         tvInventoryName.setText(rent.inventory.model);
 
         if ( rent.inventoryAddition != null )
@@ -119,6 +125,8 @@ public class RentFragment extends BaseFragment<RentActivity> {
 
                 rent.breakdown = breakdownList.get(position);
                 rent.save();
+
+                tvSummFine.setText( String.valueOf(breakdownList.get(position).cost) );
             }
 
             @Override
@@ -142,9 +150,11 @@ public class RentFragment extends BaseFragment<RentActivity> {
             @Override
             public void onClick(View v) {
                 rent.setCompleteds(true);
+                rent.client.countRents += 1;
+                rent.client.save();
                 rent.save();
                 sendToServer(rent);
-                getHostActivity().onBackPressed();
+
             }
         });
 
@@ -163,20 +173,21 @@ public class RentFragment extends BaseFragment<RentActivity> {
         final RentRequest rentRequest = RentRequest.requestPutRent(idAdmin, strJsonRent, new PostResponseListener() {
             @Override
             public void onResponse(String response) {
-                Toast.makeText(getHostActivity(), "Success", Toast.LENGTH_LONG).show();
+                Toast.makeText(BikerentalApplication.getInstance(), "Success", Toast.LENGTH_LONG).show();
                 Log.d(TAG, "Response: " + response);
                 rent.inventory.countRents +=1;
                 rent.inventory.save();
+
+                getHostActivity().onBackPressed();
             }
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                //Toast.makeText(RentActivity.this, "Error: "+error.toString(), Toast.LENGTH_LONG).show();
 
                 DataParser.getInstance(getHostActivity()).saveToPoolRentData(strJsonRent);
 
                 SampleAlarmReceiver alarmReceiver = new SampleAlarmReceiver();
-                alarmReceiver.setAlarm(getHostActivity());
+                alarmReceiver.setAlarm(BikerentalApplication.getInstance());
 
                 error.printStackTrace();
             }
@@ -190,7 +201,6 @@ public class RentFragment extends BaseFragment<RentActivity> {
                 } else {
 
                     DataParser.getInstance(getHostActivity()).saveToPoolRentData(strJsonRent);
-
 
                     SampleAlarmReceiver alarmReceiver = new SampleAlarmReceiver();
                     alarmReceiver.setAlarm(getHostActivity());
@@ -208,8 +218,8 @@ public class RentFragment extends BaseFragment<RentActivity> {
             DateFormat sdf = new SimpleDateFormat("MM/dd/yyyy hh:mm");
             Date netDate = (new Date(timeStamp));
             return sdf.format(netDate);
-        }
-        catch(Exception ex){
+        } catch(Exception ex){
+            ex.printStackTrace();
             return "xx";
         }
     }

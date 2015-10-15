@@ -1,5 +1,7 @@
 package ru.prokatvros.veloprokat.ui.fragments;
 
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
@@ -107,7 +109,7 @@ public class SearchInventoryFragment extends BaseFragment {
             }
         });
 
-        etInventoryName.setInputType(InputType.TYPE_CLASS_NUMBER);
+        etInventoryName.setInputType(InputType.TYPE_CLASS_TEXT);
         etInventoryName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -116,6 +118,7 @@ public class SearchInventoryFragment extends BaseFragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
+            @TargetApi(Build.VERSION_CODES.HONEYCOMB)
             @Override
             public void afterTextChanged(Editable s) {
 
@@ -129,6 +132,7 @@ public class SearchInventoryFragment extends BaseFragment {
                 }
             }
         });
+
 
         return view;
     }

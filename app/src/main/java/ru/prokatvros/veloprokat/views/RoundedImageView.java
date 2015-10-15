@@ -1,15 +1,6 @@
 package ru.prokatvros.veloprokat.views;
 
-import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Path;
-import android.graphics.RectF;
-import android.util.AttributeSet;
-import android.view.View;
-import android.widget.ImageView;
-
-public class RoundedImageView extends ImageView {
+/*public class RoundedImageView extends ImageView {
 	private Paint mBackground;
 	private Paint mBorder;
 	public RoundedImageView(Context context, AttributeSet attrs) {
@@ -38,4 +29,4 @@ public class RoundedImageView extends ImageView {
         super.onDraw(canvas);
 	}
 
-}
+} */

@@ -41,12 +41,15 @@ public class SearchClientFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search_base, container, false);
 
-        getHostActivity().getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        getHostActivity().getSupportActionBar().setDisplayShowTitleEnabled(false);
+        if (getHostActivity().getSupportActionBar()!=null) {
+            getHostActivity().getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            getHostActivity().getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
+
         setHasOptionsMenu(true);
 
         final ListView lvClient = (ListView) view.findViewById(R.id.lvList);
-        EditText etPhone = (EditText) view.findViewById(R.id.etSearch);
+        final EditText etPhone = (EditText) view.findViewById(R.id.etSearch);
         final LinearLayout llEmptyList = (LinearLayout) view.findViewById(R.id.llEmptyList);;
         ImageButton ibAdd = (ImageButton) view.findViewById(R.id.ibAdd);
 
@@ -69,7 +72,8 @@ public class SearchClientFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent( getHostActivity(), ClientActivity.class );
-                startActivityForResult( intent, REQUEST_ADD_NEW_CLIENT );
+                intent.putExtra(ClientActivity.KEY_SEARCHING_NUMBER, etPhone.getText().toString());
+                startActivityForResult(intent, REQUEST_ADD_NEW_CLIENT);
             }
         });
 
@@ -100,8 +104,6 @@ public class SearchClientFragment extends BaseFragment {
                             llEmptyList.setVisibility(View.VISIBLE);
                         }
 
-
-
                     }
 
                 }
@@ -118,7 +120,11 @@ public class SearchClientFragment extends BaseFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Client client = data.getParcelableExtra(ClientActivity.KEY_ADD_CLIENT);
+
+        Client client = null;
+
+        if (data != null)
+            client = data.getParcelableExtra(ClientActivity.KEY_ADD_CLIENT);
 
         if (client != null) {
             Rent.getRentFromPool(RentActivity.CREATE_RENT).client = client;

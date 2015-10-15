@@ -40,8 +40,6 @@ public class AddClientFragment extends BaseFragment {
 
     private final static String TAG = "ADD_CLIENT_FRAGMENT";
 
-    //private static final int REQUEST_CODE_CHOOSE_IMAGE = 2;
-    
     private static final int REQUEST_CODE_CAPTURE_IMAGE = 3;
 
     private static final int BASE_64_IMAGE_HANDLER = 1;
@@ -64,6 +62,16 @@ public class AddClientFragment extends BaseFragment {
         }
     };
 
+    private final static String ARG_NUMBER = "arg_client";
+
+    public static AddClientFragment newInstance(String number) {
+        AddClientFragment fragment = new AddClientFragment ();
+        Bundle args = new Bundle();
+        args.putString(ARG_NUMBER, number);
+        fragment.setArguments(args);
+
+        return fragment;
+    }
 
     public AddClientFragment() {}
 
@@ -84,6 +92,12 @@ public class AddClientFragment extends BaseFragment {
         final EditText etSurname = (EditText) view.findViewById(R.id.etSurname);
         final EditText etPhone = (EditText) view.findViewById(R.id.etSearch);
 
+        if ( getArguments() != null ) {
+            String phone = getArguments().getString(ARG_NUMBER);
+            if (phone != null)
+                etPhone.setText(phone);
+        }
+
         client = new Client();
 
         buttonAdd.setOnClickListener(new View.OnClickListener() {
@@ -92,8 +106,6 @@ public class AddClientFragment extends BaseFragment {
                 addClient(etName.getText().toString(),
                         etSurname.getText().toString(),
                         etPhone.getText().toString());
-
-                //getHostActivity().onBackPressed();
             }
         });
 
@@ -105,16 +117,15 @@ public class AddClientFragment extends BaseFragment {
             }
         });
 
-
-
         return view;
     }
 
-    public void capturePhoto( /*String targetFilename*/ ) {
+    public void capturePhoto() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        file = new File(FileUtils.getFilesDir(), Calendar.getInstance().getTimeInMillis()+"jpg");
+        file = new File(FileUtils.getFilesDir(), Calendar.getInstance().getTimeInMillis()+".jpg");
         intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
-        if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+
+        if ( intent.resolveActivity( getActivity().getPackageManager() ) != null ) {
             startActivityForResult(intent, REQUEST_CODE_CAPTURE_IMAGE);
         }
     }
@@ -125,7 +136,6 @@ public class AddClientFragment extends BaseFragment {
             Toast.makeText( getHostActivity(), getString(R.string.warning_can_not_have_empty_field), Toast.LENGTH_LONG ).show();
             return;
         }
-
 
         client.name = name;
         client.surname = surname;
@@ -184,14 +194,12 @@ public class AddClientFragment extends BaseFragment {
 
         if (resultCode == Activity.RESULT_OK) {
             final Uri uri;
-            /*if (requestCode == REQUEST_CODE_CHOOSE_IMAGE) {
-                uri = data.getData();
-            } else*/
-            if (requestCode == REQUEST_CODE_CAPTURE_IMAGE) {
+
+            if (requestCode == REQUEST_CODE_CAPTURE_IMAGE)
                 uri = Uri.fromFile(file);
-            } else {
+            else
                 return;
-            }
+
 
             new Thread(new Runnable() {
                 @Override

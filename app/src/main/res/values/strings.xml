@@ -20,6 +20,8 @@
 
     <string name="title_inventory"> Инвентарь: </string>
 
+    <string name="title_summ_fine"> Сумма штрафа: </string>
+
     <string name="title_additional_inventory"> Доп. инвентарь: </string>
 
     <string name="title_time"> До: </string>
@@ -50,6 +52,8 @@
 
     <string name="title_cost">Цены</string>
 
+    <string name="title_phone">Телефон</string>
+
     <string name="title_activity_client"> Activity client </string>
 
     <string name="title_activity_breakdown_in_rent"> Activity breakdown </string>
@@ -62,7 +66,7 @@
 
     <string name="phone"> Телефон </string>
 
-    <string name="templ_phone"> +7 XXX XXX XX XX </string>
+    <string name="templ_phone"> (XXX) XXX XX XX </string>
 
     <string name="add"> Добавить </string>
 
@@ -135,5 +139,12 @@
     <string name="photo_was_added">  Фото добавленно </string>
 
     <string name="summ"> Сумма </string>
+
+    <string name="plus_7"> +7 </string>
+
+    <string name="paid_upon"> Оплачено по факту </string>
+
+    <string name="without_fine"> Без штрафа </string>
+    <string name="without_phone"> Без телефона </string>
 
 </resources>

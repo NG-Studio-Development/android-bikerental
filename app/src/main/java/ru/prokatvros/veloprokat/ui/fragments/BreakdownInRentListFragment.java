@@ -49,15 +49,17 @@ public class BreakdownInRentListFragment extends BaseListFragment {
                 List<BreakdownInRent> listBreakdownInRents = gson.fromJson(response, new TypeToken<List<BreakdownInRent>>(){}.getType());
                 BreakdownInRentAdapter adapter = new BreakdownInRentAdapter(getHostActivity(), R.layout.item_base, listBreakdownInRents);
                 setAdapter(adapter);
+                getHostActivity().getProgressDialog().hide();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Toast.makeText(getHostActivity(), "BreakdowndInRent error callback", Toast.LENGTH_LONG).show();
+                getHostActivity().getProgressDialog().hide();
                 error.printStackTrace();
             }
         });
-
+        getHostActivity().getProgressDialog().show();
         Volley.newRequestQueue(getHostActivity()).add(request);
 
         return view ;

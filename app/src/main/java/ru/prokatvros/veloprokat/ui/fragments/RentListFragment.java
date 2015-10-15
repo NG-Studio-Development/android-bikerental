@@ -1,9 +1,11 @@
 package ru.prokatvros.veloprokat.ui.fragments;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +15,7 @@ import android.widget.RadioButton;
 
 import java.util.List;
 
+import ru.prokatvros.veloprokat.BikerentalApplication;
 import ru.prokatvros.veloprokat.R;
 import ru.prokatvros.veloprokat.model.db.Rent;
 import ru.prokatvros.veloprokat.ui.activities.RentActivity;
@@ -22,20 +25,11 @@ public class RentListFragment extends BaseListFragment implements CompoundButton
 
     private static final String TAG = "RENT_LIST_F";
 
+    private BroadcastReceiver broadcastReceiver;
+
     RadioButton rbCompleted;
     RadioButton rbUncompleted;
     List<Rent> rentList;
-
-    Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            if (msg.what == SET_ADAPTER) {
-                if (rentList != null)
-                    setAdapter(new RentAdapter(getHostActivity(), R.layout.item_base, rentList));
-                //setVisibilityProgressBar(false);
-            }
-        }
-    };
 
     @Override
     public int getLayoutResID() {
@@ -45,7 +39,8 @@ public class RentListFragment extends BaseListFragment implements CompoundButton
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        getHostActivity().getSupportActionBar().setTitle(getString(R.string.rents));
+        if ( getHostActivity().getSupportActionBar() != null )
+            getHostActivity().getSupportActionBar().setTitle(getString(R.string.rents));
     }
 
     @Override
@@ -57,6 +52,18 @@ public class RentListFragment extends BaseListFragment implements CompoundButton
 
         rbUncompleted.setOnCheckedChangeListener(this);
         rbCompleted.setOnCheckedChangeListener(this);
+
+
+        IntentFilter intFilter = new IntentFilter(ACTION_LOADED_DATA);
+        broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+                if (rentList != null)
+                    setAdapter(new RentAdapter(context, R.layout.item_base, rentList));
+            }
+        };
+        getHostActivity().registerReceiver(broadcastReceiver, intFilter);
 
         return view;
     }
@@ -70,10 +77,16 @@ public class RentListFragment extends BaseListFragment implements CompoundButton
             @Override
             public void run() {
                 rentList = Rent.getAllByCompleted(false);
-                handler.sendMessage(handler.obtainMessage(SET_ADAPTER));
-
+                Intent intentBroadcast = new Intent(ACTION_LOADED_DATA);
+                BikerentalApplication.getInstance().sendBroadcast(intentBroadcast);
             }
         }).start();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getHostActivity().unregisterReceiver(broadcastReceiver);
     }
 
     @Override

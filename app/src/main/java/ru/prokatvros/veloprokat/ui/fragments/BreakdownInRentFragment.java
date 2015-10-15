@@ -1,7 +1,7 @@
 package ru.prokatvros.veloprokat.ui.fragments;
 
-import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,12 +46,6 @@ public class BreakdownInRentFragment extends Fragment {
         tvModel.setText(breakdownInRent.model);
         tvNumber.setText(String.valueOf(breakdownInRent.number));
 
-
         return view;
     }
-
-
-
-
-
 }

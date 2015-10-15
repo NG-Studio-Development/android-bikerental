@@ -23,13 +23,31 @@
             android:hint="@string/surname"
             android:id="@+id/etSurname" />
 
-        <EditText
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/templ_phone"
-            android:inputType="phone"
-            android:ems="10"
-            android:id="@+id/etSearch" />
+            android:layout_height="match_parent">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/templ_phone"
+                android:inputType="phone"
+                android:ems="10"
+                android:id="@+id/etSearch"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@+id/textView2"
+                android:layout_toEndOf="@+id/textView2" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_widget_default_small"
+                android:text="@string/plus_7"
+                android:id="@+id/textView2"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+        </RelativeLayout>
 
     </LinearLayout>
 

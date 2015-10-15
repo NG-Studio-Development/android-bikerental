@@ -1,8 +1,9 @@
 package ru.prokatvros.veloprokat.ui.fragments;
 
+
 import android.app.Activity;
-import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -16,8 +17,8 @@ import ru.prokatvros.veloprokat.ui.activities.BaseActivity;
 public abstract class BaseFragment<ActivityClass extends BaseActivity> extends Fragment {
 
     public final static String PARAM_ACTION = "param_action";
-    public final static String PARAM_ID_ORDER = "param_id_order";
-    public final static String PARAM_TIME_IN_MILLIS = "param_time_in_millis";
+    //public final static String PARAM_ID_ORDER = "param_id_order";
+    //public final static String PARAM_TIME_IN_MILLIS = "param_time_in_millis";
 
     public static int sd;
     protected BaseFragment() {

@@ -1,5 +1,9 @@
 package ru.prokatvros.veloprokat.ui.fragments;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,11 +33,15 @@ import ru.prokatvros.veloprokat.ui.adapters.ChatAdapter;
 
 public class ChatFragment extends BaseListFragment {
 
-    private String TAG = "CHAT_FRAGMENT";
+    private final static String TAG = "CHAT_FRAGMENT";
 
     protected ChatAdapter adapter = null;
 
     protected EditText etMessage;
+
+    protected MessageRequest request;
+
+    protected BroadcastReceiver broadcastReceiver;
 
     public ChatFragment() {  }
 
@@ -47,12 +55,13 @@ public class ChatFragment extends BaseListFragment {
                              Bundle savedInstanceState) {
 
         View view = super.onCreateView(inflater, container, savedInstanceState);
-        etMessage = (EditText ) view.findViewById(R.id.etMessage);
+
+        etMessage = ( EditText ) view.findViewById(R.id.etMessage);
         ImageButton ibSendMessage = (ImageButton) view.findViewById(R.id.ibSendMessage);
         ibSendMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(etMessage.getText().toString().isEmpty()) {
+                if (etMessage != null && etMessage.getText().toString().isEmpty()) {
                     Toast.makeText(getHostActivity(),
                             getString(R.string.warning_can_not_have_empty_message),
                             Toast.LENGTH_LONG).show();
@@ -60,7 +69,10 @@ public class ChatFragment extends BaseListFragment {
                 }
 
                 Message message = new Message();
-                message.message = etMessage.getText().toString();
+
+                if (etMessage != null)
+                    message.message = etMessage.getText().toString();
+
                 message.admin = BikerentalApplication.getInstance().getAdmin();
                 message.save();
                 addMessageToList(message);
@@ -68,29 +80,45 @@ public class ChatFragment extends BaseListFragment {
             }
         });
 
-        getHostActivity().getSupportActionBar().setTitle(getString(R.string.chat));
+        if (getHostActivity().getSupportActionBar() != null )
+            getHostActivity().getSupportActionBar().setTitle(getString(R.string.chat));
+
+        getMassages();
+
+
+        IntentFilter intFilt = new IntentFilter(ACTION_LOADED_DATA);
+        broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+                String response = intent.getStringExtra(PARAM_RESPONSE);
+                Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+                List<Message> listMessage = gson.fromJson(response, new TypeToken<List<Message>>(){}.getType());
+                adapter = new ChatAdapter(context, R.layout.item_chat, listMessage);
+                setAdapter(adapter);
+                postList(adapter.getCount() -1 );
+
+            }
+        };
+
+        getHostActivity().registerReceiver(broadcastReceiver, intFilt);
 
         return view;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        getMassages();
-    }
+
+
 
     protected void getMassages() {
-        final MessageRequest request =  MessageRequest.requestAllMessages(new Response.Listener<String>() {
+       request =  MessageRequest.requestAllMessages(new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
 
                 Log.d(TAG, "Response: " + response);
+                Intent intentBroadcast = new Intent(ACTION_LOADED_DATA);
+                intentBroadcast.putExtra(PARAM_RESPONSE, response);
 
-                Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
-                List<Message> listMessage = gson.fromJson(response, new TypeToken<List<Message>>(){}.getType());
-                adapter = new ChatAdapter(getHostActivity(), R.layout.item_chat, listMessage);
-                setAdapter(adapter);
-                postList(adapter.getCount() -1 );
+                BikerentalApplication.getInstance().sendBroadcast(intentBroadcast);
 
             }
         }, new Response.ErrorListener() {
@@ -110,7 +138,7 @@ public class ChatFragment extends BaseListFragment {
                     return;
                 }
 
-                Volley.newRequestQueue(getHostActivity()).add(request);
+                Volley.newRequestQueue(BikerentalApplication.getInstance().getApplicationContext()).add(request);
             }
         });
     }
@@ -140,7 +168,8 @@ public class ChatFragment extends BaseListFragment {
         final MessageRequest request = MessageRequest.requestPostMessage(message, new PostResponseListener() {
             @Override
             public void onResponse(String response) {
-                etMessage.getText().clear();
+                if (etMessage!=null)
+                    etMessage.getText().clear();
             }
 
             @Override
@@ -163,6 +192,12 @@ public class ChatFragment extends BaseListFragment {
             }
         });
 
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getHostActivity().unregisterReceiver(broadcastReceiver);
     }
 
     @Override

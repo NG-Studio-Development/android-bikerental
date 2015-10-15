@@ -1,9 +1,9 @@
 package ru.prokatvros.veloprokat.ui.activities;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.Toast;
