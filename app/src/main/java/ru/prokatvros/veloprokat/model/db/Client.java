@@ -14,9 +14,11 @@ import java.util.List;
 @Table(name = "Client")
 public class Client extends Model implements Parcelable {
 
-    //@Expose
-    //@Column(name = "ServerId", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE )
-    //public int serverId = -1;
+    public static String TAG = "CLIENT";
+
+    @Expose
+    @Column(name = "ServerId", unique = true, onUniqueConflict = Column.ConflictAction.IGNORE )
+    public int serverId;
 
     @Expose
     @Column(name = "Name")
@@ -35,21 +37,48 @@ public class Client extends Model implements Parcelable {
     public String avatar;
 
     @Expose
+    @Column(name = "VipNumber")
+    public String vipNumber = "N/A";
+
     @Column(name = "CountRents", onDelete = Column.ForeignKeyAction.CASCADE)
     public int countRents = -1;
 
-    @Expose
     @Column(name = "Summ")
     public int summ = -1;
 
     @Expose
     @Column(name = "BlackList")
-    public int blackList = -1;
+    public int blackList = 0;
 
+    public boolean hasVipNumber() {
+        return !vipNumber.equals("N/A");
+    }
 
     public static List<Client> getAll() {
         return new Select()
                 .from(Client.class)
+                .execute();
+    }
+
+    public static List<Client> getAllMain() {
+        return new Select()
+                .from(Client.class)
+                .where("VipNumber IS ?", "N/A")
+                .where("BlackList = ?", 0)
+                .execute();
+    }
+
+    public static List<Client> getAllVip() {
+        return new Select()
+                .from(Client.class)
+                .where("VipNumber IS NOT ?", "N/A")
+                .execute();
+    }
+
+    public static List<Client> getAllBlackList() {
+        return new Select()
+                .from(Client.class)
+                .where("BlackList = ?", 1)
                 .execute();
     }
 

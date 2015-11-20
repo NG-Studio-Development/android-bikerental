@@ -10,7 +10,8 @@
         android:id="@+id/etSearch"
 
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_toRightOf="@+id/tvCode"
+        android:layout_toEndOf="@+id/tvCode" />
     <!-- android:inputType="phone" -->
 
     <ListView
@@ -44,4 +45,15 @@
             android:id="@+id/ibAdd" />
 
     </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/plus_7"
+        android:id="@+id/tvCode"
+        android:gravity="center"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignBottom="@+id/etSearch"
+        android:layout_alignParentTop="true" />
 </RelativeLayout>

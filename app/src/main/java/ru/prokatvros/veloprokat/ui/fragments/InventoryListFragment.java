@@ -12,11 +12,12 @@ import ru.prokatvros.veloprokat.R;
 import ru.prokatvros.veloprokat.model.db.Inventory;
 import ru.prokatvros.veloprokat.model.db.Point;
 import ru.prokatvros.veloprokat.ui.activities.InventoryActivity;
+import ru.prokatvros.veloprokat.ui.activities.MainActivity;
 import ru.prokatvros.veloprokat.ui.adapters.InventoryHeaderAdapter;
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
 
-public class InventoryListFragment extends BaseFragment {
+public class InventoryListFragment extends BaseFragment<MainActivity> {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -31,7 +32,9 @@ public class InventoryListFragment extends BaseFragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        getHostActivity().getSupportActionBar().setTitle(getString(R.string.inventory));
+
+        if (getHostActivity().getSupportActionBar() != null)
+            getHostActivity().getSupportActionBar().setTitle(getString(R.string.inventory));
     }
 
     @Override
@@ -44,7 +47,11 @@ public class InventoryListFragment extends BaseFragment {
 
         StickyListHeadersListView stickyList = (StickyListHeadersListView) view.findViewById(R.id.lvInventory);
 
-        final InventoryHeaderAdapter adapter = new InventoryHeaderAdapter(getHostActivity(), Inventory.getByPoint(point, true));
+        //List<Inventory> inventoryList =  Inventory.getByPoint(point, true);
+        //inventoryList.size();
+
+
+        final InventoryHeaderAdapter adapter = new InventoryHeaderAdapter( getHostActivity(), Inventory.getByPoint(point, true) );
 
         stickyList.setAdapter(adapter);
         stickyList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -57,6 +64,26 @@ public class InventoryListFragment extends BaseFragment {
 
         return view;
     }
+
+
+    /* @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_main, menu);
+        menu.findItem(R.id.action_commit).setVisible(true);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_commit:
+                Toast.makeText(getHostActivity(), "Action commit", Toast.LENGTH_LONG).show();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    } */
+
 
     /*@Override
     public void onAddClick() { throw new UnsupportedOperationException(); }

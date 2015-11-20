@@ -67,6 +67,32 @@
                 android:text="@string/not_have_additional_inventory"
                 android:id="@+id/tvInventoryAdditionalName" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/cost"
+                android:layout_marginTop="@dimen/margin_widget_default_small"
+                android:id="@+id/tvCostTitle"
+                style="@style/TextViewTitle" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/not_have_additional_inventory"
+                android:id="@+id/tvCost" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/prepaid"
+                android:id="@+id/tvPrepaidTitle" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="New Text"
+                android:id="@+id/tvPrepaid" />
+
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -94,10 +120,10 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
                 android:id="@+id/rlBreakdown"
-                android:visibility="gone"
+
                 android:layout_marginTop="@dimen/margin_widget_default_small"
                 android:layout_gravity="center_horizontal">
 
@@ -114,11 +140,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="New Text"
+                    android:text="@string/without_breakdown"
                     android:id="@+id/tvBreakdown"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true" />
+                    android:layout_below="@+id/tvBreakdownTitle" />
             </RelativeLayout>
 
             <TextView
@@ -133,6 +157,16 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/spinnerBreakdown"
                 android:layout_gravity="center_horizontal" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/etSurcharge"
+                android:inputType="number"
+                android:hint="@string/paid_upon"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
 
         </LinearLayout>
 
@@ -152,7 +186,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/linearLayout4"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:id="@+id/relativeLayout2">
 
         <TextView
             android:layout_width="wrap_content"
@@ -173,13 +208,32 @@
             android:layout_alignParentEnd="true" />
     </RelativeLayout>
 
-    <EditText
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/editText"
-        android:hint="@string/paid_upon"
-        android:layout_centerVertical="true"
+        android:layout_below="@+id/relativeLayout2"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:id="@+id/rlSurcharge"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/title_surcharge"
+            android:id="@+id/tvSurchargeTitle"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/without_fine"
+            android:id="@+id/tvSurcharge"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+    </RelativeLayout>
 
 </RelativeLayout>

@@ -14,6 +14,12 @@ import java.util.List;
 @Table(name = "Point")
 public class Point extends Model implements Parcelable {
 
+
+    @Expose
+    @Column(name="ServerId")
+    public String serverId;
+
+
     @Expose
     @Column(name = "Title")
     public String title;
@@ -33,6 +39,13 @@ public class Point extends Model implements Parcelable {
         return new Select()
                 .from(Point.class)
                 .where("Address = ?", address)
+                .executeSingle();
+    }
+
+    public static Point getByServerId(String serverId) {
+        return new Select()
+                .from(Point.class)
+                .where("ServerId = ?", serverId)
                 .executeSingle();
     }
 

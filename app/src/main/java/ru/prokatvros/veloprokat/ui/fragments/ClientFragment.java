@@ -3,9 +3,13 @@ package ru.prokatvros.veloprokat.ui.fragments;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -40,9 +44,10 @@ public class ClientFragment extends BaseFragment<ClientActivity> {
                 throw new Error("Not found client model !!!");
         }
 
-        getHostActivity().getSupportActionBar().setTitle(client.name);
-        getHostActivity().getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        if (getHostActivity().getSupportActionBar() != null) {
+            getHostActivity().getSupportActionBar().setTitle(client.name);
+            getHostActivity().getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     @Override
@@ -64,10 +69,13 @@ public class ClientFragment extends BaseFragment<ClientActivity> {
         TextView tvRentsCount = (TextView) view.findViewById(R.id.tvRentsCount);
         TextView tvSumm = (TextView) view.findViewById(R.id.tvSumm);
         TextView tvBlackList = (TextView) view.findViewById(R.id.tvBlackList);
+        TextView tvVipNumber = (TextView) view.findViewById(R.id.tvVipNumber);
+        RelativeLayout rlVip = (RelativeLayout) view.findViewById(R.id.rlVip);
+
         ImageView ivAvatar = (ImageView) view.findViewById(R.id.ivAvatar);
 
         String urlToImage = ConstantsBikeRentalApp.URL_SERVER+"/"+client.avatar;
-        Log.d(TAG, "Avatar: "+ urlToImage);
+        Log.d(TAG, "Avatar: " + urlToImage);
         ImageLoader.getInstance().displayImage(urlToImage, ivAvatar);
 
         tvName.setText(client.name);
@@ -77,8 +85,32 @@ public class ClientFragment extends BaseFragment<ClientActivity> {
         tvSumm.setText(String.valueOf(client.summ));
         tvBlackList.setText(String.valueOf(client.blackList));
 
+        if ( client.hasVipNumber() ) {
+            rlVip.setVisibility(View.VISIBLE);
+            tvVipNumber.setText(String.valueOf(client.vipNumber));
+        }
 
         return view;
+    }
+
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_client, menu);
+        menu.findItem(R.id.action_edit).setVisible(true);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_edit:
+                getHostActivity().replaceFragment(AddClientFragment.newInstance(client), true);
+                //getHostActivity().onBackPressed();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }

@@ -1,6 +1,7 @@
 package ru.prokatvros.veloprokat.ui.fragments;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -29,9 +31,13 @@ import java.util.List;
 import ru.prokatvros.veloprokat.BikerentalApplication;
 import ru.prokatvros.veloprokat.R;
 import ru.prokatvros.veloprokat.model.db.Admin;
+import ru.prokatvros.veloprokat.model.db.Point;
 import ru.prokatvros.veloprokat.model.db.Rent;
+import ru.prokatvros.veloprokat.model.db.Shift;
 import ru.prokatvros.veloprokat.model.requests.LoadAllDataRequest;
 import ru.prokatvros.veloprokat.model.requests.PostResponseListener;
+import ru.prokatvros.veloprokat.model.requests.ShiftRequest;
+import ru.prokatvros.veloprokat.ui.activities.LoginActivity;
 import ru.prokatvros.veloprokat.ui.activities.ProfileActivity;
 import ru.prokatvros.veloprokat.utils.DataParser;
 
@@ -56,6 +62,7 @@ public class ProfileFragment extends BaseFragment<ProfileActivity> {
     TextView contactEmail;
     //ContactStep currentContact;
     File file;
+    List<Shift> shiftList;
 
     @Override
     public void onAttach(Activity activity) {
@@ -82,7 +89,8 @@ public class ProfileFragment extends BaseFragment<ProfileActivity> {
         ImageButton ibBack = (ImageButton) view.findViewById(R.id.ibBack);
         TextView tvProfileName = (TextView) view.findViewById(R.id.tvProfileName);
         final Button buttonSend = (Button) view.findViewById(R.id.buttonSend);
-
+        final Button buttonShifts = (Button) view.findViewById(R.id.buttonShifts);
+        final Button buttonDeliver = (Button) view.findViewById(R.id.buttonDeliver);
 
         ibBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,7 +98,6 @@ public class ProfileFragment extends BaseFragment<ProfileActivity> {
                 getHostActivity().onBackPressed();
             }
         });
-
 
         Admin admin = BikerentalApplication.getInstance().getAdmin();
 
@@ -101,12 +108,9 @@ public class ProfileFragment extends BaseFragment<ProfileActivity> {
         tvProfileName.setText(admin.name);
 
         String dataFromPool = DataParser.getInstance(getHostActivity()).loadDataFromPool();
-        //int resButtonSendText = R.string.notice_sanding_not_send_all_data;
 
         if ( dataFromPool.isEmpty() )
             disableSendButton(buttonSend);
-
-
 
         final LoadAllDataRequest request = LoadAllDataRequest.saveRequestAllData(dataFromPool, new PostResponseListener() {
             @Override
@@ -144,6 +148,44 @@ public class ProfileFragment extends BaseFragment<ProfileActivity> {
         });
 
 
+        requestShifts(new PostResponseListener() {
+            @Override
+            public void onResponse(String response) {
+                Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+
+                shiftList = gson.fromJson(response, new TypeToken<List<Shift>>() {
+                }.getType());
+
+                for (Shift shift : shiftList) {
+                    shift.point = Point.getByServerId("1");
+                    shift.save();
+                }
+
+                buttonShifts.setText( getString(R.string.count_shifts)+": "+shiftList.size() );
+
+            }
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        });
+
+        buttonDeliver.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                requestShiftsDeliver ();
+            }
+        });
+
+        buttonShifts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (shiftList != null) {
+                    getHostActivity().replaceFragment(ListShiftFragment.newInstance(shiftList), true);
+                }
+            }
+        });
 
         buttonSend.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -160,6 +202,38 @@ public class ProfileFragment extends BaseFragment<ProfileActivity> {
         buttonSend.setText(getString(R.string.notice_sanding_is_all_send));
         buttonSend.setEnabled(false);
         buttonSend.setAlpha(ALPHA_DISABLE);
+    }
+
+    protected void requestShifts ( PostResponseListener listener ) {
+        Admin admin = BikerentalApplication.getInstance().getAdmin();
+        ShiftRequest request = ShiftRequest.requestAllAdminShift(admin, listener);
+        Volley.newRequestQueue(getHostActivity()).add(request);
+    }
+
+    protected void requestShiftsDeliver () {
+
+        Shift shift = BikerentalApplication.getInstance().getShift();
+        shift.state = Shift.STATE_DELIVERED;
+        shift.save();
+
+        ShiftRequest request = ShiftRequest.requestDeliverShift(shift, new PostResponseListener() {
+            @Override
+            public void onResponse(String response) {
+                //BikerentalApplication.getInstance().logout();
+
+                BikerentalApplication.getInstance().getApplicationPreferencesEditor().clear();
+                BikerentalApplication.getInstance().getApplicationPreferencesEditor().commit();
+                Intent intent = new Intent(getHostActivity(), LoginActivity.class);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        });
+
+        Volley.newRequestQueue(getHostActivity()).add(request);
     }
 
 }

@@ -10,11 +10,25 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
+
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import ru.prokatvros.veloprokat.BikerentalApplication;
 import ru.prokatvros.veloprokat.R;
 import ru.prokatvros.veloprokat.model.db.Admin;
+import ru.prokatvros.veloprokat.model.db.Inventory;
+import ru.prokatvros.veloprokat.model.db.Point;
+import ru.prokatvros.veloprokat.model.db.Shift;
+import ru.prokatvros.veloprokat.model.requests.PostResponseListener;
+import ru.prokatvros.veloprokat.model.requests.ShiftRequest;
 import ru.prokatvros.veloprokat.ui.adapters.ItemsAdapter;
 import ru.prokatvros.veloprokat.ui.fragments.BreakdownInRentListFragment;
 import ru.prokatvros.veloprokat.ui.fragments.ChatFragment;
@@ -61,12 +75,14 @@ public class MainActivity extends BaseActivity {
         rvDrawerContainer.setLayoutManager(mLayoutManager);
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        //drawerLayout.setDrawerLockMode();
 
         mDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout,toolbar,R.string.drawer_open, R.string.drawer_close) {
 
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
+                Toast.makeText(MainActivity.this, "onOpenDrawer", Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -75,8 +91,8 @@ public class MainActivity extends BaseActivity {
             }
         };
 
-        drawerLayout.setDrawerListener(mDrawerToggle);
 
+        mDrawerToggle.setDrawerIndicatorEnabled(false);
         mDrawerToggle.syncState();
 
         if (savedInstanceState == null) {
@@ -121,57 +137,60 @@ public class MainActivity extends BaseActivity {
         }
 
         replaceFragment(fragment, false);
-        //drawerLayout.closeDrawers();
+        drawerLayout.closeDrawers();
     }
 
+    public void actionIntercedeShift(final MenuItem item) {
 
-    @Override
-    protected void onResume() {
-        super.onResume();
+        Point point = BikerentalApplication.getInstance().getPoint();
+        Admin admin = BikerentalApplication.getInstance().getAdmin();
 
-        /*
-        Client client = new Client();
-
-        client.name="vasa";
-        client.phone="9449";
-        client.surname="sidorov";
-        client.serverId=9999;
-        //client.save();
-
-        Rent rent = new Rent();
-        rent.client = client;
-
-        Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
-        final String strJsonRent = gson.toJson(rent);
-
-        Log.d("CLIENT_TO_JSON", strJsonRent); */
-
-        //List<Inventory> list = Inventory.getAll();
-        //list.size();
-
-    }
-
-    /*private void getPoolDataDEBUG() {
-        String dataFromPool = DataParser.getInstance(this).loadDataFromPool();
-        Log.d(TAG, "Data from pool: " + dataFromPool);
-
-        LoadAllDataRequest request = LoadAllDataRequest.saveRequestAllData(dataFromPool, new PostResponseListener() {
+        ShiftRequest request = ShiftRequest.intercedeShift(Inventory.getByPoint(point, true), point, admin, new PostResponseListener() {
             @Override
             public void onResponse(String response) {
-                Log.d(TAG, "Save request all data SUCCESS");
+                item.setVisible(false);
+
+                Log.d(TAG, "Response: " + response);
+
+                mDrawerToggle.setDrawerIndicatorEnabled(true);
+
+                Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+
+                Shift shift = gson.fromJson(response, Shift.class);
+                shift.save();
+
+                BikerentalApplication.getInstance().setShift(shift);
+
             }
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d(TAG, "Save request all data ERROR");
+                error.printStackTrace();
+                Toast.makeText(MainActivity.this, "Action error", Toast.LENGTH_LONG).show();
             }
         });
 
         Volley.newRequestQueue(this).add(request);
-    } */
+    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        menu.findItem(R.id.action_commit).setVisible(true);
+        return super.onCreateOptionsMenu(menu);
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
 
+        switch (item.getItemId()) {
+            case R.id.action_commit:
+                actionIntercedeShift(item);
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
     public static void startMainActivity(Context context) {
         Intent intent = new Intent(context, MainActivity.class);

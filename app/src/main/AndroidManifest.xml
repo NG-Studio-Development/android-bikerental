@@ -61,9 +61,11 @@
         <meta-data
             android:name="AA_DB_VERSION"
             android:value="134" />
-        <!-- <meta-data
+        <!--
+             <meta-data
             android:name="AA_MODELS"
-            android:value="ru.prokatvros.veloprokat.model.db.Admin,                             ru.prokatvros.veloprokat.model.db.Breakdown,                             ru.prokatvros.veloprokat.model.db.Client,                             ru.prokatvros.veloprokat.model.db.Inventory,                             ru.prokatvros.veloprokat.model.db.Message,                             ru.prokatvros.veloprokat.model.db.Point,                             ru.prokatvros.veloprokat.model.db.Rent,                             ru.prokatvros.veloprokat.model.db.Tarif" />-->
+            android:value="ru.prokatvros.veloprokat.model.db.Admin,                             ru.prokatvros.veloprokat.model.db.Breakdown,                             ru.prokatvros.veloprokat.model.db.Client,                             ru.prokatvros.veloprokat.model.db.Inventory,                             ru.prokatvros.veloprokat.model.db.Message,                             ru.prokatvros.veloprokat.model.db.Point,                             ru.prokatvros.veloprokat.model.db.Rent,                             ru.prokatvros.veloprokat.model.db.Tarif" />
+        -->
 
         <activity
             android:name=".ui.activities.ClientActivity"
@@ -98,6 +100,15 @@
         <activity
             android:name=".ui.activities.BreakdownInRentActivity"
             android:label="@string/title_activity_breakdown_in_rent" >
+        </activity>
+        <activity
+            android:name=".ui.activities.GalleryActivity"
+            android:label="@string/title_activity_gallery"
+            android:parentActivityName=".ui.activities.MainActivity"
+            android:theme="@style/AppTheme" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ru.prokatvros.veloprokat.ui.activities.MainActivity" />
         </activity>
     </application>
 

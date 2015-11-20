@@ -10,16 +10,10 @@ import android.widget.Toast;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
-import java.util.List;
-
-import ru.prokatvros.veloprokat.R;
 import ru.prokatvros.veloprokat.model.db.BreakdownInRent;
 import ru.prokatvros.veloprokat.model.requests.BreakdowndInRentRequest;
 import ru.prokatvros.veloprokat.ui.activities.BreakdownInRentActivity;
-import ru.prokatvros.veloprokat.ui.adapters.BreakdownInRentAdapter;
 
 
 public class BreakdownInRentListFragment extends BaseListFragment {
@@ -44,11 +38,11 @@ public class BreakdownInRentListFragment extends BaseListFragment {
                     Toast.makeText(getHostActivity(), "Can not load data", Toast.LENGTH_LONG).show();
                     return;
                 }
-
-                Gson gson = new Gson();
-                List<BreakdownInRent> listBreakdownInRents = gson.fromJson(response, new TypeToken<List<BreakdownInRent>>(){}.getType());
-                BreakdownInRentAdapter adapter = new BreakdownInRentAdapter(getHostActivity(), R.layout.item_base, listBreakdownInRents);
-                setAdapter(adapter);
+                // **** NOT DELETE ***** //
+                //Gson gson = new Gson();
+                //List<BreakdownInRent> listBreakdownInRents = gson.fromJson(response, new TypeToken<List<BreakdownInRent>>(){}.getType());
+                //BreakdownInRentAdapter adapter = new BreakdownInRentAdapter(getHostActivity(), R.layout.item_base, listBreakdownInRents);
+                //setAdapter(adapter);
                 getHostActivity().getProgressDialog().hide();
             }
         }, new Response.ErrorListener() {

@@ -13,15 +13,15 @@ public class Tarif extends Model {
     public String name;
 
     @Expose
-    @Column(name = "SumPerHour")
-    public int sumPerHour;
+    @Column(name = "SumHour")
+    public int sumHour;
 
     @Expose
     @Column(name = "SumDay")
     public int sumDay;
 
     @Expose
-    @Column(name = "SumTsDay")
-    public int sumTsDay;
+    @Column(name = "SumTsHour")
+    public int sumTsHour;
 
 }

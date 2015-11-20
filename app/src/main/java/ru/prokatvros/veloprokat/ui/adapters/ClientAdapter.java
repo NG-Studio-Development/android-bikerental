@@ -54,6 +54,7 @@ public class ClientAdapter extends ArrayAdapter<Client> {
         Client client = getItem(position);
 
         holder.tvName.setText(client.name);
+        holder.tvPhone.setText(client.phone);
 
         return convertView;
     }
@@ -61,11 +62,13 @@ public class ClientAdapter extends ArrayAdapter<Client> {
     private Holder initHolder(View convertView) {
         Holder holder = new Holder();
         holder.tvName = (TextView) convertView.findViewById(R.id.tvName);
+        holder.tvPhone = (TextView) convertView.findViewById(R.id.tvPhone);
         return holder;
     }
 
     class Holder {
         TextView tvName;
+        TextView tvPhone;
     }
 
 }

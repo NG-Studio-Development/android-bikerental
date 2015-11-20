@@ -7,33 +7,46 @@ import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import org.joda.time.DateTime;
+import org.joda.time.Period;
+
 import java.util.Calendar;
+import java.util.Date;
 
 import ru.prokatvros.veloprokat.R;
+import ru.prokatvros.veloprokat.model.db.Inventory;
 import ru.prokatvros.veloprokat.model.db.Rent;
 import ru.prokatvros.veloprokat.ui.activities.RentActivity;
+
+//import org.joda.time.DateTime;
+//import org.joda.time.Period;
 
 public class AddRentFragment extends BaseFragment<RentActivity> {
 
     private static String TAG = "ADD_RENT_FRAGMENT";
 
+
+    EditText etPaid;
     static TextView tvTime;
     static TextView tvDate;
     Button buttonAddClient;
     Button buttonAddInventory;
     Button buttonAdditionInventory;
     TextView tvCost;
+
+    TimePickerFragment timePickerFragment; ;
+    DatePickerFragment datePickerFragment;
 
     @Override
     public int getLayoutResID() {
@@ -49,6 +62,8 @@ public class AddRentFragment extends BaseFragment<RentActivity> {
 
         setHasOptionsMenu(true);
 
+        etPaid = (EditText) view.findViewById(R.id.etPaid);
+
         tvTime = (TextView) view.findViewById(R.id.tvTime);
         tvDate = (TextView) view.findViewById(R.id.tvDate);
 
@@ -60,10 +75,44 @@ public class AddRentFragment extends BaseFragment<RentActivity> {
         ImageButton buttonAddDate = (ImageButton) view.findViewById(R.id.ibAddDate);
         ImageButton ibAddTime = (ImageButton) view.findViewById(R.id.ibAddTime);
         tvCost = (TextView) view.findViewById(R.id.tvCost);
+        tvCost.setText(getString(R.string.calculate_cost));
+
+        tvCost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Rent rent = Rent.getRentFromPool(RentActivity.CREATE_RENT);
+
+                if ( !isFullData() ) {
+                    Toast.makeText(getHostActivity(), getString(R.string.warning_can_not_have_empty_field), Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                Period period = new Period(new DateTime(), new DateTime(getDeadlineInMillis()));
 
 
-        final TimePickerFragment timePickerFragment = new TimePickerFragment();
-        final DatePickerFragment datePickerFragment = new DatePickerFragment();
+                int years = period.getYears();
+                int month = period.getMonths();
+                int weeks = period.getWeeks();
+                int days = period.getDays();
+                int hour = period.getHours();
+
+                if (years >0 || month >0 || weeks>0 || days>3) {
+                    Toast.makeText(getHostActivity(), getString(R.string.warning_rent_can_not_be_moere_then_three_days), Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                if (days == 0 && hour == 0) {
+                    Toast.makeText(getHostActivity(), getString(R.string.warning_rent_can_not_be_less_then_one_hour), Toast.LENGTH_LONG).show();
+                    return;
+                } 
+                rent.startTime = new Date().getTime();
+                rent.endTime = getDeadlineInMillis();
+                tvCost.setText(String.valueOf(rent.getCost()));
+            }
+        });
+
+        timePickerFragment = new TimePickerFragment();
+        datePickerFragment = new DatePickerFragment();
 
         ibAddTime.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,27 +160,37 @@ public class AddRentFragment extends BaseFragment<RentActivity> {
                     return;
                 }
 
-                Calendar calendar = Calendar.getInstance();
-                calendar.set(Calendar.YEAR, datePickerFragment.getYear());
-                calendar.set(Calendar.MONTH, datePickerFragment.getMonth());
-                calendar.set(Calendar.DAY_OF_MONTH, datePickerFragment.getDay());
 
-                calendar.set(Calendar.HOUR_OF_DAY, timePickerFragment.getHourOfDay());
-                calendar.set(Calendar.MINUTE, timePickerFragment.getMinute());
 
                 Rent rent = Rent.getRentFromPool(RentActivity.CREATE_RENT);
 
                 if ( rent != null ) {
-                    Log.d(TAG, "Time in millis: "+calendar.getTimeInMillis());
-                    rent.endTime = calendar.getTimeInMillis();
+                    //rent.endTime = getDeadlineInMillis();
+                    //rent.startTime = new Date().getTime();
+                    if (rent.startTime == 0 || rent.startTime == 0) {
+                        Toast.makeText(getHostActivity(), getString(R.string.warning_you_must_calculate_cost),Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                    if (etPaid.getText().toString().isEmpty()) {
+                        Toast.makeText(getHostActivity(), getString(R.string.warning_set_prepay),Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                    rent.inventory.state = Inventory.RENTED_STATE;
+                    rent.surcharge = Integer.valueOf(etPaid.getText().toString());
+                    rent.inventory.save();
                     rent.save();
 
-                    tvCost.setText(String.valueOf(rent.getCost()));
+                    tvCost.setText( String.valueOf(rent.getCost()) );
 
                     getHostActivity().sendToServer(rent);
+
                 } else {
                     throw new Error("Rent is null, please, check set new rent to pool in RentActivity");
                 }
+
+
 
                 getHostActivity().onBackPressed();
             }
@@ -159,8 +218,36 @@ public class AddRentFragment extends BaseFragment<RentActivity> {
         if(rent.inventoryAddition != null)
             buttonAdditionInventory.setText(rent.inventoryAddition.model);
 
-        tvCost.setText( String.valueOf(rent.getCost()) );
     }
+
+    protected boolean isFullData() {
+        Rent rent = Rent.getRentFromPool(RentActivity.CREATE_RENT);
+        return datePickerFragment.isSet() && timePickerFragment.isSet() &&  rent.client != null && rent.inventory != null;
+    }
+
+    public long getDeadlineInMillis() {
+
+        if (datePickerFragment == null || timePickerFragment == null
+                || !datePickerFragment.isSet() && !timePickerFragment.isSet())
+            return 0;
+
+        Calendar calendar = Calendar.getInstance();
+
+        if ( datePickerFragment.isSet() ){
+            calendar.set(Calendar.YEAR, datePickerFragment.getYear());
+            calendar.set(Calendar.MONTH, datePickerFragment.getMonth());
+            calendar.set(Calendar.DAY_OF_MONTH, datePickerFragment.getDay());
+        }
+
+        if ( timePickerFragment.isSet() ) {
+            calendar.set(Calendar.HOUR_OF_DAY, timePickerFragment.getHourOfDay());
+            calendar.set(Calendar.MINUTE, timePickerFragment.getMinute());
+        }
+
+        return calendar.getTimeInMillis();
+
+    }
+
 
     public static class TimePickerFragment extends DialogFragment
             implements TimePickerDialog.OnTimeSetListener {

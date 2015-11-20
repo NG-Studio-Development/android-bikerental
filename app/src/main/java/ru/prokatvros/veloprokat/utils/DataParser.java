@@ -118,24 +118,7 @@ public class DataParser {
         Volley.newRequestQueue(context).add(requestCollectData);
     }
 
-    /*@Deprecated
-    protected void saveToDataBase(List<? extends Model>... lists) {
-        ActiveAndroid.beginTransaction();
-        try {
 
-            for (List<? extends Model> list : lists) {
-                for (Model model : list) {
-                    model.save();
-                }
-            }
-            ActiveAndroid.setTransactionSuccessful();
-            handler.sendMessage(handler.obtainMessage(ON_SUCCESS) );
-        }
-        finally {
-            ActiveAndroid.endTransaction();
-        }
-
-    } */
 
     protected void saveToDataBase( List<Client> clientList,
                                   List<Tarif> tarifsList,
@@ -160,7 +143,8 @@ public class DataParser {
             }
 
             for (Inventory inventory : inventoriesList) {
-                inventory.tarif.save();
+                if ( inventory.tarif != null )
+                        inventory.tarif.save();
                 inventory.saveCrud();
                 inventory.save();
             }

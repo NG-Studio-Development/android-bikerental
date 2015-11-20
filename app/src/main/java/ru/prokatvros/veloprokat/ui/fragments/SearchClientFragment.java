@@ -56,7 +56,7 @@ public class SearchClientFragment extends BaseFragment {
         etPhone.setHint(getString(R.string.hint_enter_client_number));
 
         final List<Client> clientList = new ArrayList<>();
-        final ClientAdapter adapter = new ClientAdapter(getHostActivity(), R.layout.item_base, clientList);
+        final ClientAdapter adapter = new ClientAdapter(getHostActivity(), R.layout.item_client, clientList);
         lvClient.setAdapter(adapter);
 
         lvClient.setOnItemClickListener(new AdapterView.OnItemClickListener() {

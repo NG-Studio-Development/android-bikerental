@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="ru.prokatvros.veloprokat.ui.fragments.ClientListFragment">
+
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/lvList"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/rgFilter" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/drawable_ic_add"
+        android:background="@drawable/bg_round_button"
+        android:id="@+id/ibAdd"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="@dimen/margin_widget_default_medium"  />
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/rgFilter"
+        android:gravity="right" >
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/main"
+            android:id="@+id/rbMain"
+            android:layout_margin="@dimen/margin_widget_default_small" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/vip"
+            android:id="@+id/rbVip"
+            android:layout_margin="@dimen/margin_widget_default_small" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/black_list"
+            android:id="@+id/rbBlackList"
+            android:layout_margin="@dimen/margin_widget_default_small" />
+
+    </RadioGroup>
+</RelativeLayout>

@@ -59,7 +59,7 @@ public class LoginActivity extends  BaseActivity implements LoginFragment.OnLogi
 
         context = getApplicationContext();
 
-        if (checkPlayServices()) {
+        if (true/*checkPlayServices()*/) {
             gcm = GoogleCloudMessaging.getInstance(this);
             regid = getRegistrationId(context);
 
@@ -103,7 +103,7 @@ public class LoginActivity extends  BaseActivity implements LoginFragment.OnLogi
     protected void onResume() {
         super.onResume();
         // Check device for Play Services APK.
-        checkPlayServices();
+        //checkPlayServices();
     }
 
     private boolean checkPlayServices() {
@@ -191,8 +191,8 @@ public class LoginActivity extends  BaseActivity implements LoginFragment.OnLogi
     }
 
     private SharedPreferences getGcmPreferences(Context context) {
-        return getSharedPreferences(LoginActivity.class.getSimpleName(),
-                Context.MODE_PRIVATE);
+        return BikerentalApplication.getInstance().getApplicationPreferences();
+        //return getSharedPreferences(LoginActivity.class.getSimpleName(), Context.MODE_PRIVATE);
     }
 
     private void sendRegistrationIdToBackend(String login, String password) {

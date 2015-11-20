@@ -4,11 +4,15 @@ package ru.prokatvros.veloprokat.ui.fragments;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -79,7 +83,6 @@ public class RentFragment extends BaseFragment<RentActivity> {
             getHostActivity().getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-
         setHasOptionsMenu(true);
 
         TextView tvClientName = (TextView) view.findViewById(R.id.tvClientName);
@@ -90,30 +93,40 @@ public class RentFragment extends BaseFragment<RentActivity> {
         RelativeLayout rlBreakdown = (RelativeLayout) view.findViewById(R.id.rlBreakdown);
         TextView tvBreakdown = (TextView) view.findViewById(R.id.tvBreakdown);
         TextView tvBreakdownSpinnerTitle = (TextView) view.findViewById(R.id.tvBreakdownSpinnerTitle);
+        TextView tvCost = (TextView) view.findViewById(R.id.tvCost);
+        TextView tvSurcharge = (TextView) view.findViewById(R.id.tvSurcharge);
+        RelativeLayout rlSurcharge = (RelativeLayout) view.findViewById(R.id.rlSurcharge);
         final TextView tvSummFine = (TextView) view.findViewById(R.id.tvSummFine);
+        TextView tvPrepaid = (TextView) view.findViewById(R.id.tvPrepaid);
 
         TextView tvInventoryAdditionalName = (TextView) view.findViewById(R.id.tvInventoryAdditionalName);
+
+        final EditText etSurcharge = (EditText) view.findViewById(R.id.etSurcharge);
 
         Spinner spinner = (Spinner) view.findViewById(R.id.spinnerBreakdown);
         Button buttonClose = (Button) view.findViewById(R.id.buttonClose);
 
-        final List<Breakdown> breakdownList = Breakdown.getAll();
+        final List<Breakdown> breakdownList = new ArrayList<>();
+        breakdownList.add(Breakdown.createWithoutBreakdown(getString(R.string.without_breakdown)));
+        breakdownList.addAll(Breakdown.getAll());
+
 
         final ArrayAdapter<String> adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, createSinnerTitle(breakdownList) );
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
 
-
         tvClientName.setText(rent.client.name + " " + rent.client.surname);
         tvClientPhone.setText(rent.client.phone);
         tvInventoryName.setText(rent.inventory.model);
+        tvCost.setText(String.valueOf( rent.getCost() ) );
+        tvPrepaid.setText(String.valueOf(rent.surcharge));
 
         if ( rent.inventoryAddition != null )
             tvInventoryAdditionalName.setText(rent.inventoryAddition.model);
 
-        tvTime.setText(getDate(rent.endTime));
+        tvTime.setText( getDate(rent.endTime) );
 
-        if (rent != null && rent.breakdown != null)
+        if ( rent != null && rent.breakdown != null )
             spinner.setSelection( breakdownList.indexOf(rent.breakdown) );
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -123,10 +136,15 @@ public class RentFragment extends BaseFragment<RentActivity> {
                 if (rent == null)
                     return;
 
-                rent.breakdown = breakdownList.get(position);
+                Breakdown breakdown = breakdownList.get(position);
+
+                if (!breakdown.code.equals(Breakdown.CODE_WITHOUT_BREAKDOWN)) {
+                    rent.breakdown = breakdownList.get(position);
+                    tvSummFine.setText(String.valueOf(rent.breakdown.summ));
+                }
+
                 rent.save();
 
-                tvSummFine.setText( String.valueOf(breakdownList.get(position).cost) );
             }
 
             @Override
@@ -134,17 +152,29 @@ public class RentFragment extends BaseFragment<RentActivity> {
             }
         });
 
-        if (rent.isCompleted()) {
+        if ( rent.isCompleted() ) {
             rlBreakdown.setVisibility(View.VISIBLE);
-            if (rent.breakdown != null )
+
+            if ( rent.breakdown != null )
                 tvBreakdown.setText(rent.breakdown.description);
+
             buttonClose.setVisibility(View.INVISIBLE);
             tvTime.setVisibility(View.INVISIBLE);
             tvTimeTitle.setText(getString(R.string.was_closed));
             tvTimeTitle.setTextColor(getResources().getColor(R.color.red));
-            spinner.setVisibility(View.INVISIBLE);
-            tvBreakdownSpinnerTitle.setVisibility(View.INVISIBLE);
+            spinner.setVisibility(View.GONE);
+            tvBreakdownSpinnerTitle.setVisibility(View.GONE);
+            etSurcharge.setVisibility(View.GONE);
+            rlSurcharge.setVisibility(View.VISIBLE);
+            tvSurcharge.setText(rent.surcharge == 0
+                    ? getString(R.string.without_surcharge)
+                    : String.valueOf(rent.surcharge));
+
+            if (rent.breakdown != null)
+                tvSummFine.setText( String.valueOf(rent.breakdown.summ) );
         }
+
+
 
         buttonClose.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -152,6 +182,9 @@ public class RentFragment extends BaseFragment<RentActivity> {
                 rent.setCompleteds(true);
                 rent.client.countRents += 1;
                 rent.client.save();
+
+                if (!etSurcharge.getText().toString().isEmpty())
+                    rent.surcharge = Integer.valueOf(etSurcharge.getText().toString());
                 rent.save();
                 sendToServer(rent);
 
@@ -232,5 +265,10 @@ public class RentFragment extends BaseFragment<RentActivity> {
         }
         return list;
     }
+
+
+
+
+
 
 }

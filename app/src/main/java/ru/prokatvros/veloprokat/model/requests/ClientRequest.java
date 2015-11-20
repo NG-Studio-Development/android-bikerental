@@ -25,25 +25,58 @@ public class ClientRequest extends StringRequest {
     private static String PARAM_JSON_CLIENT = "json_client";
 
     public static int CODE_ERROR_DUPLICATE_POST_CLIENT = 1;
+    public static int CODE_ERROR_PHONE_OF_OTHER_CLIENT = 2;
     public static int CODE_NOT_ERROR_POST_CLIENT = 0;
 
 
     private Map<String, String> params;
 
     public ClientRequest (int method, String url, Map<String, String> params, Response.Listener<String> listener, Response.ErrorListener errorListener) {
-
         super(method, url, listener, errorListener);
         this.params = params;
+
+        text_error_post_client[CODE_ERROR_DUPLICATE_POST_CLIENT] = R.string.warning_duplicate_client;
+        text_error_post_client[CODE_ERROR_PHONE_OF_OTHER_CLIENT] = R.string.warning_duplicate_client_phone;
+        text_error_post_client[CODE_NOT_ERROR_POST_CLIENT] = R.string.warning_duplicate_client;
     }
 
 
-    private static int[] text_error_post_client = new int[2];
+    private static int[] text_error_post_client = new int[3];
 
     public static String errorMessagePostClient(int code) {
         return BikerentalApplication.getInstance().getString(text_error_post_client[code]);
     }
 
     public static ClientRequest requestPostClient(Client client,  final PostResponseListener listener) {
+
+
+
+
+        Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+        final String strJsonClient = gson.toJson(client);
+
+
+        Log.d(TAG, "Json post: " + strJsonClient);
+
+        String url = ConstantsBikeRentalApp.URL_SERVER+"/"+"add_client";
+
+        Map<String, String> params = new HashMap<>();
+        params.put(PARAM_JSON_CLIENT, strJsonClient);
+
+        return new ClientRequest(Request.Method.POST, url, params, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                listener.onResponse(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                listener.onErrorResponse(error);
+            }
+        });
+    }
+
+    public static ClientRequest requestPutClient(Client client,  final PostResponseListener listener) {
 
 
         text_error_post_client[CODE_ERROR_DUPLICATE_POST_CLIENT] = R.string.warning_duplicate_client;
@@ -53,14 +86,14 @@ public class ClientRequest extends StringRequest {
         final String strJsonClient = gson.toJson(client);
 
 
-        Log.d(TAG, "Json: " + strJsonClient);
+        Log.d(TAG, "Json put: " + strJsonClient);
 
-        String url = ConstantsBikeRentalApp.URL_SERVER+"/"+"add_client";
+        String url = ConstantsBikeRentalApp.URL_SERVER+"/"+"client/"+client.serverId;
 
         Map<String, String> params = new HashMap<>();
         params.put(PARAM_JSON_CLIENT, strJsonClient);
 
-        return new ClientRequest(Request.Method.POST, url, params, new Response.Listener<String>() {
+        return new ClientRequest(Request.Method.PUT, url, params, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 listener.onResponse(response);

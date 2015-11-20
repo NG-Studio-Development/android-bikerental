@@ -7,36 +7,23 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import ru.prokatvros.veloprokat.R;
-import ru.prokatvros.veloprokat.model.db.Inventory;
+import ru.prokatvros.veloprokat.model.db.Shift;
 
-public class InventoryAdapter extends ArrayAdapter<Inventory> {
+public class ShiftAdapter extends ArrayAdapter<Shift> {
 
     private int resource;
-    private List<Inventory> list;
+    private List<Shift> list;
 
-    public InventoryAdapter(Context context, int resource, List<Inventory> list) {
+    public ShiftAdapter (Context context, int resource, List<Shift> list) {
         super(context, resource, list);
 
         this.resource = resource;
         this.list = list;
     }
 
-
-    public static List<Inventory> initListForDEBUG() {
-        List<Inventory> list = new ArrayList<>();
-
-        for (int i=0; i<10; i++) {
-            Inventory inventory = new Inventory();
-            inventory.model = "Inventory "+(i+1);
-            list.add(inventory);
-        }
-
-        return list;
-    }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -51,28 +38,23 @@ public class InventoryAdapter extends ArrayAdapter<Inventory> {
             holder = (Holder)convertView.getTag();
         }
 
-        Inventory inventory = getItem(position);
+        Shift shift = getItem(position);
 
-        holder.tvName.setText(inventory.model);
-        holder.tvNumber.setText(inventory.number);
+        holder.tvPoint.setText(shift.point.title);
 
         return convertView;
     }
 
+
     private Holder initHolder(View convertView) {
         Holder holder = new Holder();
-
-        holder.tvName = (TextView) convertView.findViewById(R.id.tvName);
-        holder.tvNumber = (TextView) convertView.findViewById(R.id.tvNumber);
-        holder.tvState = (TextView) convertView.findViewById(R.id.tvState);
-
+        holder.tvPoint = (TextView) convertView.findViewById(R.id.tvPoint);
         return holder;
     }
 
     class Holder {
-        TextView tvName;
-        TextView tvNumber;
-        TextView tvState;
+        TextView tvPoint;
     }
+
 
 }

@@ -119,6 +119,7 @@ public class RentListFragment extends BaseListFragment implements CompoundButton
         }
 
         List<Rent> rentList = Rent.getAllByCompleted(completed);
+        //List<Rent> rentList = Rent.getAll();
         setAdapter(new RentAdapter(getHostActivity(), R.layout.item_base, rentList));
     }
 }

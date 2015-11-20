@@ -74,8 +74,8 @@ public abstract class BaseListFragment extends BaseFragment<MainActivity> {
     }
 
     public void setVisibilityProgressBar(boolean visibilityState) {
-        int visibility = visibilityState ? View.VISIBLE : View.GONE;
-        pbLoader.setVisibility(visibility);
+        //int visibility = visibilityState ? View.VISIBLE : View.GONE;
+        //pbLoader.setVisibility(visibility);
     }
     public ListAdapter getAdapter() {
         return lvList.getAdapter();

@@ -35,8 +35,13 @@ public class InventoryHeaderAdapter extends BaseAdapter implements StickyListHea
         for(Inventory inventory : inventoryList) {
             if (inventory.idParent != 0)
                 itemList.add(inventory);
-            else
-                headersMap.put(Long.valueOf(inventory.serverId), inventory);
+            /*else
+                headersMap.put(Long.valueOf(inventory.serverId), inventory);*/
+        }
+
+        List<Inventory> listInventoryRoot = Inventory.getRoot();
+        for (Inventory inventory : listInventoryRoot) {
+            headersMap.put(Long.valueOf(inventory.serverId), inventory);
         }
 
         return itemList;
@@ -63,15 +68,20 @@ public class InventoryHeaderAdapter extends BaseAdapter implements StickyListHea
 
         if (convertView == null) {
             holder = new ViewHolder();
-            convertView = inflater.inflate(R.layout.item_base, parent, false);
-            holder.text = (TextView) convertView.findViewById(R.id.tvName);
+            convertView = inflater.inflate(R.layout.item_inventory, parent, false);
+
+            holder.tvName = (TextView) convertView.findViewById(R.id.tvName);
+            holder.tvNumber = (TextView) convertView.findViewById(R.id.tvNumber);
+            holder.tvState = (TextView) convertView.findViewById(R.id.tvState);
+
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        holder.text.setText(itemList.get(position).model);
-
+        holder.tvName.setText(itemList.get(position).model);
+        holder.tvNumber.setText(itemList.get(position).number);
+        //holder.tvState.setText(item);
         return convertView;
     }
 
@@ -86,6 +96,7 @@ public class InventoryHeaderAdapter extends BaseAdapter implements StickyListHea
         } else {
             holder = (HeaderViewHolder) convertView.getTag();
         }
+
         //set header text as first char in name
         //String headerText = "" + itemList.get(position).model;//countries[position].subSequence(0, 1).charAt(0);
         String headerText = "" + headersMap.get(itemList.get(position).idParent).model;
@@ -108,7 +119,11 @@ public class InventoryHeaderAdapter extends BaseAdapter implements StickyListHea
     }
 
     class ViewHolder {
-        TextView text;
+
+        TextView tvName;
+        TextView tvNumber;
+        TextView tvState;
+
     }
 
 }

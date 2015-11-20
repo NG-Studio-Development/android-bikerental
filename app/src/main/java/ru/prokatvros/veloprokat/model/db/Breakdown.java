@@ -13,6 +13,8 @@ import java.util.List;
 @Table(name = "Breakdown")
 public class Breakdown extends Model implements Serializable {
 
+    public static String CODE_WITHOUT_BREAKDOWN = "code_without_breakdown";
+
     @Expose
     @Column(name = "Code")
     public String code;
@@ -22,9 +24,8 @@ public class Breakdown extends Model implements Serializable {
     public String description;
 
     @Expose
-    @Column(name = "Cost")
-    public int cost;
-
+    @Column(name = "Summ")
+    public int summ;
 
     public static List<Breakdown> initListForDEBUG() {
         List<Breakdown> list = new ArrayList<>();
@@ -43,6 +44,20 @@ public class Breakdown extends Model implements Serializable {
         return new Select()
                 .from(Breakdown.class)
                 .execute();
+    }
+
+    public static Breakdown getByCode( String code ) {
+        return new Select()
+                .from(Breakdown.class)
+                .where("Code = ?", code)
+                .executeSingle();
+    }
+
+    public static Breakdown createWithoutBreakdown(String description) {
+        Breakdown breakdown = new Breakdown();
+        breakdown.code = CODE_WITHOUT_BREAKDOWN;
+        breakdown.description = description;
+        return breakdown;
     }
 
     /*@Override

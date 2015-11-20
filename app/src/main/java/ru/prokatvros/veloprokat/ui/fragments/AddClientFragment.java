@@ -40,19 +40,22 @@ public class AddClientFragment extends BaseFragment {
 
     private final static String TAG = "ADD_CLIENT_FRAGMENT";
 
-    private static final int REQUEST_CODE_CAPTURE_IMAGE = 3;
-
-    private static final int BASE_64_IMAGE_HANDLER = 1;
+    protected int sendAction = SEND_ADD_CLIENT;
 
     File file;
     Client client;
     String base64Image;
     Button buttonAddPhoto;
 
+    EditText etName;// = (EditText) view.findViewById(R.id.etName);
+    EditText etSurname;// = (EditText) view.findViewById(R.id.etSurname);
+    EditText etPhone;// = (EditText) view.findViewById(R.id.etSearch);
+    EditText etNumber;
+
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            if ( msg.what == BASE_64_IMAGE_HANDLER ) {
+            if ( msg.what == ConstantsBikeRentalApp.BASE_64_IMAGE_HANDLER ) {
                 if (base64Image != null) {
                     postImageToServer(base64Image);
                     buttonAddPhoto.setText(getString(R.string.photo_was_added));
@@ -62,12 +65,23 @@ public class AddClientFragment extends BaseFragment {
         }
     };
 
-    private final static String ARG_NUMBER = "arg_client";
+    private final static String ARG_NUMBER = "arg_number";
+
+    private final static String ARG_CLIENT = "arg_client";
 
     public static AddClientFragment newInstance(String number) {
         AddClientFragment fragment = new AddClientFragment ();
         Bundle args = new Bundle();
         args.putString(ARG_NUMBER, number);
+        fragment.setArguments(args);
+
+        return fragment;
+    }
+
+    public static AddClientFragment newInstance(Client client) {
+        AddClientFragment fragment = new AddClientFragment ();
+        Bundle args = new Bundle();
+        args.putParcelable(ARG_CLIENT, client);
         fragment.setArguments(args);
 
         return fragment;
@@ -80,6 +94,17 @@ public class AddClientFragment extends BaseFragment {
         return R.layout.fragment_add_client;
     }
 
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if (getHostActivity().getSupportActionBar() != null) {
+            getHostActivity().getSupportActionBar().setTitle("Name");
+            getHostActivity().getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -88,24 +113,36 @@ public class AddClientFragment extends BaseFragment {
         Button buttonAdd = (Button) view.findViewById(R.id.buttonAdd);
         buttonAddPhoto = (Button) view.findViewById(R.id.buttonAddPhoto);
 
-        final EditText etName = (EditText) view.findViewById(R.id.etName);
-        final EditText etSurname = (EditText) view.findViewById(R.id.etSurname);
-        final EditText etPhone = (EditText) view.findViewById(R.id.etSearch);
+        etName = (EditText) view.findViewById(R.id.etName);
+        etSurname = (EditText) view.findViewById(R.id.etSurname);
+        etPhone = (EditText) view.findViewById(R.id.etSearch);
+        etNumber = (EditText) view.findViewById(R.id.etNumber);
+
+
 
         if ( getArguments() != null ) {
+
+            if (getArguments().getParcelable(ARG_CLIENT) != null) {
+                client = getArguments().getParcelable(ARG_CLIENT);
+                fillField( client );
+                buttonAdd.setText(getString(R.string.save));
+                sendAction = SEND_UPDATE_CLIENT;
+            } else {
+                client = new Client();
+            }
+
             String phone = getArguments().getString(ARG_NUMBER);
             if (phone != null)
                 etPhone.setText(phone);
         }
 
-        client = new Client();
-
         buttonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addClient(etName.getText().toString(),
+                addClient( etName.getText().toString(),
                         etSurname.getText().toString(),
-                        etPhone.getText().toString());
+                        etPhone.getText().toString(),
+                        etNumber.getText().toString(),  sendAction);
             }
         });
 
@@ -120,17 +157,30 @@ public class AddClientFragment extends BaseFragment {
         return view;
     }
 
+
+    protected void fillField(Client client) {
+        etName.setText(client.name);
+        etSurname.setText(client.surname);
+        etPhone.setText(client.phone);
+
+        if (client.hasVipNumber())
+            etNumber.setText(client.vipNumber);
+    }
+
     public void capturePhoto() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         file = new File(FileUtils.getFilesDir(), Calendar.getInstance().getTimeInMillis()+".jpg");
         intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
 
         if ( intent.resolveActivity( getActivity().getPackageManager() ) != null ) {
-            startActivityForResult(intent, REQUEST_CODE_CAPTURE_IMAGE);
+            startActivityForResult(intent, ConstantsBikeRentalApp.REQUEST_CODE_CAPTURE_IMAGE);
         }
     }
 
-    private void addClient( String name, String surname, String phone ) {
+    protected static final int SEND_UPDATE_CLIENT = 0;
+    protected static final int SEND_ADD_CLIENT = 1;
+
+    private void addClient( String name, String surname, String phone, String vipNumber, int actionSend ) {
 
         if ( name.isEmpty() || surname.isEmpty() || phone.isEmpty() ) {
             Toast.makeText( getHostActivity(), getString(R.string.warning_can_not_have_empty_field), Toast.LENGTH_LONG ).show();
@@ -140,14 +190,51 @@ public class AddClientFragment extends BaseFragment {
         client.name = name;
         client.surname = surname;
         client.phone = phone;
+
+        if (vipNumber != null && !vipNumber.isEmpty() )
+            client.vipNumber = vipNumber;
+
         client.save();
 
-        sendToServer(client);
-
+        if (actionSend == SEND_ADD_CLIENT) {
+            reqPostClient(client);
+        } else if (actionSend == SEND_UPDATE_CLIENT) {
+            reqUpdateClient(client);
+        }
     }
 
+    protected void reqUpdateClient(Client client) {
+        ClientRequest clientRequest = ClientRequest.requestPutClient(client, new PostResponseListener() {
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "Put response: " + response);
+                int errorCode;
+                try {
+                    JSONObject jsonResponse = new JSONObject(response);
+                    errorCode = jsonResponse.getInt("error_code");
+                } catch (JSONException ex) {
+                    ex.printStackTrace();
+                    return;
+                }
 
-    protected void sendToServer(final Client client) {
+                if (errorCode != ClientRequest.CODE_NOT_ERROR_POST_CLIENT) {
+                    Toast.makeText(getHostActivity(),
+                            ClientRequest.errorMessagePostClient(errorCode),
+                            Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                Log.d(TAG, "Put error: ");
+            }
+        });
+
+        Volley.newRequestQueue(getHostActivity()).add(clientRequest);
+    }
+
+    protected void reqPostClient(final Client client) {
         ClientRequest clientRequest = ClientRequest.requestPostClient(client, new PostResponseListener() {
             @Override
             public void onResponse(String response) {
@@ -195,7 +282,7 @@ public class AddClientFragment extends BaseFragment {
         if (resultCode == Activity.RESULT_OK) {
             final Uri uri;
 
-            if (requestCode == REQUEST_CODE_CAPTURE_IMAGE)
+            if (requestCode == ConstantsBikeRentalApp.REQUEST_CODE_CAPTURE_IMAGE)
                 uri = Uri.fromFile(file);
             else
                 return;
@@ -207,7 +294,7 @@ public class AddClientFragment extends BaseFragment {
                     try {
                         final Bitmap avatarImage = BitmapUtils.decodeUri(getActivity(), uri, BitmapUtils.DESIRED_SIZE, BitmapUtils.DESIRED_SIZE, BitmapUtils.DecodeType.BOTH_SHOULD_BE_EQUAL_CUT);
                         base64Image = BitmapUtils.convertBitmapToBase64(avatarImage, false);
-                        handler.sendMessage( handler.obtainMessage( BASE_64_IMAGE_HANDLER) );
+                        handler.sendMessage( handler.obtainMessage( ConstantsBikeRentalApp.BASE_64_IMAGE_HANDLER) );
 
                     } catch (IOException e) {
                         e.printStackTrace();

@@ -12,6 +12,8 @@ import com.activeandroid.Configuration;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
+import net.danlew.android.joda.JodaTimeAndroid;
+
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -22,9 +24,12 @@ import ru.prokatvros.veloprokat.model.db.Client;
 import ru.prokatvros.veloprokat.model.db.Inventory;
 import ru.prokatvros.veloprokat.model.db.Point;
 import ru.prokatvros.veloprokat.model.db.Rent;
+import ru.prokatvros.veloprokat.model.db.Shift;
 import ru.prokatvros.veloprokat.model.db.Tarif;
 import ru.prokatvros.veloprokat.utils.DataParser;
 import ru.prokatvros.veloprokat.utils.FileUtils;
+
+//import net.danlew.android.joda.JodaTimeAndroid;
 
 public class BikerentalApplication extends android.app.Application {
 
@@ -53,16 +58,18 @@ public class BikerentalApplication extends android.app.Application {
         ImageLoader.getInstance().handleSlowNetwork(true);
 
         Configuration.Builder configurationBuilder = new Configuration.Builder(this);
-        configurationBuilder.addModelClasses(Admin.class,
-                Breakdown.class, Client.class,
-                Inventory.class, ru.prokatvros.veloprokat.model.db.Message.class,
-                Point.class, Rent.class,
-                Tarif.class);
+
+        configurationBuilder.addModelClasses( Admin.class, Breakdown.class, Client.class,
+                                            Inventory.class, Point.class, Rent.class, Tarif.class,
+                                            Shift.class,
+                                            ru.prokatvros.veloprokat.model.db.Message.class );
 
 
-        ActiveAndroid.initialize(this);
+        //ActiveAndroid.initialize(this);
+        ActiveAndroid.initialize(configurationBuilder.create());
 
         FileUtils.init(this);
+        JodaTimeAndroid.init(this);
 
         synchronized (BikerentalApplication.class) {
             if (BuildConfig.DEBUG) {
@@ -106,6 +113,14 @@ public class BikerentalApplication extends android.app.Application {
             }
         }
         return application;
+    }
+
+    public void logout() {
+        /*getApplicationPreferencesEditor().clear();
+        getApplicationPreferencesEditor().commit();
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);*/
+
     }
 
     /* @Deprecated
@@ -179,6 +194,21 @@ public class BikerentalApplication extends android.app.Application {
         SharedPreferences.Editor  editor = getApplicationPreferencesEditor();
         editor.putLong(ConstantsBikeRentalApp.PREFERENCE_ID_POINT, point.getId());
         editor.commit();
+    }
+
+    public void setShift(Shift shift) {
+        SharedPreferences.Editor  editor = getApplicationPreferencesEditor();
+        editor.putLong(ConstantsBikeRentalApp.PREFERENCE_ID_SHIFT, shift.getId());
+        editor.commit();
+    }
+
+    public Shift getShift() {
+        long shiftId = getApplicationPreferences().getLong(ConstantsBikeRentalApp.PREFERENCE_ID_SHIFT, -1);
+
+        if (shiftId == -1)
+            throw new Error("Not found admin, please check registration of admin !!!");
+
+        return Shift.load(Shift.class, shiftId);
     }
 
     public Point getPoint() {

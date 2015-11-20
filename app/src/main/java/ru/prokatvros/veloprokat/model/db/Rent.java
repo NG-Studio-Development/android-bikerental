@@ -6,6 +6,9 @@ import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
 import com.google.gson.annotations.Expose;
 
+import org.joda.time.DateTime;
+import org.joda.time.Period;
+
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -14,21 +17,25 @@ import java.util.Map;
 import ru.prokatvros.veloprokat.BikerentalApplication;
 
 @Table(name = "Rental")
-public class Rent extends Model /*implements Parcelable*/ {
+public class Rent extends Model {
 
     private final static Map<String, Rent> poolOfRents = new HashMap<>();
 
     @Expose
-    @Column(name = "serverId")
+    @Column( name = "serverId" )
     private Integer serverId;
 
     @Expose
-    @Column(name = "Token"/*, unique = true, onUniqueConflict = Column.ConflictAction.REPLACE*/ )
+    @Column( name = "Token" )
     private String token;
 
     @Expose
-    @Column(name = "IsCompleted")
+    @Column( name = "IsCompleted" )
     public Integer isCompleted = 0;
+
+    @Expose
+    @Column( name = "StartTime" )
+    public long startTime;
 
     @Expose
     @Column(name = "Client", onDelete = Column.ForeignKeyAction.CASCADE)
@@ -50,10 +57,17 @@ public class Rent extends Model /*implements Parcelable*/ {
     @Column(name = "EndTime")
     public Long endTime;
 
+    /*@Expose
+    @Column(name = "Paid")
+    public int paid; */
+
     @Expose
     @Column(name = "PaidFine")
     public int paidFine;
 
+    @Expose
+    @Column(name = "Surcharge")
+    public int surcharge;
 
     public void setCompleteds(boolean completeds) {
         this.isCompleted = completeds ? 1:0;
@@ -75,12 +89,6 @@ public class Rent extends Model /*implements Parcelable*/ {
                 client.save();
         }
 
-        //=
-
-
-        //=
-
-
         Inventory inventory = Inventory.getByNumber(this.inventory.number);
 
         if (inventory == null)
@@ -98,17 +106,16 @@ public class Rent extends Model /*implements Parcelable*/ {
                 inventoryAddition = inventory;
         }
 
+        if (this.breakdown != null) {
+            Breakdown breakdown = Breakdown.getByCode(this.breakdown.code);
+            if (breakdown == null) {
+                this.breakdown.save();
+            } else {
+                this.breakdown = breakdown;
+            }
+        }
+
     }
-
-    /*public void saveCrud() {
-        List<Point> pointsAll = Point.getAll();
-        Point points = Point.getByAddress(this.points.address);
-        if ( points == null )
-            this.points.save();
-        else
-            this.points = points;
-
-    }*/
 
     public Rent() {
         super();
@@ -155,10 +162,31 @@ public class Rent extends Model /*implements Parcelable*/ {
     }
 
     public int getCost() {
-        if ( inventory != null && endTime != null )
-            return 99;
-        else
-            return 0;
+        int cost = 0;
+
+        if ( inventory == null ) {
+            throw new NullPointerException("inventory can not be NULL !!!");
+        } else if(endTime == null) {
+            throw new NullPointerException("endTime can not be NULL !!!");
+        }
+
+        DateTime startTime = new DateTime(this.startTime);
+        DateTime endTime = new DateTime(this.endTime);
+
+        Period p = new Period(startTime, endTime);
+
+        int hours = p.getHours();
+        int days = p.getDays();
+
+        if ( days > 0 && days < 3 )
+            cost = inventory.tarif.sumDay * days;
+        else if (days == 3)
+            cost = inventory.tarif.sumTsHour;
+        else if (hours > 0)
+            cost = inventory.tarif.sumHour * hours;
+
+        return cost;
+
     }
 
 }

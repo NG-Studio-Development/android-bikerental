@@ -91,7 +91,7 @@ public class SearchInventoryFragment extends BaseFragment {
         etInventoryName.setHint(getString(R.string.hint_enter_model_name));
 
         final List<Inventory> inventoryList = new ArrayList<>();
-        final InventoryAdapter adapter = new InventoryAdapter(getHostActivity(), R.layout.item_base, inventoryList);
+        final InventoryAdapter adapter = new InventoryAdapter(getHostActivity(), R.layout.item_inventory, inventoryList);
         lvInventory.setAdapter(adapter);
         lvInventory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -127,7 +127,7 @@ public class SearchInventoryFragment extends BaseFragment {
                 synchronized (adapter) {
                     adapter.clear();
                     if (!s.toString().isEmpty())
-                        adapter.addAll(Inventory.getBySubNumber(s.toString(), idGroup));
+                        adapter.addAll(Inventory.getFreeBySubNumber(s.toString(), idGroup));
                     adapter.notify();
                 }
             }
