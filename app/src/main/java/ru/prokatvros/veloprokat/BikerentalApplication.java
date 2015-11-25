@@ -6,26 +6,15 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 
 import com.activeandroid.ActiveAndroid;
 import com.activeandroid.Configuration;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.HurlStack;
-import com.android.volley.toolbox.Volley;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
-import java.io.ByteArrayInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -37,7 +26,7 @@ import ru.prokatvros.veloprokat.model.db.Point;
 import ru.prokatvros.veloprokat.model.db.Rent;
 import ru.prokatvros.veloprokat.model.db.Shift;
 import ru.prokatvros.veloprokat.model.db.Tarif;
-import ru.prokatvros.veloprokat.net.InputStreamVolleyRequest;
+import ru.prokatvros.veloprokat.utils.DataParser;
 import ru.prokatvros.veloprokat.utils.FileUtils;
 
 //import net.danlew.android.joda.JodaTimeAndroid;
@@ -87,84 +76,6 @@ public class BikerentalApplication extends android.app.Application {
         } catch (IOException ex) {
             ex.printStackTrace();
         } */
-
-
-        String url = "http://prokatvros.temp.swtest.ru/api/files/backupname2.db";
-        InputStreamVolleyRequest request = new InputStreamVolleyRequest(Request.Method.GET, url, null, new Response.Listener<byte[]>() {
-            @Override
-            public void onResponse(byte[] response) {
-
-                try {
-                    copyDataBase(response);
-                    //copyDataBase();
-                    //initActiveAndroid();
-                    Log.d("LOAD_BACKUP","Was load");
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-
-                /*HashMap<String, Object> map = new HashMap<String, Object>();
-                try {
-                    if ( response != null ) {
-
-
-                        //String content = request.responseHeaders.get("Content-Disposition").toString();
-                        //StringTokenizer st = new StringTokenizer(content, "=");
-                        //String[] arrTag = st.toArray();
-
-                        //String filename = arrTag[1];
-                        //filename = filename.replace(":", ".");
-                        //Log.d("DEBUG::FILE NAME", filename);
-
-                        try{
-                            long lenghtOfFile = response.length;
-
-                            //covert reponse to input stream
-                            InputStream input = new ByteArrayInputStream(response);
-                            File path = Environment.getExternalStorageDirectory();
-                            File file = new File(path, filename);
-                            map.put("resume_path", file.toString());
-                            BufferedOutputStream output = new BufferedOutputStream(new FileOutputStream(file));
-                            byte data[] = new byte[1024];
-
-                            long total = 0;
-                            int count;
-
-                            while ((count = input.read(data)) != -1) {
-                                total += count;
-                                output.write(data, 0, count);
-                            }
-
-                            output.flush();
-
-                            output.close();
-                            input.close();
-                        }catch(IOException e){
-                            e.printStackTrace();
-
-                        }
-                    }
-                } catch (Exception e) {
-                    // TODO Auto-generated catch block
-                    Log.d("KEY_ERROR", "UNABLE TO DOWNLOAD FILE");
-                    e.printStackTrace();
-                }*/
-
-
-
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-            }
-        });
-        RequestQueue mRequestQueue = Volley.newRequestQueue(getApplicationContext(),
-                new HurlStack());
-        
-        mRequestQueue.add(request);
-
         initActiveAndroid();
 
         FileUtils.init(this);
@@ -336,9 +247,9 @@ public class BikerentalApplication extends android.app.Application {
         return tManager.getDeviceId();
     }
 
-    /*public DataParser getDataParser() {
+    public DataParser getDataParser() {
         return DataParser.getInstance(this);
-    } */
+    }
 
     public interface NetworkAvailableListener {
         void onResponse(boolean isAvailable);
@@ -390,7 +301,7 @@ public class BikerentalApplication extends android.app.Application {
     }
 
 
-    private static String DB_PATH = "/data/data/ru.prokatvros.veloprokat/databases/";
+    /*private static String DB_PATH = "/data/data/ru.prokatvros.veloprokat/databases/";
     private static String DB_NAME = "backupname2.db";
 
     private void copyDataBase(byte[] response) throws IOException {
@@ -415,10 +326,10 @@ public class BikerentalApplication extends android.app.Application {
         myOutput.flush();
         myOutput.close();
         myInput.close();
-    }
+    } */
 
 
-    private void copyDataBase() throws IOException {
+    /*private void copyDataBase() throws IOException {
         //Открываем локальную БД как входящий поток
         InputStream myInput = this.getAssets().open(DB_NAME);
 
@@ -439,7 +350,7 @@ public class BikerentalApplication extends android.app.Application {
         myOutput.flush();
         myOutput.close();
         myInput.close();
-    }
+    } */
 
 
 }

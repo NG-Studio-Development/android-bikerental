@@ -27,7 +27,7 @@ public class LoadAllDataRequest extends StringRequest {
         this.params = params;
     }
 
-    public static LoadAllDataRequest requestCollectData(/*boolean employment,*/ Response.Listener<String> listener, Response.ErrorListener errorListener) {
+    public static LoadAllDataRequest requestCollectData( Response.Listener<String> listener, Response.ErrorListener errorListener ) {
         String url = ConstantsBikeRentalApp.URL_SERVER+"/data/collect";
         Log.d("REQUEST_SET_EMPLOYMENT", "Url requestCollectData(): " + url);
         return new LoadAllDataRequest(Request.Method.GET, url, listener, errorListener);

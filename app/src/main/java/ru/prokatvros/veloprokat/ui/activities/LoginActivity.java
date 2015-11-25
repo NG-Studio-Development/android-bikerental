@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.ConnectionResult;
@@ -18,16 +19,22 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import ru.prokatvros.veloprokat.BikerentalApplication;
+import ru.prokatvros.veloprokat.ConstantsBikeRentalApp;
 import ru.prokatvros.veloprokat.R;
 import ru.prokatvros.veloprokat.model.db.Admin;
 import ru.prokatvros.veloprokat.model.requests.AuthorizationRequest;
+import ru.prokatvros.veloprokat.model.requests.LoadAllDataRequest;
 import ru.prokatvros.veloprokat.model.requests.PostResponseListener;
 import ru.prokatvros.veloprokat.ui.fragments.LoginFragment;
 import ru.prokatvros.veloprokat.ui.fragments.SelectPointFragment;
+import ru.prokatvros.veloprokat.utils.DataParser;
 
 public class LoginActivity extends  BaseActivity implements LoginFragment.OnLoginListener {
 
@@ -89,7 +96,7 @@ public class LoginActivity extends  BaseActivity implements LoginFragment.OnLogi
         }
 
         @Override
-        public void onSuccess() {
+        public void onLoad() {
             getProgressDialog().hide();
             replaceFragment(new SelectPointFragment(), false);
         }
@@ -125,7 +132,7 @@ public class LoginActivity extends  BaseActivity implements LoginFragment.OnLogi
     }
 
     private void storeRegistrationId(Context context, String regId) {
-        final SharedPreferences prefs = getGcmPreferences(context);
+        final SharedPreferences prefs = getGcmPreferences();
         int appVersion = getAppVersion(context);
         Log.i(TAG, "Saving regId on app version " + appVersion);
         SharedPreferences.Editor editor = prefs.edit();
@@ -135,7 +142,7 @@ public class LoginActivity extends  BaseActivity implements LoginFragment.OnLogi
     }
 
     private String getRegistrationId(Context context) {
-        final SharedPreferences prefs = getGcmPreferences(context);
+        final SharedPreferences prefs = getGcmPreferences();
         String registrationId = prefs.getString(PROPERTY_REG_ID, "");
         if (registrationId.isEmpty()) {
             Log.i(TAG, "Registration not found.");
@@ -193,9 +200,8 @@ public class LoginActivity extends  BaseActivity implements LoginFragment.OnLogi
         }
     }
 
-    private SharedPreferences getGcmPreferences(Context context) {
+    private SharedPreferences getGcmPreferences() {
         return BikerentalApplication.getInstance().getApplicationPreferences();
-        //return getSharedPreferences(LoginActivity.class.getSimpleName(), Context.MODE_PRIVATE);
     }
 
     private void sendRegistrationIdToBackend(String login, String password) {
@@ -204,30 +210,80 @@ public class LoginActivity extends  BaseActivity implements LoginFragment.OnLogi
             @Override
             public void onResponse(String response) {
                 Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
-                Log.d(TAG, "Response: "+response);
+                Log.d(TAG, "Response: " + response);
                 Admin admin = gson.fromJson(response, Admin.class);
-                admin.save();
-
-                //if (admin != null)
-                BikerentalApplication.getInstance().setAdmin(admin);
-                replaceFragment(new SelectPointFragment(), false);
-                //else
-                    //throw new Error("Admin is null");
-
-                //DataParser.getInstance(LoginActivity.this).clearDB();
-                //BikerentalApplication.getInstance().getDataParser().parsing(parseListener);
-
+                loadDB(admin);
             }
 
             @Override
             public void onErrorResponse(VolleyError error) {
+                getProgressDialog().hide();
                 Toast.makeText(LoginActivity.this, "Id to back "+error.toString(), Toast.LENGTH_LONG).show();
                 error.printStackTrace();
             }
         });
 
+        getProgressDialog().setMessage(getString(R.string.authorisation));
+        getProgressDialog().show();
+
         Volley.newRequestQueue(this).add(request);
     }
+
+    protected void loadDB(final Admin admin) {
+        getProgressDialog().setMessage(getString(R.string.update_data));
+        LoadAllDataRequest requestCollectData = LoadAllDataRequest.requestCollectData(new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonData = new JSONObject(response);
+
+                    if ( jsonData.getInt("error_encode") == 0 ) {
+                        String url = ConstantsBikeRentalApp.URL_SERVER
+                                +jsonData.getJSONObject("data").getString("url");
+
+                        loadDumpDB(url, admin);
+                    }
+
+                } catch (JSONException ex) {
+                    ex.printStackTrace();
+                    getProgressDialog().hide();
+                }
+
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                getProgressDialog().hide();
+            }
+        });
+
+        Volley.newRequestQueue(this).add(requestCollectData);
+    }
+
+    protected void loadDumpDB(String url, final Admin admin) {
+        getProgressDialog().setMessage(getString(R.string.load_data));
+        BikerentalApplication.getInstance().getDataParser().loadDumpDB(url, new DataParser.OnLoadDBListener() {
+            @Override
+            public void onLoad() {}
+
+            @Override
+            public void onFinish() {
+                admin.save();
+                BikerentalApplication.getInstance().setAdmin(admin);
+                replaceFragment(new SelectPointFragment(), false);
+                getProgressDialog().hide();
+            }
+
+            @Override
+            public void onError() {
+                getProgressDialog().hide();
+            }
+        });
+    }
+
 
     @Override
     protected int getContainer() {

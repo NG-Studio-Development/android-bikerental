@@ -14,6 +14,12 @@
 
     <string name="breakdowns"> Поломки </string>
 
+    <string name="authorisation"> Авторизация... </string>
+
+    <string name="update_data"> Оновление баз... </string>
+
+    <string name="load_data"> Загрузка данных... </string>
+
     <string name="clients"> Клиенты </string>
 
     <string name="title_client"> Клиент: </string>
