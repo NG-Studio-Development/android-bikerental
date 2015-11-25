@@ -18,8 +18,10 @@ public class BreakdowndInRentRequest extends StringRequest {
 
     public static BreakdowndInRentRequest requestAllBreakdowns(Response.Listener<String> listener, Response.ErrorListener errorListener) {
 
-        String url = ConstantsBikeRentalApp.URL_SERVER+"/rents/breakdowns";
+        String url = ConstantsBikeRentalApp.URL_SERVER+"/breakdown";
         Log.d(TAG, "Request all mess = " + url);
         return  new BreakdowndInRentRequest(Request.Method.GET, url, listener, errorListener);
     }
+
+
 }

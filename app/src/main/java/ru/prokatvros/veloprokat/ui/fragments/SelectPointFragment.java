@@ -6,15 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
-
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.List;
 
@@ -22,7 +13,6 @@ import ru.prokatvros.veloprokat.BikerentalApplication;
 import ru.prokatvros.veloprokat.R;
 import ru.prokatvros.veloprokat.model.db.Admin;
 import ru.prokatvros.veloprokat.model.db.Point;
-import ru.prokatvros.veloprokat.model.requests.PointRequest;
 import ru.prokatvros.veloprokat.ui.activities.MainActivity;
 import ru.prokatvros.veloprokat.ui.adapters.PointAdapter;
 
@@ -42,6 +32,8 @@ public class SelectPointFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_select_point, container, false);
         final ListView lvPoint = (ListView) view.findViewById(R.id.lvPoints);
+
+        MainActivity.exportDatabse("BikeRents3.db");
 
         lvPoint.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -65,7 +57,7 @@ public class SelectPointFragment extends BaseFragment {
 
         adapter = new PointAdapter(getHostActivity(), R.layout.item_base, pointList);
         lvPoint.setAdapter(adapter);
-        PointRequest pointRequest = PointRequest.reqAllPoint(new Response.Listener<String>() {
+        /*PointRequest pointRequest = PointRequest.reqGetPoint(new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -100,7 +92,7 @@ public class SelectPointFragment extends BaseFragment {
                 Toast.makeText(getHostActivity(), getString(R.string.can_not_load_data_from_server), Toast.LENGTH_LONG).show();
                 error.printStackTrace();
             }
-        });
+        });*/
 
         //getHostActivity().getProgressDialog().show();
 

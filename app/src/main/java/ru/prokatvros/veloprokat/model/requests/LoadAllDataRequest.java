@@ -6,10 +6,7 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
-
-import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,11 +33,11 @@ public class LoadAllDataRequest extends StringRequest {
         return new LoadAllDataRequest(Request.Method.GET, url, listener, errorListener);
     }
 
-    public static JsonObjectRequest jsonRequestAllData( Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
+    /*public static JsonObjectRequest jsonRequestAllData( Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
         String url = ConstantsBikeRentalApp.URL_SERVER+"/files/results.json";
         Log.d("REQUEST_SET_EMPLOYMENT", "Url JsonObjectRequest() : " + url);
         return new JsonObjectRequest(Request.Method.GET, url, null, listener, errorListener);
-    }
+    } */
 
     public static LoadAllDataRequest saveRequestAllData( String jsonData, final PostResponseListener listener ) {
         String url = ConstantsBikeRentalApp.URL_SERVER+"/data/load";

@@ -23,6 +23,10 @@ public class RentRequest extends StringRequest {
         this.params = params;
     }
 
+    public RentRequest (int method, String url, Response.Listener<String> listener, Response.ErrorListener errorListener) {
+        super(method, url, listener, errorListener);
+    }
+
     public static RentRequest requestPostRent( long adminId, String strJsonRent, final PostResponseListener listener ) {
 
         String url = ConstantsBikeRentalApp.URL_SERVER+"/"+"add_rent";
@@ -67,6 +71,12 @@ public class RentRequest extends StringRequest {
         });
     }
 
+
+    public static RentRequest requestGetRent( Response.Listener<String> listener, Response.ErrorListener errorListener ) {
+
+        String url = ConstantsBikeRentalApp.URL_SERVER+"/"+"rents";
+        return new RentRequest(Request.Method.GET, url, listener, errorListener);
+    }
 
     @Override
     protected Map<String, String> getParams() throws com.android.volley.AuthFailureError {

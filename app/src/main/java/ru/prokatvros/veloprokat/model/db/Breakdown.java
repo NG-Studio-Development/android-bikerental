@@ -1,5 +1,6 @@
 package ru.prokatvros.veloprokat.model.db;
 
+import com.activeandroid.ActiveAndroid;
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
@@ -60,8 +61,21 @@ public class Breakdown extends Model implements Serializable {
         return breakdown;
     }
 
-    /*@Override
-    public String toString() {
-        return description;
-    }*/
+    public static void parse(List<Breakdown> list) {
+
+        ActiveAndroid.beginTransaction();
+
+        try {
+
+            for (Breakdown breakdown : list) {
+                breakdown.save();
+            }
+
+            ActiveAndroid.setTransactionSuccessful();
+        }
+        finally {
+            ActiveAndroid.endTransaction();
+        }
+
+    }
 }

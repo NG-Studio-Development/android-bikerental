@@ -1,9 +1,10 @@
 package ru.prokatvros.veloprokat.model.db;
 
+import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 
+import com.activeandroid.ActiveAndroid;
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
@@ -12,7 +13,11 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import ru.prokatvros.veloprokat.R;
 
 @Table(name = "Inventory")
 public class Inventory extends Model implements Parcelable {
@@ -47,10 +52,9 @@ public class Inventory extends Model implements Parcelable {
     @Column( name = "State" )
     public int state = FREE_STATE;
 
-
     @Expose
-    @Column(name = "CountRents")
-    public int countRents = -1;
+    @Column(name = "CountRent")
+    private int count_rent = 0;
 
     /*@Expose
     @Column(name = "Cost")
@@ -80,6 +84,15 @@ public class Inventory extends Model implements Parcelable {
         return avatar != null;
     }
 
+
+    public int getCountRent() {
+        return count_rent;
+    }
+
+    public void setCountRent(int countRent) {
+        this.count_rent = countRent;
+    }
+
     public String toJsonString() {
         return new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create().toJson(this);
     }
@@ -102,6 +115,7 @@ public class Inventory extends Model implements Parcelable {
 
         return new Select()
                 .from(Inventory.class)
+                .orderBy("IdParent asc")
                 .execute();
     }
 
@@ -140,6 +154,26 @@ public class Inventory extends Model implements Parcelable {
                 .execute();
     }
 
+    public Long fullSave() {
+        if (this.tarif != null )
+            this.tarif.save();
+        return  this.save();
+    }
+
+    public static void parse(List<Inventory> list) {
+
+        ActiveAndroid.beginTransaction();
+        try {
+            for (Inventory inventory : list) {
+                inventory.fullSave();
+            }
+            ActiveAndroid.setTransactionSuccessful();
+        }
+        finally {
+            ActiveAndroid.endTransaction();
+        }
+    }
+
 
     private static List<Inventory> removeRootItem(List<Inventory> allInventory) {
 
@@ -162,9 +196,17 @@ public class Inventory extends Model implements Parcelable {
         return removeRootItem(allInventory);
     }
 
+    public static List<Inventory> getByState(int state) {
+        List<Inventory> allInventory = new Select()
+                .from(Inventory.class)
+                .where("State = ?", state)
+                .execute();
+
+        return removeRootItem(allInventory);
+    }
 
     public static List<Inventory> getFreeBySubNumber(String subNumber, Long idGroup) {
-        List<Inventory> inventoryList = getBySubNumber(subNumber, idGroup);
+        /*List<Inventory> inventoryList = getBySubNumber(subNumber, idGroup);
 
         List<Rent> rentList = Rent.getAllByCompleted(false);
 
@@ -177,7 +219,18 @@ public class Inventory extends Model implements Parcelable {
                 }
         }
 
-        return inventoryList;
+        return inventoryList; */
+
+
+        List<Inventory> allInventory = new Select()
+                .from(Inventory.class)
+                .where("State = ?", FREE_STATE)
+                .where("Number LIKE ?", "%" + subNumber + "%")
+                .where("IdGroup = ?", String.valueOf(idGroup))
+                .execute();
+
+        return removeRootItem(allInventory);
+
     }
 
 
@@ -185,6 +238,7 @@ public class Inventory extends Model implements Parcelable {
 
         List<Inventory> byPoint = new Select()
                 .from(Inventory.class)
+                .orderBy("IdParent asc")
                 .where( "Point = ?", point.getId() )
                 .execute();
 
@@ -197,6 +251,28 @@ public class Inventory extends Model implements Parcelable {
                 .where( "IdGroup = ?", idGroup )
                 .execute();
     } */
+
+    private static Map<String, Integer> keyStateMap;
+
+    private static void initKeyMap(Context context) {
+        keyStateMap = new HashMap<>();
+        keyStateMap.put(context.getString(R.string.item_rented), Inventory.RENTED_STATE);
+        keyStateMap.put(context.getString(R.string.item_missing), Inventory.MISSING_STATE);
+        keyStateMap.put(context.getString(R.string.item_refit), Inventory.REFIT_STATE);
+        keyStateMap.put(context.getString(R.string.item_free), Inventory.FREE_STATE);
+
+    }
+
+    public static String getStateStringFormat(Context context, int state) {
+        if (keyStateMap == null)
+            initKeyMap(context);
+
+        for (Map.Entry<String, Integer> e : keyStateMap.entrySet())
+            if ( state == e.getValue() )
+                return e.getKey();
+
+        throw new Error("Set unavialable object in map !!!");
+    }
 
     public static final Parcelable.Creator<Inventory> CREATOR = new Parcelable.Creator<Inventory>() {
 
@@ -220,4 +296,5 @@ public class Inventory extends Model implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(getId());
     }
+
 }

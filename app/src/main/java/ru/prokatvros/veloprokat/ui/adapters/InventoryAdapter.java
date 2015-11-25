@@ -55,6 +55,7 @@ public class InventoryAdapter extends ArrayAdapter<Inventory> {
 
         holder.tvName.setText(inventory.model);
         holder.tvNumber.setText(inventory.number);
+        holder.tvState.setText(Inventory.getStateStringFormat(getContext(), inventory.state));
 
         return convertView;
     }

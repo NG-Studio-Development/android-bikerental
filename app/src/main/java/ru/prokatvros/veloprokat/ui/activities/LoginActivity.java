@@ -28,11 +28,9 @@ import ru.prokatvros.veloprokat.model.requests.AuthorizationRequest;
 import ru.prokatvros.veloprokat.model.requests.PostResponseListener;
 import ru.prokatvros.veloprokat.ui.fragments.LoginFragment;
 import ru.prokatvros.veloprokat.ui.fragments.SelectPointFragment;
-import ru.prokatvros.veloprokat.utils.DataParser;
 
 public class LoginActivity extends  BaseActivity implements LoginFragment.OnLoginListener {
 
-    //public static final String EXTRA_MESSAGE = "message";
     public static final String PROPERTY_REG_ID = "registration_id";
     private static final String PROPERTY_APP_VERSION = "appVersion";
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
@@ -41,9 +39,10 @@ public class LoginActivity extends  BaseActivity implements LoginFragment.OnLogi
 
     static final String TAG = "GCM Demo";
 
-    //TextView mDisplay;
     GoogleCloudMessaging gcm;
+
     AtomicInteger msgId = new AtomicInteger();
+
     Context context;
 
     String regid;
@@ -68,8 +67,12 @@ public class LoginActivity extends  BaseActivity implements LoginFragment.OnLogi
                 // registerInBackground();
             } else {
                 //replaceFragment(new SelectPointFragment(), false);
-                DataParser.getInstance(this).clearDB();
-                BikerentalApplication.getInstance().getDataParser().parsing(parseListener);
+
+                //DataParser.getInstance(this).clearDB();
+                //BikerentalApplication.getInstance().getDataParser().parsing(parseListener);
+
+                MainActivity.startMainActivity(this);
+                finish();
             }
         } else {
             Log.i(TAG, "No valid Google Play Services APK found.");
@@ -78,11 +81,11 @@ public class LoginActivity extends  BaseActivity implements LoginFragment.OnLogi
 
 
 
-    DataParser.OnParseListener parseListener = new DataParser.OnParseListener() {
+    /*DataParser.OnParseListener parseListener = new DataParser.OnParseListener() {
         @Override
         public void onStart() {
-            //if(!getProgressDialog().isShowing())
-                //getProgressDialog().show();
+            if(!getProgressDialog().isShowing())
+                getProgressDialog().show();
         }
 
         @Override
@@ -95,7 +98,7 @@ public class LoginActivity extends  BaseActivity implements LoginFragment.OnLogi
         public void onError() {
             getProgressDialog().hide();
         }
-    };
+    };*/
 
 
 
@@ -205,13 +208,14 @@ public class LoginActivity extends  BaseActivity implements LoginFragment.OnLogi
                 Admin admin = gson.fromJson(response, Admin.class);
                 admin.save();
 
-                if (admin != null)
-                    BikerentalApplication.getInstance().setAdmin(admin);
-                else
-                    throw new Error("Admin is null");
+                //if (admin != null)
+                BikerentalApplication.getInstance().setAdmin(admin);
+                replaceFragment(new SelectPointFragment(), false);
+                //else
+                    //throw new Error("Admin is null");
 
-                DataParser.getInstance(LoginActivity.this).clearDB();
-                BikerentalApplication.getInstance().getDataParser().parsing(parseListener);
+                //DataParser.getInstance(LoginActivity.this).clearDB();
+                //BikerentalApplication.getInstance().getDataParser().parsing(parseListener);
 
             }
 

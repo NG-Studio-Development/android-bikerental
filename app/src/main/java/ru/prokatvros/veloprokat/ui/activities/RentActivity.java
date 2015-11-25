@@ -22,7 +22,6 @@ import ru.prokatvros.veloprokat.model.requests.RentRequest;
 import ru.prokatvros.veloprokat.services.receivers.SampleAlarmReceiver;
 import ru.prokatvros.veloprokat.ui.fragments.AddRentFragment;
 import ru.prokatvros.veloprokat.ui.fragments.RentFragment;
-import ru.prokatvros.veloprokat.utils.DataParser;
 
 public class RentActivity extends BaseActivity {
 
@@ -86,8 +85,8 @@ public class RentActivity extends BaseActivity {
             public void onResponse(String response) {
                 Toast.makeText(RentActivity.this, "Success", Toast.LENGTH_LONG).show();
                 Log.d(TAG, "Response: " + response);
-                rent.inventory.countRents +=1;
-                rent.inventory.save();
+                //rent.inventory.countRents +=1;
+                //rent.inventory.save();
                 //getHostActivity().onBackPressed();
             }
 
@@ -95,7 +94,7 @@ public class RentActivity extends BaseActivity {
             public void onErrorResponse(VolleyError error) {
                 //Toast.makeText(RentActivity.this, "Error: "+error.toString(), Toast.LENGTH_LONG).show();
 
-                DataParser.getInstance(RentActivity.this).saveToPoolRentData(strJsonRent);
+                //DataParser.getInstance(RentActivity.this).saveToPoolRentData(strJsonRent);
 
                 SampleAlarmReceiver alarmReceiver = new SampleAlarmReceiver();
                 alarmReceiver.setAlarm(RentActivity.this);
@@ -111,7 +110,7 @@ public class RentActivity extends BaseActivity {
                     Volley.newRequestQueue(RentActivity.this).add(rentRequest);
                 } else {
 
-                    DataParser.getInstance(RentActivity.this).saveToPoolRentData(strJsonRent);
+                    //DataParser.getInstance(RentActivity.this).saveToPoolRentData(strJsonRent);
 
 
                     SampleAlarmReceiver alarmReceiver = new SampleAlarmReceiver();

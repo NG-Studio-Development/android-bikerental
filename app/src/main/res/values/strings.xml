@@ -1,8 +1,8 @@
 <resources>
 
-    <string name="please_wait"> Идет обработка запроса </string>
+    <string name="app_name">Велопрокат</string>
 
-    <string name="app_name">Bike Rent</string>
+    <string name="please_wait"> Идет обработка запроса </string>
 
     <string name="default_name">Name</string>
 
@@ -76,6 +76,8 @@
 
     <string name="close"> Закрыть </string>
 
+    <string name="intercede_shift"> Сдать смену </string>
+
     <string name="closed"> Закрытые </string>
 
     <string name="current"> Текущие </string>
@@ -90,7 +92,7 @@
 
     <string name="vip"> vip </string>
 
-
+    <string name="not_specified"> Не орпеделен </string>
 
     <string name="warning_must_enter_time_and_date"> Поля дата и время обязательны для ввода </string>
 
@@ -164,7 +166,7 @@
 
     <string name="photo_was_added">  Фото добавленно </string>
 
-    <string name="summ"> Сумма </string>
+    <string name="summ"> Общая сумма </string>
 
     <string name="vip_number"> Номер карты </string>
 
@@ -179,6 +181,8 @@
     <string name="without_surcharge"> Без доплаты </string>
 
     <string name="without_breakdown"> Без поломки </string>
+
+    <string name="without_name"> Без имени </string>
 
     <string name="cost"> Цена </string>
 

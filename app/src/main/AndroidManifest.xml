@@ -57,10 +57,10 @@
 
         <meta-data
             android:name="AA_DB_NAME"
-            android:value="BikeRents2.db" />
+            android:value="backupname2.db" />
         <meta-data
             android:name="AA_DB_VERSION"
-            android:value="134" />
+            android:value="135" />
         <!--
              <meta-data
             android:name="AA_MODELS"
@@ -73,7 +73,6 @@
         </activity>
         <activity
             android:name=".ui.activities.LoginActivity"
-            android:label="@string/title_activity_login"
             android:windowSoftInputMode="adjustResize|stateHidden" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

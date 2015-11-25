@@ -154,7 +154,7 @@ public class InventoryFragment extends BaseFragment<InventoryActivity> {
             tvCost.setText(String.valueOf(getString(R.string.hour)+": "+inventory.tarif.sumHour +"\n"+
                                             getString(R.string.day)+": "+inventory.tarif.sumDay+"\n"+
                                             getString(R.string.th_hour)+": "+inventory.tarif.sumTsHour) );
-            tvCount.setText(String.valueOf(inventory.countRents));
+            tvCount.setText(String.valueOf(inventory.getCountRent()));
 
             if ( inventory.state != Inventory.RENTED_STATE ) {
                 spinnerState.setVisibility(View.VISIBLE);

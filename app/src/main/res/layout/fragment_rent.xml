@@ -3,117 +3,205 @@
     android:layout_height="match_parent"
     tools:context="ru.prokatvros.veloprokat.ui.fragments.RentFragment" >
 
-        <LinearLayout
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/scrollView"
+        android:layout_above="@+id/buttonClose">
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_alignParentTop="true"
-            android:layout_above="@+id/button"
-            android:id="@+id/linearLayout4">
+            android:layout_height="match_parent">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/title_client"
-                android:layout_marginTop="@dimen/margin_widget_default_small"
-                android:id="@+id/tvClientTitle"
-                style="@style/TextViewTitle" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="New Text"
-                android:id="@+id/tvClientName" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/title_phone"
-                android:layout_marginTop="@dimen/margin_widget_default_small"
-                android:id="@+id/tvClientPhoneTitle"
-                style="@style/TextViewTitle" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/without_phone"
-                android:id="@+id/tvClientPhone" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/title_inventory"
-                android:layout_marginTop="@dimen/margin_widget_default_small"
-                android:id="@+id/tvInventoryTitle"
-                style="@style/TextViewTitle" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="New Text"
-                android:id="@+id/tvInventoryName" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/title_additional_inventory"
-                android:layout_marginTop="@dimen/margin_widget_default_small"
-                android:id="@+id/tvInventoryAdditionalTitle"
-                style="@style/TextViewTitle" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/not_have_additional_inventory"
-                android:id="@+id/tvInventoryAdditionalName" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/cost"
-                android:layout_marginTop="@dimen/margin_widget_default_small"
-                android:id="@+id/tvCostTitle"
-                style="@style/TextViewTitle" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/not_have_additional_inventory"
-                android:id="@+id/tvCost" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/prepaid"
-                android:id="@+id/tvPrepaidTitle" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="New Text"
-                android:id="@+id/tvPrepaid" />
-
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_widget_default_small"
-                android:layout_gravity="center_horizontal">
+                android:orientation="vertical"
+                android:layout_alignParentTop="true"
+                android:layout_above="@+id/button"
+                android:id="@+id/linearLayout4">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/title_time"
-                    android:id="@+id/tvTimeTitle"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
+                    android:text="@string/title_client"
+                    android:layout_marginTop="@dimen/margin_widget_default_small"
+                    android:id="@+id/tvClientTitle"
                     style="@style/TextViewTitle" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="New Text"
-                    android:id="@+id/tvTime"
+                    android:id="@+id/tvClientName" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/title_phone"
+                    android:layout_marginTop="@dimen/margin_widget_default_small"
+                    android:id="@+id/tvClientPhoneTitle"
+                    style="@style/TextViewTitle" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/without_phone"
+                    android:id="@+id/tvClientPhone" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/title_inventory"
+                    android:layout_marginTop="@dimen/margin_widget_default_small"
+                    android:id="@+id/tvInventoryTitle"
+                    style="@style/TextViewTitle" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="New Text"
+                    android:id="@+id/tvInventoryName" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/title_additional_inventory"
+                    android:layout_marginTop="@dimen/margin_widget_default_small"
+                    android:id="@+id/tvInventoryAdditionalTitle"
+                    style="@style/TextViewTitle" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/not_have_additional_inventory"
+                    android:id="@+id/tvInventoryAdditionalName" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/cost"
+                    android:layout_marginTop="@dimen/margin_widget_default_small"
+                    android:id="@+id/tvCostTitle"
+                    style="@style/TextViewTitle" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/not_have_additional_inventory"
+                    android:id="@+id/tvCost" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/prepaid"
+                    android:id="@+id/tvPrepaidTitle" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="New Text"
+                    android:id="@+id/tvPrepaid" />
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_widget_default_small"
+                    android:layout_gravity="center_horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/title_time"
+                        android:id="@+id/tvTimeTitle"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        style="@style/TextViewTitle" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="New Text"
+                        android:id="@+id/tvTime"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:id="@+id/rlBreakdown"
+
+                    android:layout_marginTop="@dimen/margin_widget_default_small"
+                    android:layout_gravity="center_horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/title_breakdown"
+                        android:id="@+id/tvBreakdownTitle"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        style="@style/TextViewTitle" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/without_breakdown"
+                        android:id="@+id/tvBreakdown"
+                        android:layout_below="@+id/tvBreakdownTitle" />
+                </RelativeLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/title_breakdown"
+                    android:id="@+id/tvBreakdownSpinnerTitle"
+                    android:layout_gravity="center_horizontal" />
+
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/spinnerBreakdown"
+                    android:layout_gravity="center_horizontal" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/etSurcharge"
+                    android:inputType="number"
+                    android:hint="@string/paid_upon"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true" />
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/linearLayout4"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:id="@+id/relativeLayout2">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/title_summ_fine"
+                    android:id="@+id/tvSummFineTitle"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/without_fine"
+                    android:id="@+id/tvSummFine"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true" />
@@ -121,119 +209,41 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:id="@+id/rlBreakdown"
-
-                android:layout_marginTop="@dimen/margin_widget_default_small"
-                android:layout_gravity="center_horizontal">
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/relativeLayout2"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:id="@+id/rlSurcharge"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/title_breakdown"
-                    android:id="@+id/tvBreakdownTitle"
+                    android:text="@string/title_surcharge"
+                    android:id="@+id/tvSurchargeTitle"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    style="@style/TextViewTitle" />
+                    android:layout_alignParentStart="true" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/without_breakdown"
-                    android:id="@+id/tvBreakdown"
-                    android:layout_below="@+id/tvBreakdownTitle" />
+                    android:text="@string/without_fine"
+                    android:id="@+id/tvSurcharge"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true" />
             </RelativeLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/title_breakdown"
-                android:id="@+id/tvBreakdownSpinnerTitle"
-                android:layout_gravity="center_horizontal" />
-
-            <Spinner
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/spinnerBreakdown"
-                android:layout_gravity="center_horizontal" />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/etSurcharge"
-                android:inputType="number"
-                android:hint="@string/paid_upon"
-                android:layout_centerVertical="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
-
-        </LinearLayout>
+        </RelativeLayout>
+    </ScrollView>
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/close"
         android:id="@+id/buttonClose"
+        android:layout_marginTop="@dimen/margin_widget_default_small"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/linearLayout4"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:id="@+id/relativeLayout2">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/title_summ_fine"
-            android:id="@+id/tvSummFineTitle"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/without_fine"
-            android:id="@+id/tvSummFine"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/relativeLayout2"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:id="@+id/rlSurcharge"
-        android:visibility="gone">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/title_surcharge"
-            android:id="@+id/tvSurchargeTitle"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/without_fine"
-            android:id="@+id/tvSurcharge"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
-    </RelativeLayout>
+    />
 
 </RelativeLayout>

@@ -1,5 +1,6 @@
 package ru.prokatvros.veloprokat.model.db;
 
+import com.activeandroid.ActiveAndroid;
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
@@ -22,8 +23,8 @@ public class Rent extends Model {
     private final static Map<String, Rent> poolOfRents = new HashMap<>();
 
     @Expose
-    @Column( name = "serverId" )
-    private Integer serverId;
+    @Column( name = "ServerId", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE )
+    public String serverId;
 
     @Expose
     @Column( name = "Token" )
@@ -56,10 +57,6 @@ public class Rent extends Model {
     @Expose
     @Column(name = "EndTime")
     public Long endTime;
-
-    /*@Expose
-    @Column(name = "Paid")
-    public int paid; */
 
     @Expose
     @Column(name = "PaidFine")
@@ -161,6 +158,24 @@ public class Rent extends Model {
         }
     }
 
+    public static void parse(List<Rent> list) {
+
+        ActiveAndroid.beginTransaction();
+
+        try {
+            for (Rent rent : list) {
+
+                rent.fullSave();
+            }
+            ActiveAndroid.setTransactionSuccessful();
+        }
+        finally {
+            ActiveAndroid.endTransaction();
+        }
+    }
+
+
+
     public int getCost() {
         int cost = 0;
 
@@ -187,6 +202,16 @@ public class Rent extends Model {
 
         return cost;
 
+    }
+
+    public Long fullSave() {
+        if (this.inventory != null)
+            this.inventory.save();
+
+        if (this.client != null)
+            this.client.save();
+
+        return save();
     }
 
 }

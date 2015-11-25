@@ -3,6 +3,7 @@ package ru.prokatvros.veloprokat.model.db;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.activeandroid.ActiveAndroid;
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
@@ -27,6 +28,26 @@ public class Point extends Model implements Parcelable {
     @Expose
     @Column(name = "Address", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
     public String address;
+
+
+
+    public static void parse(List<Point> list) {
+
+        ActiveAndroid.beginTransaction();
+
+        try {
+
+            for (Point point : list) {
+                point.save();
+            }
+
+            ActiveAndroid.setTransactionSuccessful();
+        }
+        finally {
+            ActiveAndroid.endTransaction();
+        }
+
+    }
 
     public static List<Point> getAll() {
 

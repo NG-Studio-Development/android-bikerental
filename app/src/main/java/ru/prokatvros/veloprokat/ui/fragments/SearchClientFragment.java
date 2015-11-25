@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +53,8 @@ public class SearchClientFragment extends BaseFragment {
         final EditText etPhone = (EditText) view.findViewById(R.id.etSearch);
         final LinearLayout llEmptyList = (LinearLayout) view.findViewById(R.id.llEmptyList);;
         ImageButton ibAdd = (ImageButton) view.findViewById(R.id.ibAdd);
-
+        TextView tvCode = (TextView) view.findViewById(R.id.tvCode);
+        tvCode.setVisibility(View.VISIBLE);
         etPhone.setHint(getString(R.string.hint_enter_client_number));
 
         final List<Client> clientList = new ArrayList<>();

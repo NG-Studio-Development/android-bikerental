@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -72,8 +72,10 @@ public class AddRentFragment extends BaseFragment<RentActivity> {
         buttonAddClient = (Button) view.findViewById(R.id.buttonAddClient);
         buttonAddInventory = (Button) view.findViewById(R.id.buttonAddInventory);
         Button buttonAdd = (Button) view.findViewById(R.id.buttonAdd);
-        ImageButton buttonAddDate = (ImageButton) view.findViewById(R.id.ibAddDate);
-        ImageButton ibAddTime = (ImageButton) view.findViewById(R.id.ibAddTime);
+
+        RelativeLayout rlAddDate = (RelativeLayout ) view.findViewById(R.id.rlAddDate);
+        RelativeLayout rlAddTime = (RelativeLayout ) view.findViewById(R.id.rlAddTime);
+
         tvCost = (TextView) view.findViewById(R.id.tvCost);
         tvCost.setText(getString(R.string.calculate_cost));
 
@@ -114,14 +116,14 @@ public class AddRentFragment extends BaseFragment<RentActivity> {
         timePickerFragment = new TimePickerFragment();
         datePickerFragment = new DatePickerFragment();
 
-        ibAddTime.setOnClickListener(new View.OnClickListener() {
+        rlAddTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 timePickerFragment.show(getFragmentManager(), "timePicker");
             }
         });
 
-        buttonAddDate.setOnClickListener(new View.OnClickListener() {
+        rlAddDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 datePickerFragment.show(getFragmentManager(), "datePicker");

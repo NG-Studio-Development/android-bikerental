@@ -52,7 +52,9 @@ public class ClientListFragment extends BaseListFragment implements CompoundButt
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        // getHostActivity().getSupportActionBar().setTitle(getString(R.string.clients));
+
+        if (getHostActivity().getSupportActionBar() != null)
+            getHostActivity().getSupportActionBar().setTitle(getString(R.string.clients));
     }
 
     @Override
@@ -64,7 +66,8 @@ public class ClientListFragment extends BaseListFragment implements CompoundButt
         new Thread(new Runnable() {
             @Override
             public void run() {
-                clientList = Client.getAllMain();
+                //clientList = Client.getAllMain();
+                clientList = Client.getAll();
                 handler.sendMessage( handler.obtainMessage( SET_ADAPTER) );
             }
         }).start();
@@ -111,14 +114,15 @@ public class ClientListFragment extends BaseListFragment implements CompoundButt
     }
 
     @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+    public void onCheckedChanged( CompoundButton buttonView, boolean isChecked ) {
 
-        if (!isChecked) return;
+        if ( !isChecked ) return;
 
         switch (buttonView.getId()) {
             default:
             case R.id.rbMain:
-                clientList = Client.getAllMain();
+                //clientList = Client.getAllMain();
+                clientList = Client.getAll();
                 break;
 
             case R.id.rbVip:

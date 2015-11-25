@@ -21,10 +21,12 @@ public class InventoryHeaderAdapter extends BaseAdapter implements StickyListHea
     private LayoutInflater inflater;
     private List<Inventory> itemList;
     private Map<Long, Inventory> headersMap;
+    private Context context;
 
     public InventoryHeaderAdapter(Context context, List<Inventory> inventoryList) {
         inflater = LayoutInflater.from(context);
         this.itemList = createItemList(inventoryList);
+        this.context = context;
 
     }
 
@@ -79,9 +81,22 @@ public class InventoryHeaderAdapter extends BaseAdapter implements StickyListHea
             holder = (ViewHolder) convertView.getTag();
         }
 
-        holder.tvName.setText(itemList.get(position).model);
-        holder.tvNumber.setText(itemList.get(position).number);
-        //holder.tvState.setText(item);
+        Inventory inventory = itemList.get(position);
+
+
+
+        if (inventory.state == Inventory.MISSING_STATE)
+            convertView.setBackgroundColor(context.getResources().getColor(R.color.missing_color));
+        else if (inventory.state == Inventory.REFIT_STATE)
+            convertView.setBackgroundColor(context.getResources().getColor(R.color.refit_color));
+        else if (inventory.state == Inventory.RENTED_STATE)
+            convertView.setBackgroundColor(context.getResources().getColor(R.color.in_rent_color));
+        else if (inventory.state == Inventory.FREE_STATE)
+            convertView.setBackgroundColor(context.getResources().getColor(R.color.free_color));
+
+        holder.tvName.setText(inventory.model);
+        holder.tvNumber.setText(inventory.number);
+        holder.tvState.setText(Inventory.getStateStringFormat(context, inventory.state));
         return convertView;
     }
 

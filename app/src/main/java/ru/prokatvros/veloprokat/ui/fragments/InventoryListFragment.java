@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 
+import java.util.List;
+
 import ru.prokatvros.veloprokat.BikerentalApplication;
 import ru.prokatvros.veloprokat.R;
 import ru.prokatvros.veloprokat.model.db.Inventory;
@@ -17,7 +19,10 @@ import ru.prokatvros.veloprokat.ui.adapters.InventoryHeaderAdapter;
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
 
+
 public class InventoryListFragment extends BaseFragment<MainActivity> {
+
+    protected StickyListHeadersListView stickyList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -45,13 +50,16 @@ public class InventoryListFragment extends BaseFragment<MainActivity> {
 
         Point point = BikerentalApplication.getInstance().getPoint();
 
-        StickyListHeadersListView stickyList = (StickyListHeadersListView) view.findViewById(R.id.lvInventory);
+        stickyList = (StickyListHeadersListView) view.findViewById(R.id.lvInventory);
 
         //List<Inventory> inventoryList =  Inventory.getByPoint(point, true);
         //inventoryList.size();
 
 
-        final InventoryHeaderAdapter adapter = new InventoryHeaderAdapter( getHostActivity(), Inventory.getByPoint(point, true) );
+        //final InventoryHeaderAdapter adapter = new InventoryHeaderAdapter( getHostActivity(), Inventory.getByPoint(point, true) );
+
+        List<Inventory> inventoryList = Inventory.getAll();
+        final InventoryHeaderAdapter adapter = new InventoryHeaderAdapter( getHostActivity(), inventoryList );
 
         stickyList.setAdapter(adapter);
         stickyList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -65,6 +73,11 @@ public class InventoryListFragment extends BaseFragment<MainActivity> {
         return view;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        ( (InventoryHeaderAdapter) stickyList.getAdapter()).notifyDataSetChanged();
+    }
 
     /* @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {

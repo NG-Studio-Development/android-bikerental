@@ -38,8 +38,13 @@ public class ClientRequest extends StringRequest {
         text_error_post_client[CODE_ERROR_DUPLICATE_POST_CLIENT] = R.string.warning_duplicate_client;
         text_error_post_client[CODE_ERROR_PHONE_OF_OTHER_CLIENT] = R.string.warning_duplicate_client_phone;
         text_error_post_client[CODE_NOT_ERROR_POST_CLIENT] = R.string.warning_duplicate_client;
+
     }
 
+
+    public ClientRequest (int method, String url, Response.Listener<String> listener, Response.ErrorListener errorListener) {
+        super( method, url, listener, errorListener);
+    }
 
     private static int[] text_error_post_client = new int[3];
 
@@ -48,9 +53,6 @@ public class ClientRequest extends StringRequest {
     }
 
     public static ClientRequest requestPostClient(Client client,  final PostResponseListener listener) {
-
-
-
 
         Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
         final String strJsonClient = gson.toJson(client);
@@ -104,6 +106,17 @@ public class ClientRequest extends StringRequest {
                 listener.onErrorResponse(error);
             }
         });
+    }
+
+
+    public static ClientRequest requestGetClient( Response.Listener<String> listener, Response.ErrorListener errorListener ) {
+
+        text_error_post_client[CODE_ERROR_DUPLICATE_POST_CLIENT] = R.string.warning_duplicate_client;
+        text_error_post_client[CODE_NOT_ERROR_POST_CLIENT] = R.string.warning_duplicate_client;
+
+        String url = ConstantsBikeRentalApp.URL_SERVER+"/"+"clients";
+
+        return new ClientRequest(Request.Method.GET, url, listener, errorListener);
     }
 
     @Override

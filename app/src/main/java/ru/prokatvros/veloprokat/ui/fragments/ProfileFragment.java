@@ -3,7 +3,6 @@ package ru.prokatvros.veloprokat.ui.fragments;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
@@ -22,9 +20,6 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.File;
 import java.util.List;
 
@@ -32,14 +27,11 @@ import ru.prokatvros.veloprokat.BikerentalApplication;
 import ru.prokatvros.veloprokat.R;
 import ru.prokatvros.veloprokat.model.db.Admin;
 import ru.prokatvros.veloprokat.model.db.Point;
-import ru.prokatvros.veloprokat.model.db.Rent;
 import ru.prokatvros.veloprokat.model.db.Shift;
-import ru.prokatvros.veloprokat.model.requests.LoadAllDataRequest;
 import ru.prokatvros.veloprokat.model.requests.PostResponseListener;
 import ru.prokatvros.veloprokat.model.requests.ShiftRequest;
 import ru.prokatvros.veloprokat.ui.activities.LoginActivity;
 import ru.prokatvros.veloprokat.ui.activities.ProfileActivity;
-import ru.prokatvros.veloprokat.utils.DataParser;
 
 
 public class ProfileFragment extends BaseFragment<ProfileActivity> {
@@ -67,7 +59,8 @@ public class ProfileFragment extends BaseFragment<ProfileActivity> {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        getHostActivity().getSupportActionBar().hide();
+        if ( getHostActivity().getSupportActionBar() != null)
+            getHostActivity().getSupportActionBar().hide();
     }
 
     @Override
@@ -107,7 +100,7 @@ public class ProfileFragment extends BaseFragment<ProfileActivity> {
 
         tvProfileName.setText(admin.name);
 
-        String dataFromPool = DataParser.getInstance(getHostActivity()).loadDataFromPool();
+        /*String dataFromPool = DataParser.getInstance(getHostActivity()).loadDataFromPool();
 
         if ( dataFromPool.isEmpty() )
             disableSendButton(buttonSend);
@@ -129,7 +122,7 @@ public class ProfileFragment extends BaseFragment<ProfileActivity> {
 
                     Log.d(TAG, "Save request all data SUCCESS");
                     Toast.makeText(getHostActivity(), "Save request all data SUCCESS", Toast.LENGTH_LONG).show();
-                    DataParser.getInstance(getHostActivity()).clear();
+                    //DataParser.getInstance(getHostActivity()).clear();
                     //disableSendButton(buttonSend);
 
 
@@ -145,7 +138,7 @@ public class ProfileFragment extends BaseFragment<ProfileActivity> {
                 Log.d(TAG, "Save request all data ERROR");
                 //Toast.makeText(getHostActivity(), "Save request all data ERROR", Toast.LENGTH_LONG).show();
             }
-        });
+        }); */
 
 
         requestShifts(new PostResponseListener() {
@@ -190,7 +183,7 @@ public class ProfileFragment extends BaseFragment<ProfileActivity> {
         buttonSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Volley.newRequestQueue(getHostActivity()).add(request);
+                //Volley.newRequestQueue(getHostActivity()).add(request);
                 disableSendButton(buttonSend);
             }
         });

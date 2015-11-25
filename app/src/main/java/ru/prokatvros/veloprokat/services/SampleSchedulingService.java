@@ -6,13 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.Volley;
-
-import ru.prokatvros.veloprokat.model.requests.LoadAllDataRequest;
-import ru.prokatvros.veloprokat.model.requests.PostResponseListener;
 import ru.prokatvros.veloprokat.services.receivers.SampleAlarmReceiver;
-import ru.prokatvros.veloprokat.utils.DataParser;
 
 
 public class SampleSchedulingService extends IntentService {
@@ -34,7 +28,7 @@ public class SampleSchedulingService extends IntentService {
     }
 
     private void sendToServer() {
-        final SampleAlarmReceiver alarm = new SampleAlarmReceiver();
+        /*final SampleAlarmReceiver alarm = new SampleAlarmReceiver();
         String dataFromPool = DataParser.getInstance(this).loadDataFromPool();
         Log.d(TAG, "Data from pool: " + dataFromPool);
 
@@ -51,31 +45,10 @@ public class SampleSchedulingService extends IntentService {
             }
         });
 
-        Volley.newRequestQueue(this).add(request);
+        Volley.newRequestQueue(this).add(request); */
 
 
-        /*long idAdmin = BikerentalApplication.getInstance().getAdmin().getId();
-        final SampleAlarmReceiver alarm = new SampleAlarmReceiver();
-        final String strJsonRent = new DataParser(this).loadDataFromPool();
 
-        final RentRequest rentRequest = RentRequest.requestPostRent(idAdmin, strJsonRent, new PostResponseListener() {
-            @Override
-            public void onResponse(String response) {
-                Toast.makeText(SampleSchedulingService.this, "Success", Toast.LENGTH_LONG).show();
-                Log.d(TAG, "Response: " + response);
-                alarm.cancelAlarm(SampleSchedulingService.this);
-                //getHostActivity().onBackPressed();
-            }
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(SampleSchedulingService.this, "Error: "+error.getMessage(), Toast.LENGTH_LONG).show();
-                error.printStackTrace();
-            }
-        });
-
-
-        Volley.newRequestQueue(this).add(rentRequest); */
     }
 
 

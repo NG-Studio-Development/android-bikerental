@@ -12,7 +12,7 @@ public class PointRequest extends StringRequest {
         super(method, url, listener, errorListener);
     }
 
-    public static PointRequest reqAllPoint(Response.Listener<String> listener, Response.ErrorListener errorListener) {
+    public static PointRequest reqGetPoint(Response.Listener<String> listener, Response.ErrorListener errorListener) {
         String url = ConstantsBikeRentalApp.URL_SERVER+"/points";
 
 

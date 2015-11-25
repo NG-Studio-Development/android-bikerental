@@ -3,6 +3,7 @@ package ru.prokatvros.veloprokat.model.db;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.activeandroid.ActiveAndroid;
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
@@ -17,8 +18,8 @@ public class Client extends Model implements Parcelable {
     public static String TAG = "CLIENT";
 
     @Expose
-    @Column(name = "ServerId", unique = true, onUniqueConflict = Column.ConflictAction.IGNORE )
-    public int serverId;
+    @Column(name = "ServerId", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE )
+    public String serverId;
 
     @Expose
     @Column(name = "Name")
@@ -29,7 +30,7 @@ public class Client extends Model implements Parcelable {
     public String surname;
 
     @Expose
-    @Column(name = "Phone", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE )
+    @Column(name = "Phone")
     public String phone;
 
     @Expose
@@ -40,18 +41,50 @@ public class Client extends Model implements Parcelable {
     @Column(name = "VipNumber")
     public String vipNumber = "N/A";
 
-    @Column(name = "CountRents", onDelete = Column.ForeignKeyAction.CASCADE)
-    public int countRents = -1;
-
-    @Column(name = "Summ")
-    public int summ = -1;
+    @Column(name = "CountRents")
+    public int countRents = 0;
 
     @Expose
-    @Column(name = "BlackList")
+    @Column(name = "Summ")
+    public int summ = 0;
+
+    @Expose
+    @Column(name = "Blacklist")
     public int blackList = 0;
 
     public boolean hasVipNumber() {
         return !vipNumber.equals("N/A");
+    }
+
+
+    public interface LoadListener {
+        void onLoad();
+    }
+
+    public static void parse(final List<Client> list/*, final LoadListener listener*/) {
+
+        //new Thread(new Runnable() {
+            //@Override
+            //public void run() {
+
+                ActiveAndroid.beginTransaction();
+
+                try {
+
+                    for (Client client : list) {
+                        client.save();
+                    }
+
+                    ActiveAndroid.setTransactionSuccessful();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }finally {
+                    ActiveAndroid.endTransaction();
+                    //listener.onLoad();
+                }
+            //}
+        //}).start();
+
     }
 
     public static List<Client> getAll() {
@@ -64,7 +97,7 @@ public class Client extends Model implements Parcelable {
         return new Select()
                 .from(Client.class)
                 .where("VipNumber IS ?", "N/A")
-                .where("BlackList = ?", 0)
+                .where("Blacklist = ?", 0)
                 .execute();
     }
 
@@ -72,6 +105,7 @@ public class Client extends Model implements Parcelable {
         return new Select()
                 .from(Client.class)
                 .where("VipNumber IS NOT ?", "N/A")
+                .where("Blacklist = ?", 0)
                 .execute();
     }
 
@@ -96,12 +130,8 @@ public class Client extends Model implements Parcelable {
                 .executeSingle();
     }
 
-
-
     public static final Parcelable.Creator<Client> CREATOR = new Parcelable.Creator<Client>() {
-
         public Client createFromParcel(Parcel in) {
-
             return Client.load(Client.class, in.readLong());
         }
 
@@ -109,7 +139,6 @@ public class Client extends Model implements Parcelable {
             return new Client[size];
         }
     };
-
 
     @Override
     public int describeContents() {
@@ -120,6 +149,5 @@ public class Client extends Model implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(getId());
     }
-
 
 }

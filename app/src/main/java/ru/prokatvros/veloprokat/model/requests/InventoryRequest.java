@@ -27,9 +27,9 @@ public class InventoryRequest extends StringRequest {
         this.params = params;
     }
 
-    public static InventoryRequest requestAllInventory(String point, /*boolean employment,*/ Response.Listener<String> listener, Response.ErrorListener errorListener) {
+    public static InventoryRequest requestGetInventory(Response.Listener<String> listener, Response.ErrorListener errorListener) {
 
-        String url = ConstantsBikeRentalApp.URL_SERVER+"/inventory/1";
+        String url = ConstantsBikeRentalApp.URL_SERVER+"/inventory";
         Log.d("REQUEST_SET_EMPLOYMENT", "Request = " + url);
         return  new InventoryRequest(Request.Method.GET, url, listener, errorListener);
     }

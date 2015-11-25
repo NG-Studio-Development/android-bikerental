@@ -38,7 +38,7 @@ public class ShiftRequest extends StringRequest {
 
     public ShiftRequest (int method, String url, Response.Listener<String> listener, Response.ErrorListener errorListener) {
         super(method, url, listener, errorListener);
-        this.params = params;
+        //this.params = params;
     }
 
     public static ShiftRequest intercedeShift(List<Inventory> inventoryList,  Point point, Admin admin, final PostResponseListener listener) {

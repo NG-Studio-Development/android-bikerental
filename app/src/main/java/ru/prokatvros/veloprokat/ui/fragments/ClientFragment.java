@@ -68,7 +68,7 @@ public class ClientFragment extends BaseFragment<ClientActivity> {
         TextView tvPhone = (TextView) view.findViewById(R.id.tvPhone);
         TextView tvRentsCount = (TextView) view.findViewById(R.id.tvRentsCount);
         TextView tvSumm = (TextView) view.findViewById(R.id.tvSumm);
-        TextView tvBlackList = (TextView) view.findViewById(R.id.tvBlackList);
+        // TextView tvBlackList = (TextView) view.findViewById(R.id.tvBlackList);
         TextView tvVipNumber = (TextView) view.findViewById(R.id.tvVipNumber);
         RelativeLayout rlVip = (RelativeLayout) view.findViewById(R.id.rlVip);
 
@@ -83,7 +83,7 @@ public class ClientFragment extends BaseFragment<ClientActivity> {
         tvPhone.setText(client.phone);
         tvRentsCount.setText(String.valueOf(client.countRents));
         tvSumm.setText(String.valueOf(client.summ));
-        tvBlackList.setText(String.valueOf(client.blackList));
+        // tvBlackList.setText(String.valueOf(client.blackList));
 
         if ( client.hasVipNumber() ) {
             rlVip.setVisibility(View.VISIBLE);

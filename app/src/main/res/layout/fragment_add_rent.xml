@@ -33,6 +33,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/rlAddTime"
             android:paddingLeft="@dimen/margin_widget_default_small"
             android:paddingRight="@dimen/margin_widget_default_small" >
 
@@ -61,6 +62,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/rlAddDate"
             android:paddingLeft="@dimen/margin_widget_default_small"
             android:paddingRight="@dimen/margin_widget_default_small" >
 

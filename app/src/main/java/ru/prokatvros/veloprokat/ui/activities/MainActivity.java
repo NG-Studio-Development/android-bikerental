@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -20,6 +21,12 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
 
 import ru.prokatvros.veloprokat.BikerentalApplication;
 import ru.prokatvros.veloprokat.R;
@@ -92,12 +99,17 @@ public class MainActivity extends BaseActivity {
         };
 
 
-        mDrawerToggle.setDrawerIndicatorEnabled(false);
+        boolean isIntercede = BikerentalApplication.getInstance().isIntercede();
+        mDrawerToggle.setDrawerIndicatorEnabled(isIntercede);
+
         mDrawerToggle.syncState();
 
         if (savedInstanceState == null) {
             selectItem(0);
         }
+
+
+        exportDatabse("BikeRents2.db");
     }
 
     @Override
@@ -145,11 +157,12 @@ public class MainActivity extends BaseActivity {
         Point point = BikerentalApplication.getInstance().getPoint();
         Admin admin = BikerentalApplication.getInstance().getAdmin();
 
-        ShiftRequest request = ShiftRequest.intercedeShift(Inventory.getByPoint(point, true), point, admin, new PostResponseListener() {
+        //ShiftRequest request = ShiftRequest.intercedeShift(Inventory.getByPoint(point, true), point, admin, new PostResponseListener() {
+        ShiftRequest request = ShiftRequest.intercedeShift(Inventory.getAll(), point, admin, new PostResponseListener() {
             @Override
             public void onResponse(String response) {
                 item.setVisible(false);
-
+                BikerentalApplication.getInstance().setIntercede(true);
                 Log.d(TAG, "Response: " + response);
 
                 mDrawerToggle.setDrawerIndicatorEnabled(true);
@@ -176,7 +189,8 @@ public class MainActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        menu.findItem(R.id.action_commit).setVisible(true);
+        boolean isIntercede = BikerentalApplication.getInstance().isIntercede();
+        menu.findItem(R.id.action_commit).setVisible(!isIntercede);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -195,6 +209,34 @@ public class MainActivity extends BaseActivity {
     public static void startMainActivity(Context context) {
         Intent intent = new Intent(context, MainActivity.class);
         context.startActivity(intent);
+    }
+
+
+    public static void exportDatabse(String databaseName) {
+        try {
+            File sd = Environment.getExternalStorageDirectory();
+            File data = Environment.getDataDirectory();
+
+            Log.d("LOAD_DB", sd.getAbsolutePath());
+
+            if (sd.canWrite()) {
+                String currentDBPath = "//data//"+BikerentalApplication.getInstance().getPackageName()+"//databases//"+databaseName+"";
+                String backupDBPath = "backupname.db";
+                File currentDB = new File(data, currentDBPath);
+                File backupDB = new File(sd, backupDBPath);
+
+                if (currentDB.exists()) {
+                    FileChannel src = new FileInputStream(currentDB).getChannel();
+                    FileChannel dst = new FileOutputStream(backupDB).getChannel();
+                    dst.transferFrom(src, 0, src.size());
+                    src.close();
+                    dst.close();
+                }
+            }
+            Log.d("LOAD_DB", "Was load");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

@@ -66,14 +66,24 @@ public class RentAdapter extends ArrayAdapter<Rent> {
 
         holder.tvName.setText(clientName + " " + inventoryModel);
 
-        long timeToEndOfRent = rent.endTime - Calendar.getInstance().getTimeInMillis();
+        if (!rent.isCompleted()) {
+
+            /*if (rent.endTime == null) {
+                rent.endTime = Calendar.getInstance().getTimeInMillis() - 3600000;
+            } */
+
+                long timeToEndOfRent = rent.endTime - Calendar.getInstance().getTimeInMillis();
+            if (timeToEndOfRent <= 0 ) {
+                convertView.setBackgroundColor(getContext().getResources().getColor(R.color.red));
+            } else if (timeToEndOfRent <= TIME_OF_EXPIRES) {
+                convertView.setBackgroundColor(getContext().getResources().getColor(R.color.yellow));
+            }
 
 
-        if (timeToEndOfRent <= 0 ) {
-            convertView.setBackgroundColor(getContext().getResources().getColor(R.color.red));
-        } else if (timeToEndOfRent <= TIME_OF_EXPIRES) {
-            convertView.setBackgroundColor(getContext().getResources().getColor(R.color.yellow));
+
         }
+
+
 
 
         return convertView;

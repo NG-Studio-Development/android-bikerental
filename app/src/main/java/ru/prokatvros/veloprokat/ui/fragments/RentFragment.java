@@ -4,9 +4,6 @@ package ru.prokatvros.veloprokat.ui.fragments;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -33,12 +30,12 @@ import java.util.List;
 import ru.prokatvros.veloprokat.BikerentalApplication;
 import ru.prokatvros.veloprokat.R;
 import ru.prokatvros.veloprokat.model.db.Breakdown;
+import ru.prokatvros.veloprokat.model.db.Inventory;
 import ru.prokatvros.veloprokat.model.db.Rent;
 import ru.prokatvros.veloprokat.model.requests.PostResponseListener;
 import ru.prokatvros.veloprokat.model.requests.RentRequest;
 import ru.prokatvros.veloprokat.services.receivers.SampleAlarmReceiver;
 import ru.prokatvros.veloprokat.ui.activities.RentActivity;
-import ru.prokatvros.veloprokat.utils.DataParser;
 
 public class RentFragment extends BaseFragment<RentActivity> {
 
@@ -78,8 +75,10 @@ public class RentFragment extends BaseFragment<RentActivity> {
 
         View view = inflater.inflate(R.layout.fragment_rent, container, false);
 
+        String title = rent.client != null && rent.client.name != null ? rent.client.name : getString(R.string.without_name);
+
         if (getHostActivity().getSupportActionBar() != null) {
-            getHostActivity().getSupportActionBar().setTitle(rent.client.name);
+            getHostActivity().getSupportActionBar().setTitle(title);
             getHostActivity().getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
@@ -115,16 +114,36 @@ public class RentFragment extends BaseFragment<RentActivity> {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
 
-        tvClientName.setText(rent.client.name + " " + rent.client.surname);
-        tvClientPhone.setText(rent.client.phone);
-        tvInventoryName.setText(rent.inventory.model);
-        tvCost.setText(String.valueOf( rent.getCost() ) );
+        if (rent.client != null) {
+            String clientName = new String();
+            if (rent.client.name != null)
+                clientName = clientName+rent.client.name;
+
+            if (rent.client.surname != null)
+                clientName = clientName+rent.client.surname;
+
+            tvClientName.setText(!clientName.isEmpty() ? clientName : getString(R.string.not_specified));
+
+            if( rent.client.phone != null )
+                tvClientPhone.setText(rent.client.phone);
+        }
+
+
+
+        if ( rent.inventory!=null && rent.inventory.model!=null )
+            tvInventoryName.setText(rent.inventory.model);
+
         tvPrepaid.setText(String.valueOf(rent.surcharge));
 
-        if ( rent.inventoryAddition != null )
+        if (!rent.isCompleted()) {
+            tvCost.setText(String.valueOf( rent.getCost() ) );
+            tvTime.setText(getDate(rent.endTime) );
+        }
+
+        if ( rent.inventoryAddition != null && rent.inventoryAddition.model != null )
             tvInventoryAdditionalName.setText(rent.inventoryAddition.model);
 
-        tvTime.setText( getDate(rent.endTime) );
+
 
         if ( rent != null && rent.breakdown != null )
             spinner.setSelection( breakdownList.indexOf(rent.breakdown) );
@@ -144,7 +163,6 @@ public class RentFragment extends BaseFragment<RentActivity> {
                 }
 
                 rent.save();
-
             }
 
             @Override
@@ -181,10 +199,16 @@ public class RentFragment extends BaseFragment<RentActivity> {
             public void onClick(View v) {
                 rent.setCompleteds(true);
                 rent.client.countRents += 1;
+                rent.client.summ += Integer.valueOf(etSurcharge.getText().toString());
                 rent.client.save();
+
+                rent.inventory.state = Inventory.FREE_STATE;
+                rent.inventory.setCountRent( rent.inventory.getCountRent()+1 ); ;
+                rent.inventory.save();
 
                 if (!etSurcharge.getText().toString().isEmpty())
                     rent.surcharge = Integer.valueOf(etSurcharge.getText().toString());
+
                 rent.save();
                 sendToServer(rent);
 
@@ -208,8 +232,8 @@ public class RentFragment extends BaseFragment<RentActivity> {
             public void onResponse(String response) {
                 Toast.makeText(BikerentalApplication.getInstance(), "Success", Toast.LENGTH_LONG).show();
                 Log.d(TAG, "Response: " + response);
-                rent.inventory.countRents +=1;
-                rent.inventory.save();
+                //rent.inventory.countRents +=1;
+                //rent.inventory.save();
 
                 getHostActivity().onBackPressed();
             }
@@ -217,7 +241,7 @@ public class RentFragment extends BaseFragment<RentActivity> {
             @Override
             public void onErrorResponse(VolleyError error) {
 
-                DataParser.getInstance(getHostActivity()).saveToPoolRentData(strJsonRent);
+                //DataParser.getInstance(getHostActivity()).saveToPoolRentData(strJsonRent);
 
                 SampleAlarmReceiver alarmReceiver = new SampleAlarmReceiver();
                 alarmReceiver.setAlarm(BikerentalApplication.getInstance());
@@ -233,7 +257,7 @@ public class RentFragment extends BaseFragment<RentActivity> {
                     Volley.newRequestQueue(getHostActivity()).add(rentRequest);
                 } else {
 
-                    DataParser.getInstance(getHostActivity()).saveToPoolRentData(strJsonRent);
+                    //DataParser.getInstance(getHostActivity()).saveToPoolRentData(strJsonRent);
 
                     SampleAlarmReceiver alarmReceiver = new SampleAlarmReceiver();
                     alarmReceiver.setAlarm(getHostActivity());
