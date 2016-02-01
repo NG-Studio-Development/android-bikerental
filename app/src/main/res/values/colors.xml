@@ -43,9 +43,13 @@
 
     <color name="gray_light">#bdbdbd</color>
 
+    <color name="gray_low">#ededed</color>
+
     <color name="black">#000</color>
 
     <color name="main_color">#00BCE8</color>
+
+    <color name="main_contrast_color">#FF7F00</color>
 
     <color name="violet_additional_dark">#4C385A</color>
 

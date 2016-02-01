@@ -43,7 +43,7 @@ public class BreakdownInRentAdapter extends ArrayAdapter<BreakdownInRent> {
 
     private Holder initHolder(View convertView) {
         Holder holder = new Holder();
-        holder.tvDescription = (TextView) convertView.findViewById(R.id.tvName);
+        holder.tvDescription = (TextView) convertView.findViewById(R.id.tvPhone);
         return holder;
     }
 

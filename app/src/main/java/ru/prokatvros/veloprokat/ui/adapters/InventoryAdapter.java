@@ -63,7 +63,7 @@ public class InventoryAdapter extends ArrayAdapter<Inventory> {
     private Holder initHolder(View convertView) {
         Holder holder = new Holder();
 
-        holder.tvName = (TextView) convertView.findViewById(R.id.tvName);
+        holder.tvName = (TextView) convertView.findViewById(R.id.tvPhone);
         holder.tvNumber = (TextView) convertView.findViewById(R.id.tvNumber);
         holder.tvState = (TextView) convertView.findViewById(R.id.tvState);
 

@@ -29,13 +29,9 @@ import ru.prokatvros.veloprokat.model.db.Inventory;
 import ru.prokatvros.veloprokat.model.db.Rent;
 import ru.prokatvros.veloprokat.ui.activities.RentActivity;
 
-//import org.joda.time.DateTime;
-//import org.joda.time.Period;
-
 public class AddRentFragment extends BaseFragment<RentActivity> {
 
     private static String TAG = "ADD_RENT_FRAGMENT";
-
 
     EditText etPaid;
     static TextView tvTime;
@@ -76,7 +72,7 @@ public class AddRentFragment extends BaseFragment<RentActivity> {
         RelativeLayout rlAddDate = (RelativeLayout ) view.findViewById(R.id.rlAddDate);
         RelativeLayout rlAddTime = (RelativeLayout ) view.findViewById(R.id.rlAddTime);
 
-        tvCost = (TextView) view.findViewById(R.id.tvCost);
+        tvCost = (TextView) view.findViewById(R.id.tvCostThHour);
         tvCost.setText(getString(R.string.calculate_cost));
 
         tvCost.setOnClickListener(new View.OnClickListener() {
@@ -169,7 +165,7 @@ public class AddRentFragment extends BaseFragment<RentActivity> {
                 if ( rent != null ) {
                     //rent.endTime = getDeadlineInMillis();
                     //rent.startTime = new Date().getTime();
-                    if (rent.startTime == 0 || rent.startTime == 0) {
+                    if ( rent.startTime == 0 || rent.startTime == 0 ) {
                         Toast.makeText(getHostActivity(), getString(R.string.warning_you_must_calculate_cost),Toast.LENGTH_LONG).show();
                         return;
                     }

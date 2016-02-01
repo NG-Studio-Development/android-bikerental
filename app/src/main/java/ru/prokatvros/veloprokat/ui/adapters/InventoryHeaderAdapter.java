@@ -72,7 +72,7 @@ public class InventoryHeaderAdapter extends BaseAdapter implements StickyListHea
             holder = new ViewHolder();
             convertView = inflater.inflate(R.layout.item_inventory, parent, false);
 
-            holder.tvName = (TextView) convertView.findViewById(R.id.tvName);
+            holder.tvName = (TextView) convertView.findViewById(R.id.tvPhone);
             holder.tvNumber = (TextView) convertView.findViewById(R.id.tvNumber);
             holder.tvState = (TextView) convertView.findViewById(R.id.tvState);
 

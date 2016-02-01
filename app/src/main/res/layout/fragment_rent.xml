@@ -89,7 +89,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/not_have_additional_inventory"
-                    android:id="@+id/tvCost" />
+                    android:id="@+id/tvCostThHour" />
 
                 <TextView
                     android:layout_width="wrap_content"

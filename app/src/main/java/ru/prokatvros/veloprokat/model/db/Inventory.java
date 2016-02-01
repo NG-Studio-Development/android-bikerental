@@ -33,7 +33,7 @@ public class Inventory extends Model implements Parcelable {
     public static final int FREE_STATE = 4;
 
     @Expose
-    @Column(name = "ServerId")
+    @Column(name = "ServerId", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
     public String serverId;
 
     @Expose
@@ -41,7 +41,7 @@ public class Inventory extends Model implements Parcelable {
     public String model;
 
     @Expose
-    @Column( name = "Number", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE )
+    @Column( name = "Number" )
     public String number;
 
     @Expose

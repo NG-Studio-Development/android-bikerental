@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:id="@+id/tvText"
+        android:layout_marginTop="@dimen/margin_widget_default_medium"
+        android:layout_marginLeft="@dimen/margin_widget_default_normal"
+        android:layout_toRightOf="@+id/ivIcon"
+        android:layout_toEndOf="@+id/ivIcon" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/title_phone"
+        android:id="@+id/tvDescription"
+        style="@style/TextViewHint"
+        android:layout_marginTop="@dimen/margin_widget_default_tiny"
+        android:layout_below="@+id/tvText"
+        android:layout_alignLeft="@+id/tvText"
+        android:layout_alignStart="@+id/tvText" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:id="@+id/dividerModel"
+        android:background="@color/gray_low"
+        android:layout_marginTop="@dimen/margin_widget_default_small"
+        android:layout_below="@+id/tvDescription"
+        android:layout_alignLeft="@+id/tvDescription"
+        android:layout_alignStart="@+id/tvDescription" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ivIcon"
+        android:src="@mipmap/ic_action_call"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/margin_widget_default_medium" />
+
+</RelativeLayout>

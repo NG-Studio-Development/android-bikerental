@@ -33,7 +33,8 @@ public class SelectPointFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_select_point, container, false);
         final ListView lvPoint = (ListView) view.findViewById(R.id.lvPoints);
 
-        MainActivity.exportDatabse("BikeRents3.db");
+        //MainActivity.exportDatabse("BikeRents3.db");
+        MainActivity.exportDatabse("backupname2.db");
 
         lvPoint.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -47,7 +48,10 @@ public class SelectPointFragment extends BaseFragment {
                 admin.save();
 
                 BikerentalApplication.getInstance().setPoint(point);
+
                 MainActivity.startMainActivity(getHostActivity());
+
+
                 getHostActivity().finish();
 
             }

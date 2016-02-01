@@ -7,6 +7,7 @@ import com.activeandroid.ActiveAndroid;
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
+import com.activeandroid.query.From;
 import com.activeandroid.query.Select;
 import com.google.gson.annotations.Expose;
 
@@ -80,11 +81,7 @@ public class Client extends Model implements Parcelable {
                     ex.printStackTrace();
                 }finally {
                     ActiveAndroid.endTransaction();
-                    //listener.onLoad();
                 }
-            //}
-        //}).start();
-
     }
 
     public static List<Client> getAll() {
@@ -93,34 +90,40 @@ public class Client extends Model implements Parcelable {
                 .execute();
     }
 
-    public static List<Client> getAllMain() {
+    public static From getAllMain() {
         return new Select()
                 .from(Client.class)
                 .where("VipNumber IS ?", "N/A")
                 .where("Blacklist = ?", 0)
-                .execute();
+                .limit("1000");
+                //.execute();
     }
 
-    public static List<Client> getAllVip() {
+    public static From getAllVip() {
         return new Select()
                 .from(Client.class)
                 .where("VipNumber IS NOT ?", "N/A")
-                .where("Blacklist = ?", 0)
-                .execute();
-    }
+                .where("Blacklist = ?", 0);
+                //.execute();
+}
 
-    public static List<Client> getAllBlackList() {
+    public static From getAllBlackList() {
         return new Select()
                 .from(Client.class)
-                .where("BlackList = ?", 1)
-                .execute();
+                .where("BlackList = ?", 1);
+                //.execute();
+    }
+
+
+    public static From getFromBySubNumber(String subNumber) {
+        return new Select()
+                .from(Client.class)
+                .where("Phone LIKE ?", "%" + subNumber + "%");
+
     }
 
     public static List<Client> getBySubNumber(String subNumber) {
-        return new Select()
-                .from(Client.class)
-                .where("Phone LIKE ?", "%" + subNumber + "%")
-                .execute();
+        return getFromBySubNumber(subNumber).execute();
     }
 
     public static Client getByNumber(String number) {

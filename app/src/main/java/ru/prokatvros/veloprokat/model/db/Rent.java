@@ -4,6 +4,7 @@ import com.activeandroid.ActiveAndroid;
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
+import com.activeandroid.query.From;
 import com.activeandroid.query.Select;
 import com.google.gson.annotations.Expose;
 
@@ -27,7 +28,7 @@ public class Rent extends Model {
     public String serverId;
 
     @Expose
-    @Column( name = "Token" )
+    @Column( name = "Token")
     private String token;
 
     @Expose
@@ -39,11 +40,11 @@ public class Rent extends Model {
     public long startTime;
 
     @Expose
-    @Column(name = "Client", onDelete = Column.ForeignKeyAction.CASCADE)
+    @Column(name = "Client")
     public Client client;
 
     @Expose
-    @Column(name = "Inventory", onDelete = Column.ForeignKeyAction.CASCADE)
+    @Column(name = "Inventory")
     public Inventory inventory;
 
     @Expose
@@ -51,7 +52,7 @@ public class Rent extends Model {
     public Inventory inventoryAddition;
 
     @Expose
-    @Column(name = "Breakdown", onDelete = Column.ForeignKeyAction.CASCADE)
+    @Column(name = "Breakdown")
     public Breakdown breakdown;
 
     @Expose
@@ -141,12 +142,12 @@ public class Rent extends Model {
                 .execute();
     }
 
-    public static List<Rent> getAllByCompleted(boolean completed) {
+    public static From getAllByCompleted(boolean completed) {
         int completedInInteger = completed ? 1 : 0;
         return new Select()
                 .from(Rent.class)
-                .where("IsCompleted = ?", completedInInteger)
-                .execute();
+                .where("IsCompleted = ?", completedInInteger);
+                //.execute();
     }
 
     public static void removeEmpty() {

@@ -98,7 +98,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
             return viewHolderItem;
 
         } else if (viewType == TYPE_HEADER) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.header_drawer,parent,false);
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.header_drawer, parent, false);
             ViewHolder vhHeader = new ViewHolder(v,viewType);
             return vhHeader;
         }
@@ -148,23 +148,19 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
 
     public static final class MenuItem {
 
-        //private int iconId;
+        private int iconId;
         private int textResourceId;
         private String text;
 
-        private MenuItem(/*int iconId,*/ int textResourceId) {
-            //this.iconId = iconId;
+        private MenuItem(int textResourceId) {
             this.textResourceId = textResourceId;
         }
 
-        public MenuItem(/*int iconId,*/ String text) {
-            this.text = text;
-            //this.iconId = iconId;
+        private MenuItem(int iconId, int textResourceId) {
+            this.iconId = iconId;
+            this.textResourceId = textResourceId;
         }
 
-        /*public int getIconId() {
-            return iconId;
-        }*/
     }
 
      public interface OnItemClickListener {

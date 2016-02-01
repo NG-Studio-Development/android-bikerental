@@ -16,9 +16,12 @@ public class InventoryActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_base);
+        setContentView(R.layout.activity_base_fab);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setBackgroundColor(getResources().getColor(R.color.black));
+        toolbar.getBackground().setAlpha(20);
+
         setSupportActionBar(toolbar);
 
         Inventory inventory = null;

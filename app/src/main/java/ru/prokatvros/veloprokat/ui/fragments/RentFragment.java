@@ -92,7 +92,7 @@ public class RentFragment extends BaseFragment<RentActivity> {
         RelativeLayout rlBreakdown = (RelativeLayout) view.findViewById(R.id.rlBreakdown);
         TextView tvBreakdown = (TextView) view.findViewById(R.id.tvBreakdown);
         TextView tvBreakdownSpinnerTitle = (TextView) view.findViewById(R.id.tvBreakdownSpinnerTitle);
-        TextView tvCost = (TextView) view.findViewById(R.id.tvCost);
+        TextView tvCost = (TextView) view.findViewById(R.id.tvCostThHour);
         TextView tvSurcharge = (TextView) view.findViewById(R.id.tvSurcharge);
         RelativeLayout rlSurcharge = (RelativeLayout) view.findViewById(R.id.rlSurcharge);
         final TextView tvSummFine = (TextView) view.findViewById(R.id.tvSummFine);
@@ -197,8 +197,15 @@ public class RentFragment extends BaseFragment<RentActivity> {
         buttonClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if ( etSurcharge.getText().toString().isEmpty() ) {
+                    Toast.makeText(getHostActivity(), getString(R.string.warning_you_must_set_paid_summ), Toast.LENGTH_LONG).show();
+                    return;
+                }
+
                 rent.setCompleteds(true);
                 rent.client.countRents += 1;
+
                 rent.client.summ += Integer.valueOf(etSurcharge.getText().toString());
                 rent.client.save();
 
@@ -213,7 +220,7 @@ public class RentFragment extends BaseFragment<RentActivity> {
                 sendToServer(rent);
 
             }
-        });
+        } );
 
         return view;
     }
@@ -269,7 +276,7 @@ public class RentFragment extends BaseFragment<RentActivity> {
     }
 
 
-    private String getDate(long timeStamp){
+    private String getDate(long timeStamp) {
 
         try{
             DateFormat sdf = new SimpleDateFormat("MM/dd/yyyy hh:mm");
@@ -289,10 +296,5 @@ public class RentFragment extends BaseFragment<RentActivity> {
         }
         return list;
     }
-
-
-
-
-
 
 }

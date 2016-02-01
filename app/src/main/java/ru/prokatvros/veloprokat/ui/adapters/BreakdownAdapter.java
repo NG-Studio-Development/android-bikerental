@@ -19,7 +19,7 @@ package ru.prokatvros.veloprokat.ui.adapters;
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(resource, parent, false);
-            holder = initHolder(convertView);
+            holder = voidinitHolder(convertView);
             convertView.setTag(holder);
         } else {
             holder = (Holder)convertView.getTag();
@@ -32,7 +32,7 @@ package ru.prokatvros.veloprokat.ui.adapters;
         return convertView;
     }
 
-    private Holder initHolder(View convertView) {
+    private Holder voidinitHolder(View convertView) {
         Holder holder = new Holder();
         holder.tvName = (TextView) convertView.findViewById(R.id.tvName);
         return holder;

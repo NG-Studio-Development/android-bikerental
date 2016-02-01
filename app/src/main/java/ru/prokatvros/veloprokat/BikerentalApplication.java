@@ -241,6 +241,10 @@ public class BikerentalApplication extends android.app.Application {
         return Point.load(Point.class, pointId);
     }
 
+    public boolean isSelectedPoint() {
+        return getApplicationPreferences().getLong(ConstantsBikeRentalApp.PREFERENCE_ID_POINT, -1) != -1;
+    }
+
 
     public String getUUID() {
         TelephonyManager tManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);

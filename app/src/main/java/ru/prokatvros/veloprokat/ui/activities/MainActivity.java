@@ -26,6 +26,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.nio.channels.FileChannel;
 
 import ru.prokatvros.veloprokat.BikerentalApplication;
@@ -179,7 +181,26 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
-                Toast.makeText(MainActivity.this, "Action error", Toast.LENGTH_LONG).show();
+
+                StringWriter errors = new StringWriter();
+                error.printStackTrace(new PrintWriter(errors));
+
+
+                /*
+                *  File file = new File("test.log");
+
+                try {
+                    // something
+                    PrintStream ps = new PrintStream(file);
+                    error.printStackTrace(ps);
+                    ps.close();
+
+                } catch (FileNotFoundException ex) {
+                    ex.printStackTrace();
+                }
+                */
+
+                Toast.makeText(MainActivity.this, "Action error: "+errors.toString(), Toast.LENGTH_LONG).show();
             }
         });
 

@@ -10,9 +10,12 @@ import android.os.Message;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -47,10 +50,11 @@ public class AddClientFragment extends BaseFragment {
     String base64Image;
     Button buttonAddPhoto;
 
-    EditText etName;// = (EditText) view.findViewById(R.id.etName);
-    EditText etSurname;// = (EditText) view.findViewById(R.id.etSurname);
-    EditText etPhone;// = (EditText) view.findViewById(R.id.etSearch);
+    EditText etName;
+    EditText etSurname;
+    EditText etPhone;
     EditText etNumber;
+    CheckBox cbBlackList;
 
     Handler handler = new Handler() {
         @Override
@@ -113,12 +117,14 @@ public class AddClientFragment extends BaseFragment {
         Button buttonAdd = (Button) view.findViewById(R.id.buttonAdd);
         buttonAddPhoto = (Button) view.findViewById(R.id.buttonAddPhoto);
 
+        setHasOptionsMenu(true);
+
         etName = (EditText) view.findViewById(R.id.etName);
         etSurname = (EditText) view.findViewById(R.id.etSurname);
         etPhone = (EditText) view.findViewById(R.id.etSearch);
         etNumber = (EditText) view.findViewById(R.id.etNumber);
 
-
+        cbBlackList = (CheckBox) view.findViewById(R.id.cbBlackList);
 
         if ( getArguments() != null ) {
 
@@ -142,7 +148,9 @@ public class AddClientFragment extends BaseFragment {
                 addClient( etName.getText().toString(),
                         etSurname.getText().toString(),
                         etPhone.getText().toString(),
-                        etNumber.getText().toString(),  sendAction);
+                        etNumber.getText().toString(),
+                        cbBlackList.isChecked(),
+                        sendAction);
             }
         });
 
@@ -154,6 +162,10 @@ public class AddClientFragment extends BaseFragment {
             }
         });
 
+        if (getHostActivity().getSupportActionBar() != null) {
+            getHostActivity().getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
         return view;
     }
 
@@ -162,6 +174,7 @@ public class AddClientFragment extends BaseFragment {
         etName.setText(client.name);
         etSurname.setText(client.surname);
         etPhone.setText(client.phone);
+        cbBlackList.setChecked(client.blackList == 1);
 
         if (client.hasVipNumber())
             etNumber.setText(client.vipNumber);
@@ -180,7 +193,7 @@ public class AddClientFragment extends BaseFragment {
     protected static final int SEND_UPDATE_CLIENT = 0;
     protected static final int SEND_ADD_CLIENT = 1;
 
-    private void addClient( String name, String surname, String phone, String vipNumber, int actionSend ) {
+    private void addClient( String name, String surname, String phone, String vipNumber, boolean isBlackList, int actionSend ) {
 
         if ( name.isEmpty() || surname.isEmpty() || phone.isEmpty() ) {
             Toast.makeText( getHostActivity(), getString(R.string.warning_can_not_have_empty_field), Toast.LENGTH_LONG ).show();
@@ -191,7 +204,9 @@ public class AddClientFragment extends BaseFragment {
         client.surname = surname;
         client.phone = phone;
 
-        if (vipNumber != null && !vipNumber.isEmpty() )
+        client.blackList = isBlackList ? 1 : 0;
+
+        if ( vipNumber != null && !vipNumber.isEmpty() )
             client.vipNumber = vipNumber;
 
         client.save();
@@ -221,7 +236,10 @@ public class AddClientFragment extends BaseFragment {
                     Toast.makeText(getHostActivity(),
                             ClientRequest.errorMessagePostClient(errorCode),
                             Toast.LENGTH_LONG).show();
+                    return;
                 }
+
+                getHostActivity().onBackPressed();
             }
 
             @Override
@@ -239,7 +257,7 @@ public class AddClientFragment extends BaseFragment {
             @Override
             public void onResponse(String response) {
 
-                Log.d(TAG, "Response: "+response);
+                Log.d(TAG, "Response: " + response);
                 try {
                     JSONObject jsonResponse = new JSONObject(response);
                     int error_code = jsonResponse.getInt("error_code");
@@ -251,9 +269,9 @@ public class AddClientFragment extends BaseFragment {
                         return;
                     }
 
-                    if (getHostActivity().getCallingActivity() != null ) {
+                    if (getHostActivity().getCallingActivity() != null) {
                         Intent intent = new Intent();
-                        intent.putExtra( ClientActivity.KEY_ADD_CLIENT, client );
+                        intent.putExtra(ClientActivity.KEY_ADD_CLIENT, client);
                         getHostActivity().setResult(ConstantsBikeRentalApp.RESULT_OK, intent);
                     }
 
@@ -336,5 +354,10 @@ public class AddClientFragment extends BaseFragment {
         Volley.newRequestQueue(getHostActivity()).add(request);
     }
 
-
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_client, menu);
+        menu.findItem(R.id.action_edit).setVisible(false);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
 }

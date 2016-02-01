@@ -60,7 +60,7 @@ public class PointAdapter extends ArrayAdapter<Point> {
 
     private Holder initHolder(View convertView) {
         Holder holder = new Holder();
-        holder.tvTitle = (TextView) convertView.findViewById(R.id.tvName);
+        holder.tvTitle = (TextView) convertView.findViewById(R.id.tvPhone);
         return holder;
     }
 

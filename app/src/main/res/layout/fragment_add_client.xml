@@ -23,6 +23,12 @@
             android:hint="@string/surname"
             android:id="@+id/etSurname" />
 
+        <CheckBox
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="New CheckBox"
+            android:id="@+id/cbBlackList" />
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">

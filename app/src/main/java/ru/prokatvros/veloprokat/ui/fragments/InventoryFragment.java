@@ -9,12 +9,15 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -55,7 +58,7 @@ public class InventoryFragment extends BaseFragment<InventoryActivity> {
 
     protected ImageView ivAvatar;
 
-    File file;
+    static File file;
 
     public static InventoryFragment newInstance(Inventory inventory) {
         InventoryFragment fragment = new InventoryFragment();
@@ -81,7 +84,8 @@ public class InventoryFragment extends BaseFragment<InventoryActivity> {
         }
 
         if ( getHostActivity().getSupportActionBar() != null && inventory != null) {
-            getHostActivity().getSupportActionBar().setTitle(inventory.model);
+            //getHostActivity().getSupportActionBar().setTitle(inventory.model);
+            getHostActivity().getSupportActionBar().setDisplayShowTitleEnabled(false);
             getHostActivity().getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
@@ -98,30 +102,32 @@ public class InventoryFragment extends BaseFragment<InventoryActivity> {
 
         View view = inflater.inflate(R.layout.fragment_inventory, container, false);
 
-        TextView tvName = (TextView) view.findViewById(R.id.tvName);
+        TextView tvName = (TextView) view.findViewById(R.id.tvPhone);
         TextView tvNumber = (TextView) view.findViewById(R.id.tvNumber);
         TextView tvNumberFrame = (TextView) view.findViewById(R.id.tvNumberFrame);
         TextView tvCount = (TextView) view.findViewById(R.id.tvRentsCount);
-        TextView tvCost = (TextView) view.findViewById(R.id.tvCost);
+        TextView tvCostHour = (TextView) view.findViewById(R.id.tvCostHour);
+        TextView tvCostDay = (TextView) view.findViewById(R.id.tvCostDay);
+        TextView tvCostThHour = (TextView) view.findViewById(R.id.tvCostThHour);
+
         ivAvatar = (ImageView) view.findViewById(R.id.ivAvatar);
 
         if ( inventory.hasAvatar() ) {
             ImageLoader.getInstance().displayImage(ConstantsBikeRentalApp.URL_SERVER+"/"+inventory.avatar, ivAvatar);
         }
 
-        Button buttonAddPhoto = (Button) view.findViewById(R.id.buttonAddPhoto);
+        ImageButton ibAddPhoto = (ImageButton) view.findViewById(R.id.ibAddPhoto);
         Button buttonSave = (Button) view.findViewById(R.id.buttonSave);
         Spinner spinnerState = (Spinner) view.findViewById(R.id.spinnerState);
 
         buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getHostActivity().getProgressDialog().show();
-                Volley.newRequestQueue(getHostActivity()).add(requestPutInventory(inventory));
+                saveChanges();
             }
         });
 
-        buttonAddPhoto.setOnClickListener(new View.OnClickListener() {
+        ibAddPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 capturePhoto();
@@ -139,8 +145,7 @@ public class InventoryFragment extends BaseFragment<InventoryActivity> {
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
+            public void onNothingSelected(AdapterView<?> parent) {}
         });
 
         setHasOptionsMenu(true);
@@ -150,10 +155,10 @@ public class InventoryFragment extends BaseFragment<InventoryActivity> {
             tvNumber.setText(inventory.number);
             tvNumberFrame.setText(inventory.numberFrame);
 
+            tvCostHour.setText( String.valueOf(inventory.tarif.sumHour) );
+            tvCostDay.setText( String.valueOf(inventory.tarif.sumDay) );
+            tvCostThHour.setText( String.valueOf(inventory.tarif.sumTsHour) );
 
-            tvCost.setText(String.valueOf(getString(R.string.hour)+": "+inventory.tarif.sumHour +"\n"+
-                                            getString(R.string.day)+": "+inventory.tarif.sumDay+"\n"+
-                                            getString(R.string.th_hour)+": "+inventory.tarif.sumTsHour) );
             tvCount.setText(String.valueOf(inventory.getCountRent()));
 
             if ( inventory.state != Inventory.RENTED_STATE ) {
@@ -163,6 +168,11 @@ public class InventoryFragment extends BaseFragment<InventoryActivity> {
         }
 
         return view;
+    }
+
+    private void saveChanges() {
+        getHostActivity().getProgressDialog().show();
+        Volley.newRequestQueue(getHostActivity()).add(requestPutInventory(inventory));
     }
 
     protected InventoryRequest requestPutInventory(Inventory inventory) {
@@ -200,14 +210,23 @@ public class InventoryFragment extends BaseFragment<InventoryActivity> {
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_inventory, menu);
+        menu.findItem(R.id.action_save ).setVisible(true);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
-        /* switch (item.getItemId()) {
-            case android.R.id.home:
-                getHostActivity().onBackPressed();
+        switch (item.getItemId()) {
+            case R.id.action_save:
+                getHostActivity().getProgressDialog().show();
+                Volley.newRequestQueue(getHostActivity()).add( requestPutInventory(inventory) );
+                //getHostActivity().replaceFragment(AddClientFragment.newInstance(client), true);
+                //getHostActivity().onBackPressed();
                 break;
-        } */
-
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -278,10 +297,14 @@ public class InventoryFragment extends BaseFragment<InventoryActivity> {
         if (resultCode == Activity.RESULT_OK) {
             final Uri uri;
 
-            if (requestCode == ConstantsBikeRentalApp.REQUEST_CODE_CAPTURE_IMAGE)
+            if (requestCode == ConstantsBikeRentalApp.REQUEST_CODE_CAPTURE_IMAGE) {
                 uri = Uri.fromFile(file);
-            else
+                file = null;
+                //uri = data.getData();
+            } else {
                 return;
+            }
+
 
 
             new Thread(new Runnable() {

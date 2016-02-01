@@ -14,6 +14,9 @@ import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import ru.prokatvros.veloprokat.BikerentalApplication;
 import ru.prokatvros.veloprokat.R;
 import ru.prokatvros.veloprokat.model.db.Rent;
@@ -85,6 +88,15 @@ public class RentActivity extends BaseActivity {
             public void onResponse(String response) {
                 Toast.makeText(RentActivity.this, "Success", Toast.LENGTH_LONG).show();
                 Log.d(TAG, "Response: " + response);
+
+                try {
+                    JSONObject jsonRent = new JSONObject(response);
+                    rent.serverId = jsonRent.getString("serverId");
+                    rent.save();
+                } catch (JSONException ex) {
+                    ex.printStackTrace();
+                }
+
                 //rent.inventory.countRents +=1;
                 //rent.inventory.save();
                 //getHostActivity().onBackPressed();
@@ -109,10 +121,6 @@ public class RentActivity extends BaseActivity {
                 if (isAvailable) {
                     Volley.newRequestQueue(RentActivity.this).add(rentRequest);
                 } else {
-
-                    //DataParser.getInstance(RentActivity.this).saveToPoolRentData(strJsonRent);
-
-
                     SampleAlarmReceiver alarmReceiver = new SampleAlarmReceiver();
                     alarmReceiver.setAlarm(RentActivity.this);
                     Toast.makeText(RentActivity.this, "Server not avialable", Toast.LENGTH_LONG).show();

@@ -1,9 +1,6 @@
 package ru.prokatvros.veloprokat.utils;
 
 import android.content.Context;
-import android.os.Handler;
-import android.os.Message;
-import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -11,30 +8,13 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.Volley;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.ByteArrayInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.List;
 
-import ru.prokatvros.veloprokat.model.db.Breakdown;
-import ru.prokatvros.veloprokat.model.db.Client;
-import ru.prokatvros.veloprokat.model.db.Inventory;
-import ru.prokatvros.veloprokat.model.db.Point;
-import ru.prokatvros.veloprokat.model.db.Rent;
-import ru.prokatvros.veloprokat.model.requests.BreakdowndInRentRequest;
-import ru.prokatvros.veloprokat.model.requests.ClientRequest;
-import ru.prokatvros.veloprokat.model.requests.InventoryRequest;
-import ru.prokatvros.veloprokat.model.requests.PointRequest;
-import ru.prokatvros.veloprokat.model.requests.RentRequest;
 import ru.prokatvros.veloprokat.net.InputStreamVolleyRequest;
 
 public class DataParser {
@@ -51,17 +31,109 @@ public class DataParser {
 
     public static DataParser instance = null;
 
-    /*public interface OnParseListener {
-        void onStart();
-        void onLoad();
-        void onError();
-    } */
-
     public interface OnLoadDBListener {
         void onLoad();
         void onFinish();
         void onError();
     }
+
+    public OnLoadDBListener loadDBListener = null;
+
+    private DataParser(Context context) { this.context = context; }
+
+    public static DataParser getInstance(Context context) {
+
+        if (instance == null)
+            instance = new DataParser(context);
+
+        return instance;
+    }
+
+    private static String DB_PATH = "/data/data/ru.prokatvros.veloprokat/databases/";
+    private static String DB_NAME = "backupname2.db";
+
+    private void copyDataBase(byte[] response) throws IOException {
+
+        InputStream myInput = new ByteArrayInputStream(response);
+
+        String outFileName = DB_PATH + DB_NAME;
+
+        OutputStream myOutput = new FileOutputStream(outFileName);
+
+        byte[] buffer = new byte[1024];
+        int length;
+        while ((length = myInput.read(buffer))>0){
+            myOutput.write(buffer, 0, length);
+        }
+
+        myOutput.flush();
+        myOutput.close();
+        myInput.close();
+
+        loadDBListener.onFinish();
+
+    }
+
+    private void copyDataBase() throws IOException{
+        //Открываем локальную БД как входящий поток
+        InputStream myInput = context.getAssets().open(DB_NAME);
+
+        //Путь ко вновь созданной БД
+        String outFileName = DB_PATH + DB_NAME;
+
+        //Открываем пустую базу данных как исходящий поток
+        OutputStream myOutput = new FileOutputStream(outFileName);
+
+        //перемещаем байты из входящего файла в исходящий
+        byte[] buffer = new byte[1024];
+        int length;
+        while ((length = myInput.read(buffer))>0){
+            myOutput.write(buffer, 0, length);
+        }
+
+        //закрываем потоки
+        myOutput.flush();
+        myOutput.close();
+        myInput.close();
+
+        loadDBListener.onFinish();
+    }
+
+    public void loadDumpDB(String url, OnLoadDBListener listener) {
+        this.loadDBListener = listener;
+
+        InputStreamVolleyRequest request = new InputStreamVolleyRequest(Request.Method.GET, url, null, new Response.Listener<byte[]>() {
+            @Override
+            public void onResponse(byte[] response) {
+
+                try {
+                    loadDBListener.onLoad();
+                    //copyDataBase();
+                    copyDataBase(response);
+
+                } catch (IOException ex) {
+                    loadDBListener.onError();
+                    ex.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                loadDBListener.onError();
+                error.printStackTrace();
+            }
+        });
+
+
+        RequestQueue mRequestQueue = Volley.newRequestQueue(context,
+                new HurlStack());
+
+        mRequestQueue.add(request);
+
+    }
+
+
+    /*
 
     Handler handler = new Handler() {
         @Override
@@ -75,20 +147,6 @@ public class DataParser {
 
         }
     };
-
-    public OnLoadDBListener loadDBListener = null;
-
-    private DataParser() {}
-
-    private DataParser(Context context) { this.context = context; }
-
-    public static DataParser getInstance(Context context) {
-
-        if (instance == null)
-            instance = new DataParser(context);
-
-        return instance;
-    }
 
     public BreakdowndInRentRequest breakdowndRequest = BreakdowndInRentRequest.requestAllBreakdowns(new Response.Listener<String>() {
         @Override
@@ -249,65 +307,7 @@ public class DataParser {
 
 
 
-    private static String DB_PATH = "/data/data/ru.prokatvros.veloprokat/databases/";
-    private static String DB_NAME = "backupname2.db";
-
-    private void copyDataBase(byte[] response) throws IOException {
-
-        InputStream myInput = new ByteArrayInputStream(response);
-
-        String outFileName = DB_PATH + DB_NAME;
-
-        OutputStream myOutput = new FileOutputStream(outFileName);
-
-        byte[] buffer = new byte[1024];
-        int length;
-        while ((length = myInput.read(buffer))>0){
-            myOutput.write(buffer, 0, length);
-        }
-
-        myOutput.flush();
-        myOutput.close();
-        myInput.close();
-
-        loadDBListener.onFinish();
-
-    }
-
-    public void loadDumpDB(String url, OnLoadDBListener listener) {
-        this.loadDBListener = listener;
-
-        InputStreamVolleyRequest request = new InputStreamVolleyRequest(Request.Method.GET, url, null, new Response.Listener<byte[]>() {
-            @Override
-            public void onResponse(byte[] response) {
-
-                try {
-                    loadDBListener.onLoad();
-                    copyDataBase(response);
-
-                } catch (IOException ex) {
-                    loadDBListener.onError();
-                    ex.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                loadDBListener.onError();
-                error.printStackTrace();
-            }
-        });
-
-
-        RequestQueue mRequestQueue = Volley.newRequestQueue(context,
-                new HurlStack());
-
-        mRequestQueue.add(request);
-
-    }
-
-
-    /*public void parsing(OnParseListener onParseListener) {
+    public void parsing(OnParseListener onParseListener) {
 
         this.onParseListener = onParseListener;
         this.onParseListener.onStart();

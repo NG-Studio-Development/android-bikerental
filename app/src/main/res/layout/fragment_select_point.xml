@@ -3,11 +3,11 @@
     android:layout_height="match_parent"
     tools:context="ru.prokatvros.veloprokat.ui.fragments.SelectPointFragment">
 
-    <TextView
+    <!-- <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="SELECT ITEM"
-        android:id="@+id/textView2" />
+        android:id="@+id/textView2" /> -->
 
     <ListView
         android:layout_width="wrap_content"

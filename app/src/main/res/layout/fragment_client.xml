@@ -1,4 +1,161 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff"
+    tools:context="ru.prokatvros.veloprokat.ui.fragments.InventoryFragment" >
+
+    <!-- <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/scrollView2"
+        android:background="@color/gray_light"> -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/linearLayout6"
+            android:layout_marginBottom="@dimen/margin_widget_default_normal">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:id="@+id/rlProfileId"
+                    android:background="@color/main_color">
+
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:id="@+id/ivAvatar"
+                        android:background="@color/gray_light"
+                        android:layout_centerVertical="true"
+                        android:layout_centerHorizontal="true" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="New Text"
+                        android:id="@+id/tvName"
+                        android:layout_below="@+id/ivAvatar"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="@dimen/margin_widget_default_medium"
+                        style="@style/ActionBarGeneric.TextView"/>
+
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/title_statistics"
+                    android:id="@+id/tvCostTitle"
+                    android:layout_marginTop="@dimen/margin_widget_default_medium"
+                    android:layout_marginLeft="@dimen/margin_widget_default_normal"
+                    style="@style/TextViewTitle" />
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvCostTitle"
+                    android:layout_marginTop="@dimen/margin_widget_default_medium"
+                    android:id="@+id/linearLayout7">
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/absent"
+                            android:id="@+id/tvRentsCount" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/count_rent"
+                            style="@style/TextViewHint" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_weight="1" >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/absent"
+                            android:id="@+id/tvSumm" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/summ"
+                            style="@style/TextViewHint" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:id="@+id/dividerCost"
+                    android:background="@color/gray_low"
+                    android:layout_below="@+id/linearLayout7"
+                    android:layout_marginTop="@dimen/margin_widget_default_small" />
+
+            </RelativeLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rwClientListData"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/linearLayout6"
+                android:scrollbars="none">
+
+            </android.support.v7.widget.RecyclerView>
+
+        </LinearLayout>
+    <!-- </ScrollView> -->
+
+
+</RelativeLayout>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -48,44 +205,7 @@
             android:layout_alignParentEnd="true" />
     </RelativeLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_widget_default_small" >
 
-        <TextView android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/tvTitlePhone"
-            android:text="@string/phone"
-            style="@style/TextViewTitle" />
-
-        <TextView android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/tvPhone"
-            android:layout_alignBaseline="@+id/tvTitlePhone"
-            android:layout_alignBottom="@+id/tvTitlePhone"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
-    </RelativeLayout>
-
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_widget_default_small" >
-
-        <TextView android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/tvTitleCountRent"
-            android:text="@string/count_rent"
-            style="@style/TextViewTitle" />
-
-        <TextView android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/tvRentsCount"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
-    </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -130,4 +250,4 @@
 
     </RelativeLayout>
 
-</LinearLayout>
+</LinearLayout> -->

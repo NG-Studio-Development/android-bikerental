@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -74,10 +75,10 @@ public abstract class BaseListFragment extends BaseFragment<MainActivity> {
     }
 
     public void setVisibilityProgressBar(boolean visibilityState) {
-        //int visibility = visibilityState ? View.VISIBLE : View.GONE;
-        //pbLoader.setVisibility(visibility);
+        int visibility = visibilityState ? View.VISIBLE : View.GONE;
+        pbLoader.setVisibility(visibility);
     }
-    public ListAdapter getAdapter() {
-        return lvList.getAdapter();
+    public ArrayAdapter getAdapter() {
+        return (ArrayAdapter)lvList.getAdapter();
     }
 }

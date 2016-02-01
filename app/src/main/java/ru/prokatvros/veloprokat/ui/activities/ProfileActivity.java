@@ -42,7 +42,7 @@ public class ProfileActivity extends BaseActivity {
         actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         actionBar.setBackgroundDrawable(new ColorDrawable());
         actionBarHolder = new ActionBarHolder();
-        actionBar.setCustomView(actionBarHolder.initHolder(this));
+        actionBar.setCustomView(actionBarHolder.voidinitHolder(this));
         actionBarHolder.setActionBarIcon(R.drawable.drawable_ic_back);
         actionBarHolder.setActionBarIconClickListener(new View.OnClickListener() {
             @Override

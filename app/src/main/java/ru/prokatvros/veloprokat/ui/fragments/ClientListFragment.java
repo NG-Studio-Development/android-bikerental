@@ -1,13 +1,9 @@
 package ru.prokatvros.veloprokat.ui.fragments;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,34 +11,25 @@ import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.RadioButton;
 
+import com.activeandroid.query.From;
+
 import java.util.List;
 
-import ru.prokatvros.veloprokat.BikerentalApplication;
 import ru.prokatvros.veloprokat.R;
+import ru.prokatvros.veloprokat.database.ModelLoader;
 import ru.prokatvros.veloprokat.model.db.Client;
 import ru.prokatvros.veloprokat.ui.activities.ClientActivity;
 import ru.prokatvros.veloprokat.ui.adapters.ClientAdapter;
 
 
-public class ClientListFragment extends BaseListFragment implements CompoundButton.OnCheckedChangeListener {
+public class ClientListFragment extends BaseListFragment implements CompoundButton.OnCheckedChangeListener,
+                                                            LoaderManager.LoaderCallbacks<List<Client>> {
 
-    private BroadcastReceiver broadcastReceiver;
+    protected static final String SELECTED_RADIO_KEY = "selected_radio";
 
     RadioButton rbMain;
     RadioButton rbVip;
     RadioButton rbBlackList;
-
-    private List<Client> clientList = null;
-
-    Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            if (msg.what == SET_ADAPTER) {
-                setAdapter(new ClientAdapter(BikerentalApplication.getInstance(), R.layout.item_client, clientList));
-                setVisibilityProgressBar(false);
-            }
-        }
-    };
 
     @Override
     public int getLayoutResID() {
@@ -61,19 +48,7 @@ public class ClientListFragment extends BaseListFragment implements CompoundButt
     public void onStart() {
         super.onStart();
         rbMain.setChecked(true);
-        setVisibilityProgressBar(true);
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                //clientList = Client.getAllMain();
-                clientList = Client.getAll();
-                handler.sendMessage( handler.obtainMessage( SET_ADAPTER) );
-            }
-        }).start();
     }
-
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -87,17 +62,7 @@ public class ClientListFragment extends BaseListFragment implements CompoundButt
         rbVip.setOnCheckedChangeListener(this);
         rbBlackList.setOnCheckedChangeListener(this);
 
-        IntentFilter intFilter = new IntentFilter(ACTION_LOADED_DATA);
-        broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                if (clientList != null)
-                    setAdapter(new ClientAdapter(context, R.layout.item_client, clientList));
-            }
-        };
-
-        getHostActivity().registerReceiver(broadcastReceiver, intFilter);
-
+        getLoaderManager().initLoader(0, null, ClientListFragment.this);
         return view;
     }
 
@@ -118,24 +83,68 @@ public class ClientListFragment extends BaseListFragment implements CompoundButt
 
         if ( !isChecked ) return;
 
-        switch (buttonView.getId()) {
-            default:
-            case R.id.rbMain:
-                //clientList = Client.getAllMain();
-                clientList = Client.getAll();
-                break;
+        Bundle args = new Bundle();
+        args.putInt(SELECTED_RADIO_KEY, buttonView.getId());
 
-            case R.id.rbVip:
-                clientList = Client.getAllVip();
-                break;
-
-            case R.id.rbBlackList:
-                clientList = Client.getAllBlackList();
-                break;
-        }
-
-        setAdapter( new ClientAdapter( getHostActivity(), R.layout.item_client, clientList ) );
+        getLoaderManager().restartLoader(0, args, ClientListFragment.this);
 
     }
 
+    protected From getRequestFrom(int idSelected) {
+        From from;
+
+        switch (idSelected) {
+            default:
+            case R.id.rbMain:
+                from = Client.getAllMain();
+                break;
+
+            case R.id.rbVip:
+                from = Client.getAllVip();
+                break;
+
+            case R.id.rbBlackList:
+                from = Client.getAllBlackList();
+                break;
+        }
+
+        return from;
+    }
+
+    @Override
+    public Loader<List<Client>> onCreateLoader(int id, Bundle args) {
+
+        setVisibilityProgressBar(true);
+
+        if (args!=null) {
+            int idSelect = args.getInt(SELECTED_RADIO_KEY, -1);
+
+            if (idSelect != -1)
+                return new ModelLoader<Client>(getHostActivity(), Client.class, getRequestFrom(idSelect), false);
+        }
+
+        return new ModelLoader<Client>(getHostActivity(), Client.class, Client.getAllMain(), true);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<List<Client>> loader, List<Client> data) {
+
+        setVisibilityProgressBar(false);
+
+        if (getAdapter() == null ) {
+            setAdapter(new ClientAdapter(getHostActivity(), R.layout.item_client, data));
+            return;
+        }
+
+        getAdapter().clear();
+        getAdapter().addAll(data);
+        getAdapter().notifyDataSetChanged();
+    }
+
+    @Override
+    public void onLoaderReset(Loader<List<Client>> loader) {
+        getAdapter().clear();
+        getAdapter().notifyDataSetChanged();
+        setVisibilityProgressBar(true);
+    }
 }

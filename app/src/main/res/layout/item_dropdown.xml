@@ -18,7 +18,7 @@
 */
 -->
 <CheckedTextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/tvName"
+    android:id="@+id/tvPhone"
     style="?android:attr/spinnerDropDownItemStyle"
     android:singleLine="true"
     android:layout_width="match_parent"

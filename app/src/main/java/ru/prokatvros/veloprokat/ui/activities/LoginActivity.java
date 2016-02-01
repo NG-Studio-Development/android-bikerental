@@ -71,49 +71,22 @@ public class LoginActivity extends  BaseActivity implements LoginFragment.OnLogi
 
             if (regid.isEmpty()) {
                 replaceFragment(new LoginFragment(), false);
-                // registerInBackground();
             } else {
-                //replaceFragment(new SelectPointFragment(), false);
-
-                //DataParser.getInstance(this).clearDB();
-                //BikerentalApplication.getInstance().getDataParser().parsing(parseListener);
-
-                MainActivity.startMainActivity(this);
-                finish();
+                if ( BikerentalApplication.getInstance().isSelectedPoint() ) {
+                    MainActivity.startMainActivity(this);
+                    finish();
+                } else {
+                    replaceFragment(new SelectPointFragment(), false);
+                }
             }
         } else {
             Log.i(TAG, "No valid Google Play Services APK found.");
         }
     }
 
-
-
-    /*DataParser.OnParseListener parseListener = new DataParser.OnParseListener() {
-        @Override
-        public void onStart() {
-            if(!getProgressDialog().isShowing())
-                getProgressDialog().show();
-        }
-
-        @Override
-        public void onLoad() {
-            getProgressDialog().hide();
-            replaceFragment(new SelectPointFragment(), false);
-        }
-
-        @Override
-        public void onError() {
-            getProgressDialog().hide();
-        }
-    };*/
-
-
-
     @Override
     protected void onResume() {
-        super.onResume();
-        // Check device for Play Services APK.
-        //checkPlayServices();
+        super.onResume();;
     }
 
     private boolean checkPlayServices() {
@@ -134,7 +107,9 @@ public class LoginActivity extends  BaseActivity implements LoginFragment.OnLogi
     private void storeRegistrationId(Context context, String regId) {
         final SharedPreferences prefs = getGcmPreferences();
         int appVersion = getAppVersion(context);
+
         Log.i(TAG, "Saving regId on app version " + appVersion);
+
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString(PROPERTY_REG_ID, regId);
         editor.putInt(PROPERTY_APP_VERSION, appVersion);
@@ -183,11 +158,6 @@ public class LoginActivity extends  BaseActivity implements LoginFragment.OnLogi
                 sendRegistrationIdToBackend(login, password);
             }
         }.execute(null, null, null);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
     }
 
     private static int getAppVersion(Context context) {
@@ -240,17 +210,12 @@ public class LoginActivity extends  BaseActivity implements LoginFragment.OnLogi
                     if ( jsonData.getInt("error_encode") == 0 ) {
                         String url = ConstantsBikeRentalApp.URL_SERVER
                                 +jsonData.getJSONObject("data").getString("url");
-
                         loadDumpDB(url, admin);
                     }
-
                 } catch (JSONException ex) {
                     ex.printStackTrace();
                     getProgressDialog().hide();
                 }
-
-
-
             }
         }, new Response.ErrorListener() {
             @Override

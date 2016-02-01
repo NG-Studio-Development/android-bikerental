@@ -36,7 +36,7 @@ public class BreakdownInRentFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view  = inflater.inflate(R.layout.fragment_breakdown_in_rent, container, false);
-        TextView tvName = (TextView) view.findViewById(R.id.tvName);
+        TextView tvName = (TextView) view.findViewById(R.id.tvPhone);
         TextView tvPhone = (TextView) view.findViewById(R.id.tvPhone);
         TextView tvModel = (TextView) view.findViewById(R.id.tvModel);
         TextView tvNumber = (TextView) view.findViewById(R.id.tvNumber);

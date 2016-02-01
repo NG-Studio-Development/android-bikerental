@@ -19,12 +19,6 @@ public class Admin extends Model implements Parcelable {
     @Column(name = "Name")
     public String name;
 
-    //@Expose
-    //@Column(name = "Point" /*, onDelete = Column.ForeignKeyAction.CASCADE*/ )
-    //public Point point;
-
-
-
     public static final Parcelable.Creator<Admin> CREATOR = new Parcelable.Creator<Admin>() {
 
         public Admin createFromParcel(Parcel in) {

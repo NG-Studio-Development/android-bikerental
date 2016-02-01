@@ -52,7 +52,7 @@
 
     <string name="hello_world">Hello world!</string>
 
-    <string name="title_inventory_number">Инвентарный номер</string>
+    <string name="title_inventory_number">Номер</string>
 
     <string name="title_inventory_model">Модель</string>
 
@@ -60,7 +60,13 @@
 
     <string name="title_cost">Цены</string>
 
-    <string name="title_phone">Телефон</string>
+    <string name="title_statistics">Статистика</string>
+
+    <string name="title_phone"> Телефон </string>
+
+    <string name="title_email"> Почта </string>
+
+    <string name="title_address"> Адрес </string>
 
     <string name="title_activity_client"> Activity client </string>
 
@@ -103,6 +109,8 @@
     <string name="warning_must_enter_time_and_date"> Поля дата и время обязательны для ввода </string>
 
     <string name="warning_you_must_calculate_cost"> Посчитайте цену </string>
+
+    <string name="warning_you_must_set_paid_summ"> Укажите оплаченную суму </string>
 
     <string name="warning_set_prepay"> Установите предоплату </string>
 
@@ -158,9 +166,11 @@
 
     <string name="enter"> Войти </string>
 
-    <string name="count_rent"> Количество аренд </string>
+    <string name="count_rent"> Аренды </string>
 
-    <string name="black_list"> Черный список </string>
+    <string name="black_list"> Ч/C </string>
+
+    <string name="black_list_text"> Черный список </string>
 
     <string name="successful_add_data"> Дпнные успешно внесены </string>
 
@@ -172,7 +182,9 @@
 
     <string name="photo_was_added">  Фото добавленно </string>
 
-    <string name="summ"> Общая сумма </string>
+    <string name="summ"> Сумма </string>
+
+    <string name="present_in"> Имеет статус </string>
 
     <string name="vip_number"> Номер карты </string>
 
@@ -198,9 +210,16 @@
 
     <string name="calculate_cost"> Посчитать цену </string>
 
+    <string name="absent"> Нет </string>
+
+
+
+
     <string name="title_surcharge"> Доплачено по факту </string>
 
     <string name="title_number_frame"> Номер рамы </string>
+
+    <string name="title_info"> Инфо </string>
 
 
     <string name="item_free"> Свободен </string>
@@ -210,10 +229,12 @@
     <string name="item_refit"> В ремонте </string>
 
     <string name="item_missing"> Потерян </string>
+
     <string name="title_activity_gallery">GalleryActivity</string>
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_debug">DebugActivity</string>
 
 
 

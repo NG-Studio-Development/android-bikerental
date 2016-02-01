@@ -2,125 +2,320 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#fff"
     tools:context="ru.prokatvros.veloprokat.ui.fragments.InventoryFragment" >
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" >
+        android:layout_height="match_parent"
+        android:id="@+id/scrollView2" >
 
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/ivAvatar" />
-
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:id="@+id/linearLayout6"
+            android:layout_marginBottom="@dimen/margin_widget_default_normal">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/title_inventory_number"
-                android:id="@+id/tvInventoryNumberTitle" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="New Text"
-                android:id="@+id/tvNumber"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:id="@+id/ivAvatar"
+                    android:background="@color/gray_light"/>
 
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/title_number_frame"
-                android:id="@+id/textView3" />
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/ibAddPhoto"
+                    android:background="@drawable/bg_round_button"
+                    android:layout_alignBottom="@+id/view"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:src="@mipmap/ic_action_camera"
+                    android:layout_marginRight="@dimen/margin_widget_default_normal" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="New Text"
-                android:id="@+id/tvNumberFrame"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true" />
-        </RelativeLayout>
+                <View
+                    android:id="@+id/view"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_below="@+id/ivAvatar"
+                    android:layout_marginTop="@dimen/margin_widget_default_large" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            </RelativeLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/title_inventory_model"
-                android:id="@+id/tvNameTitle" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="New Text"
-                android:id="@+id/tvName"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true" />
-        </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/title_cost"
+                    android:id="@+id/tvCostTitle"
+                    android:layout_marginTop="@dimen/margin_widget_default_medium"
+                    android:layout_marginLeft="@dimen/margin_widget_default_normal"
+                    style="@style/TextViewTitle" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/title_rents_count"
-                android:id="@+id/tvRentsCountTitle" />
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvCostTitle"
+                    android:layout_marginTop="@dimen/margin_widget_default_medium"
+                    android:id="@+id/linearLayout7">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="New Text"
-                android:id="@+id/tvRentsCount"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true" />
-        </RelativeLayout>
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_weight="1">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/absent"
+                            android:id="@+id/tvCostHour" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/title_cost"
-                android:id="@+id/tvCostTitle" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/hour"
+                            style="@style/TextViewHint" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="New Text"
-                android:id="@+id/tvCost"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true" />
-        </RelativeLayout>
+                    </LinearLayout>
 
-        <Spinner
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_weight="1" >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/absent"
+                            android:id="@+id/tvCostDay"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/day"
+                            style="@style/TextViewHint" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_weight="1" >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/absent"
+                            android:id="@+id/tvCostThHour" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/th_hour"
+                            style="@style/TextViewHint" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:id="@+id/dividerCost"
+                    android:background="@color/gray_low"
+                    android:layout_below="@+id/linearLayout7"
+                    android:layout_marginTop="@dimen/margin_widget_default_small" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/spinnerState"
+
+                    android:paddingTop="@dimen/margin_widget_default_medium"
+                    android:paddingBottom="@dimen/margin_widget_default_medium"
+                    android:layout_marginLeft="@dimen/margin_widget_default_normal"
+                    android:layout_marginRight= "@dimen/margin_widget_default_normal" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:id="@+id/dividerState"
+                    android:background="@color/gray_low"
+                    android:layout_below="@+id/spinnerState"
+                    android:layout_marginTop="@dimen/margin_widget_default_small" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="New Text"
+                    android:id="@+id/tvPhone"
+                    android:layout_marginTop="@dimen/margin_widget_default_medium"
+                    android:layout_marginLeft="@dimen/margin_widget_default_normal" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/title_inventory_model"
+                    android:id="@+id/tvNameTitle"
+                    style="@style/TextViewHint"
+                    android:layout_below="@+id/tvPhone"
+                    android:layout_marginTop="@dimen/margin_widget_default_tiny"
+                    android:layout_marginLeft="@dimen/margin_widget_default_normal" />
+
+                 <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:id="@+id/dividerModel"
+                    android:background="@color/gray_low"
+                    android:layout_below="@+id/tvNameTitle"
+                    android:layout_marginTop="@dimen/margin_widget_default_small" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="New Text"
+                    android:id="@+id/tvNumberFrame"
+                    android:layout_marginTop="@dimen/margin_widget_default_medium"
+                    android:layout_marginLeft="@dimen/margin_widget_default_normal" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/title_number_frame"
+                    android:layout_below="@+id/tvNumberFrame"
+                    android:layout_marginTop="@dimen/margin_widget_default_tiny"
+                    style="@style/TextViewHint"
+                    android:id="@+id/textView3"
+                    android:layout_marginLeft="@dimen/margin_widget_default_normal" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:id="@+id/dividerFrame"
+                    android:background="@color/gray_low"
+                    android:layout_below="@+id/textView3"
+                    android:layout_marginTop="@dimen/margin_widget_default_small" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/title_info"
+                    android:id="@+id/tvInfoTitle"
+                    android:layout_marginTop="@dimen/margin_widget_default_medium"
+                    android:layout_marginLeft="@dimen/margin_widget_default_normal"
+                    style="@style/TextViewTitle" />
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvInfoTitle" >
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_widget_default_medium" >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/title_inventory_number"
+                            android:id="@+id/tvInventoryNumberTitle"
+                            android:layout_marginLeft="@dimen/margin_widget_default_normal" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="New Text"
+                            android:id="@+id/tvNumber"
+                            android:layout_marginRight="@dimen/margin_widget_default_normal"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentEnd="true" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_widget_default_medium" >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/title_rents_count"
+                            android:id="@+id/tvRentsCountTitle"
+                            android:layout_marginLeft="@dimen/margin_widget_default_normal"  />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="New Text"
+                            android:id="@+id/tvRentsCount"
+                            android:layout_marginRight="@dimen/margin_widget_default_normal"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentEnd="true" />
+
+                    </RelativeLayout>
+
+
+                </LinearLayout>
+
+
+            </RelativeLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         android:visibility="gone" >
+
+        <!-- <Spinner
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/spinnerState"
-            android:visibility="gone" />
+            android:visibility="gone" /> -->
 
         <Button
             android:layout_width="wrap_content"
@@ -128,15 +323,14 @@
             android:text="@string/without_photo"
             android:id="@+id/buttonAddPhoto" />
 
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/save"
+            android:id="@+id/buttonSave"
+            android:layout_gravity="center_horizontal"
+            android:layout_alignParentBottom="true" />
 
-    </LinearLayout>
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/save"
-        android:id="@+id/buttonSave"
-        android:layout_gravity="center_horizontal"
-        android:layout_alignParentBottom="true" />
+    </RelativeLayout>
 
 </RelativeLayout>

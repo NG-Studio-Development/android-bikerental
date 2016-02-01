@@ -1,6 +1,8 @@
 package ru.prokatvros.veloprokat.ui.fragments;
 
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -9,7 +11,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -18,6 +19,7 @@ import ru.prokatvros.veloprokat.ConstantsBikeRentalApp;
 import ru.prokatvros.veloprokat.R;
 import ru.prokatvros.veloprokat.model.db.Client;
 import ru.prokatvros.veloprokat.ui.activities.ClientActivity;
+import ru.prokatvros.veloprokat.ui.adapters.ContactAdapter;
 
 public class ClientFragment extends BaseFragment<ClientActivity> {
 
@@ -45,7 +47,8 @@ public class ClientFragment extends BaseFragment<ClientActivity> {
         }
 
         if (getHostActivity().getSupportActionBar() != null) {
-            getHostActivity().getSupportActionBar().setTitle(client.name);
+            // getHostActivity().getSupportActionBar().setTitle(client.name);
+            getHostActivity().getSupportActionBar().setDisplayShowTitleEnabled(false);
             getHostActivity().getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
     }
@@ -64,31 +67,33 @@ public class ClientFragment extends BaseFragment<ClientActivity> {
         setHasOptionsMenu(true);
 
         TextView tvName = (TextView) view.findViewById(R.id.tvName);
-        TextView tvSurname = (TextView) view.findViewById(R.id.tvSurname);
-        TextView tvPhone = (TextView) view.findViewById(R.id.tvPhone);
+        //TextView tvSurname = (TextView) view.findViewById(R.id.tvSurname);
+        //TextView tvPhone = (TextView) view.findViewById(R.id.tvPhone);
         TextView tvRentsCount = (TextView) view.findViewById(R.id.tvRentsCount);
         TextView tvSumm = (TextView) view.findViewById(R.id.tvSumm);
+        RecyclerView rvDrawerContainer = (RecyclerView) view.findViewById(R.id.rwClientListData);
+
         // TextView tvBlackList = (TextView) view.findViewById(R.id.tvBlackList);
-        TextView tvVipNumber = (TextView) view.findViewById(R.id.tvVipNumber);
-        RelativeLayout rlVip = (RelativeLayout) view.findViewById(R.id.rlVip);
+        //TextView tvVipNumber = (TextView) view.findViewById(R.id.tvVipNumber);
+        //RelativeLayout rlVip = (RelativeLayout) view.findViewById(R.id.rlVip);
 
         ImageView ivAvatar = (ImageView) view.findViewById(R.id.ivAvatar);
+
 
         String urlToImage = ConstantsBikeRentalApp.URL_SERVER+"/"+client.avatar;
         Log.d(TAG, "Avatar: " + urlToImage);
         ImageLoader.getInstance().displayImage(urlToImage, ivAvatar);
 
         tvName.setText(client.name);
-        tvSurname.setText(client.surname);
-        tvPhone.setText(client.phone);
         tvRentsCount.setText(String.valueOf(client.countRents));
         tvSumm.setText(String.valueOf(client.summ));
-        // tvBlackList.setText(String.valueOf(client.blackList));
 
-        if ( client.hasVipNumber() ) {
-            rlVip.setVisibility(View.VISIBLE);
-            tvVipNumber.setText(String.valueOf(client.vipNumber));
-        }
+        rvDrawerContainer.setVerticalScrollBarEnabled(false);
+        rvDrawerContainer.setHorizontalScrollBarEnabled(false);
+
+        rvDrawerContainer.setAdapter(new ContactAdapter(getHostActivity(), client));
+
+        rvDrawerContainer.setLayoutManager(new LinearLayoutManager(getHostActivity()));
 
         return view;
     }
@@ -107,9 +112,9 @@ public class ClientFragment extends BaseFragment<ClientActivity> {
         switch (item.getItemId()) {
             case R.id.action_edit:
                 getHostActivity().replaceFragment(AddClientFragment.newInstance(client), true);
-                //getHostActivity().onBackPressed();
                 break;
         }
+
         return super.onOptionsItemSelected(item);
     }
 

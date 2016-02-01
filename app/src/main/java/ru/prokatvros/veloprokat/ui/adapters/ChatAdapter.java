@@ -54,7 +54,7 @@ public class ChatAdapter extends ArrayAdapter<Message> {
     private Holder initHolder(View convertView) {
         Holder holder = new Holder();
         holder.tvText = (TextView) convertView.findViewById(R.id.tvText);
-        holder.tvName = (TextView) convertView.findViewById(R.id.tvName);
+        holder.tvName = (TextView) convertView.findViewById(R.id.tvPhone);
         holder.ivAvatar = (ImageView) convertView.findViewById(R.id.ivAvatar);
         return holder;
     }

@@ -91,7 +91,7 @@ public class RentAdapter extends ArrayAdapter<Rent> {
 
     private Holder initHolder(View convertView) {
         Holder holder = new Holder();
-        holder.tvName = (TextView) convertView.findViewById(R.id.tvName);
+        holder.tvName = (TextView) convertView.findViewById(R.id.tvPhone);
         return holder;
     }
 
